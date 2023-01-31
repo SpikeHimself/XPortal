@@ -82,7 +82,7 @@ if($Target.Equals("Release")) {
     Copy-Item -Path "$ProjectPath\PrePackage\manifest.json" -Destination "$PackagePath\" -Force
     Copy-Item -Path "$ProjectPath\..\Images\icon.png" -Destination "$PackagePath\" -Force
     
-    Compress-Archive -Path "$PackagePath\*" -DestinationPath "$PackageReleasePath\$TargetAssembly.zip" -Force
+    Compress-Archive -Path "$PackagePath\*" -DestinationPath "$PackageReleasePath\$name.zip" -Force
 }
 
 # Pop Location
