@@ -63,7 +63,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 * **v1.0.0** (2023-02-01)
 	
- * Initial release
+	* Initial release
 
 
 
