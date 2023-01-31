@@ -1,0 +1,9 @@
+{
+  "piece_portal_description": "Connects to another portal",
+  "piece_portal_settag": "Configure",
+  "piece_portal_tag": "Name",
+  "piece_portal_target": "Destination",
+  "piece_portal_target_none": "(None)",
+  "piece_portal_tag_none": "(No Name)",
+  "hud_xportal_title": "Hail, traveller!"
+}

@@ -1,0 +1,9 @@
+﻿{
+  "name": "XPortal",
+  "description": "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/SpikeHimself/XPortal",
+  "dependencies": [
+    "ValheimModding-Jotunn-2.10.3"
+  ]
+}

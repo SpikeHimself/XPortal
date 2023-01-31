@@ -1,0 +1,13 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ output extension=".json" #>
+{
+  "name": "<#= XPortal.XPortal.PluginName #>",
+  "description": "<#= XPortal.XPortal.PluginDescription #>",
+  "version_number": "<#= XPortal.XPortal.PluginVersion #>",
+  "website_url": "<#= XPortal.XPortal.PluginWebsiteUrl #>",
+  "dependencies": [
+    "ValheimModding-Jotunn-<#= XPortal.XPortal.PluginJotunnVersion #>"
+  ]
+}
