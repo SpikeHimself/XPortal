@@ -1,98 +1,78 @@
-# XPortal
+﻿# XPortal 
 
-A Valheim mod stub project using [Jötunn](https://github.com/Valheim-Modding/Jotunn) including build tools and a basic Unity project stub. There is no actual plugin content included, just a bare minimum plugin class. 
+ An [AnyPortal](https://www.nexusmods.com/valheim/mods/170) revamp.
 
-# Quick Setup Guide
 
-These are quick setup steps with no context provided. Please see Jötunns [Github Pages](https://valheim-modding.github.io/Jotunn/guides/overview.html) for a more in depth guide and documentation.
+## Description
 
-## Development Environment Setup
+XPortal lets you select a portal destination from a list of existing portals. 
 
-How to setup the development enviroment for this project.
+No more tag pairing, and no more portal hubs!
 
-1. Install [Visual Studio 2022](https://visualstudio.microsoft.com) and add the C# workload.
-2. Download this package: [BepInEx pack for Valheim](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/)
-3. Unpack and copy the contents of `BepInExPack_Valheim` into your Valheim root folder. You should now see a new folder called `<ValheimDir>\unstripped_corlib` and more additional stuff.
-4. Fork and clone this repository using git. That should create a new folder `JotunnModStub`. You can also [use the template function of github](https://github.com/Valheim-Modding/JotunnModStub/generate) to create a new, clean repo out of it and clone that.
-5. Edit `DoPrebuild.props` in the project base path and change `ExecutePrebuild` to `true` if you want Jötunn to automatically generate publicized versions of the game dlls for you.
-6. Open the Solution file `<JotunnModStub>\JotunnModStub.sln`. Right-click on the project or solution in the Solution Explorer and select `Manage NuGet packages...`. It should prompt you a message at the top that some NuGet-Packages are missing. Click "Restore" and restart Visual Studio when finished.
-7. Rename the Solution/Project and everything related so that it resembles your own projects name. This includes the assembly information as well as the Unity project.
 
-A new environment file `Environment.props` can be created in the projects base path `<JotunnModStub>`.
-Make sure you are not in any subfolder.
-Paste this snippet and change the paths accordingly.
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <!-- Valheim install folder. This is normally found automatically, uncomment to overwrite it. Needs to be your path to the base Valheim folder. -->
-    <!-- <VALHEIM_INSTALL>X:\PathToYourSteamLibary\steamapps\common\Valheim</VALHEIM_INSTALL>-->
+## Features
 
-    <!-- This is the folder where your build gets copied to when using the post-build automations -->
-    <MOD_DEPLOYPATH>$(VALHEIM_INSTALL)\BepInEx\plugins</MOD_DEPLOYPATH>
-  </PropertyGroup>
-</Project>
-```
+#### Select a destination
 
-### Post Build automations
+When interacting with a portal, instead of entering a tag which has to match another portal's, XPortal lets you choose the portal's destination from a list.
 
-Included in this repo is a PowerShell script `publish.ps1`. The script is referenced in the project file as a post-build event. Depending on the chosen configuration in Visual Studio the script executes the following actions.
+The "edit tag" window has been replaced by XPortal's own configuration window. You can now enter a Name and choose a Destination. Portal connections can now be one-way. In other words, you can go from portal A to portal B, all while portal B might be connected to portal C, or not even connected at all!
 
-### Building Debug
+For your convenience, the list also shows you how far away the portals are.
 
-* The compiled dll file for this project is copied to `<ValheimDir>\BepInEx\plugins` (or whatever path you set as MOD_DEPLOYPATH).
-* A .mdb file is generated for the compiled project dll and copied to `<ValheimDir>\BepInEx\plugins` (or whatever path you set as MOD_DEPLOYPATH).
+#### Ping a portal location
+Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-### Building Release
 
-* A compressed file with the binaries is created in `<JotunnModStub>\Packages`ready for upload to ThunderStore. Dont forget to include your information in the manifest.json and to change the project's readme file.
+## Multiplayer
 
-## Developing Assets with Unity
+XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. This server itself also needs to have XPortal installed and that too has to be same version.
 
-New Assets can be created with Unity and imported into Valheim using the mod. A Unity project is included in this repository under `<JotunnModStub>\JotunnModUnity`.
 
-### Unity Editor Setup
+## Bugs, Issues, Feature Requests
 
-1. [Download](https://public-cdn.cloud.unity3d.com/hub/prod/UnityHubSetup.exe) UnityHub directly from Unity or install it with the Visual Studio Installer via `Individual Components` -> `Visual Studio Tools for Unity`.
-2. You will need an Unity account to register your PC and get a free licence. Create the account, login with it in Unity Hub and get your licence via `Settings` -> `Licence Management`.
-3. Install Unity Editor version 2020.3.33f.
-4. Copy all `assembly_*.dll` from `<ValheimDir>\valheim_Data\Managed` into `<JotunnModStub>\JotunnModUnity\Assets\Assemblies`. **Do this directly in the filesystem - don't open Unity first or import the dlls directly in Unity**.
-5. **Warning:** These assembly files are copyrighted material and you can theoretically get into trouble when you distribute them in your github repository. To avoid that there is a .gitignore file in the Unity project folder. Keep that when you clone or copy this repository.
-6. Open Unity Hub and add the JotunnModUnity project.
-7. Open the project.
-7. Install the `AssetBundle Browser` package in the Unity Editor via `Window`-> `Package Manager` for easy bundle creation.
+To report problems or provide feedback, please use the project's [GitHub Issues page](https://github.com/SpikeHimself/XPortal/issues).
+If you are experiencing a bug, please include the BepinEx output log and provide as many details as possible.
 
-## Debugging
 
-You can enable remote debugging of your mod code at runtime via dnSpy or Visual Studio. Before being able to attach a remote debugger you will have to prepare your game install and turn it into a "Development Build" once:
+## Improvements over AnyPortal
 
-1. Locate your Unity Editor installation from the previous step and navigate to `<UnityInstall>\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win64_development_mono`
-2. Copy `UnityPlayer.dll` and `WinPixEventRuntime.dll` from that folder into your game installation folder. Overwrite existing files.
-3. Open the `<Valheim>\valheim_Data\boot.config` with a text editor (Notepad++ for example) and add a new line `player-connection-debug=1` to it.
-4. When starting up Valheim you should see a `Development Build` text at the lower-right corner of the screen.
+As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal updates. Also, the UI was completely overhauled.
+Here are the most prominent changes:
 
-### Debugging with Visual Studio
 
-Your own code can be debugged in source with Visual Studio itself.
+* **New UI**:
+AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
 
-1. Install Visual Studio Tools for Unity (can be done in Visual Studio installer via `Individual Components` -> `Visual Studio Tools for Unity`)
-3. Build the project with target `Debug`. The publish.ps1 PowerShell script from this repo...
-   * copies the generated mod .dll and .pdb to \<ValheimDir>\BepInEx\plugins after a successful build
-   * automatically generates a JotunnModStub.dll.mdb file, which is needed for Unity/mono debugging. It should be in \<ValheimDir>\BepInEx\plugins, too.
-4. Start Valheim (either directly from Steam or hit F5 in Visual Studio when Steam is running)
-5. Go to `Debug` -> `Attach Unity debugger`
-6. You should see your local game instance listed as a target to attach the debugger to. If it is not there, try hitting `Refresh` as the debugger only appears after the game has loaded into the main menu.
+* **Robust network synchronisation**:
+AnyPortal updates the information on your screen when you interact with a portal. XPortal updates all portal information at the very moment that any portal is changed, even when someone else does it.
 
-## Actions after a game update
+* **Smaller file**:
+XPortal uses Jötunn's UI elements, so it no longer needs its own Unity assets.
 
-When Valheim updates it is likely that parts of the assembly files change. If this is the case, the references to the assembly files must be renewed in Visual Studio and Unity.
+* **Code optimisation**:
+The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated when any portal changes name or destination. Because of this, it will not have to query game data every time you interact with a portal.
 
-### Visual Studio actions
+* **Scalability**:
+You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
 
-1. There is a file called DoPrebuild.props included in the solution. When you set its only value to true, Jötunn will automatically generate publicized assemblies for you. Otherwise you have to do this step manually.
 
-### Unity actions
 
-1. Copy all `assembly_*.dll` from `<ValheimDir>\valheim_Data\Managed` into `<JotunnModStub>\JotunnModUnity\Assets\Assemblies`. <br />
-  **Do this directly in the filesystem - don't import the dlls in Unity**.
-2. Go to Unity Editor and press `Ctrl+R`. This reloads all files from the filesystem and "re-imports" the copied dlls into the project.
+## Changelog
+
+
+* **v1.0.0** (2023-02-01)
+	
+ * Initial release
+
+
+
+## Credits
+
+
+* [sweetgiorni](https://www.nexusmods.com/valheim/users/6246023) for creating [AnyPortal](https://www.nexusmods.com/valheim/mods/170)
+
+---
+
+[<img src="
+https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" width="217" alt="Buy me a coffee!">](https://www.buymeacoffee.com/SpikeHimself)
