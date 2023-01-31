@@ -364,6 +364,10 @@ FodyWeavers.xsd
 # csproj.user file (for local environment)
 *.csproj.user
 
+# automated build output
+XPortal/[Pp]ackage
+[Rr]elease
+
 # not the libraries folder
 !libraries/*
 
