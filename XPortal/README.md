@@ -1,4 +1,4 @@
-﻿# XPortal 
+# XPortal 
 
  An [AnyPortal](https://www.nexusmods.com/valheim/mods/170) revamp.
 
