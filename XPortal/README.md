@@ -21,6 +21,7 @@ The "edit tag" window has been replaced by XPortal's own configuration window. Y
 For your convenience, the list also shows you how far away the portals are.
 
 #### Ping a portal location
+
 Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
 
@@ -38,8 +39,8 @@ If you are experiencing a bug, please include the BepinEx output log and provide
 ## Improvements over AnyPortal
 
 As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal updates. Also, the UI was completely overhauled.
-Here are the most prominent changes:
 
+Here are the most prominent changes:
 
 * **New UI**:
 AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
@@ -59,10 +60,15 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 ## Changelog
 
-
 * **v1.0.0** (2023-02-01)
 	
 	* Initial release
+
+* **v1.0.1** (2023-02-01)
+
+	* Improvements for dedicated servers
+
+	* Fix a bug that stopped XPortal showing the UI after destroying a portal
 
 
 ## Credits
