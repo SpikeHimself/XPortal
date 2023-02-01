@@ -103,8 +103,8 @@
     </None>
     <None Include="packages.config" />
     <None Include="PrePackage\Translations\English\xportal-translations-english.json" />
-    <None Include="README.bbcode" />
-    <None Include="README.md" />
+    <None Include="PrePackage\README.bbcode" />
+    <None Include="PrePackage\README.md" />
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
   </ItemGroup>
   <ItemGroup>
