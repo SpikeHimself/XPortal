@@ -156,21 +156,16 @@ namespace XPortal
 
         internal void OnPrePortalHover(out string result, ref ZDO portalZDO)
         {
+            UpdateKnownPortals();
+            
             // Get information about 'this' portal
             var thisPortalZDOID = portalZDO.m_uid;
-
-            if (!knownPortals.ContainsKey(thisPortalZDOID))
-            {
-                UpdateKnownPortals();
-            }
-
             var thisKnownPortal = knownPortals[thisPortalZDOID];
             string thisPortalName = thisKnownPortal.Name;
             if (string.IsNullOrEmpty(thisPortalName))
             {
                 thisPortalName = "$piece_portal_tag_none"; // "(No Name)"
             }
-
 
             // Get information about the target
             string thisPortalDestination = "$piece_portal_target_none"; // "(None)"
