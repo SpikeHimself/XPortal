@@ -15,7 +15,5 @@ If you are experiencing a bug, please include the BepinEx output log and provide
 
 Coming soon..
 
----
 
-[<img src="
-https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" width="217" alt="Buy me a coffee!">](https://www.buymeacoffee.com/SpikeHimself)
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right">](https://www.buymeacoffee.com/SpikeHimself)
