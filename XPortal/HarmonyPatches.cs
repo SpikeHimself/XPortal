@@ -1,14 +1,7 @@
-﻿using BepInEx;
-using Jotunn.Entities;
-using Jotunn.Managers;
-using Jotunn.Utils;
-using HarmonyLib;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
+﻿using HarmonyLib;
 using System;
-using Steamworks;
+using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace XPortal
 {
@@ -24,7 +17,7 @@ namespace XPortal
         //public static event Action OnPrePortalInteract;
         public static event OnPostPortalInteractAction OnPostPortalInteract;
 
-        private static Harmony patcher;
+        private static readonly Harmony patcher;
 
         static HarmonyPatches()
         {
@@ -33,7 +26,7 @@ namespace XPortal
 
         public static void Patch()
         {
-            patcher.PatchAll(); 
+            patcher.PatchAll();
         }
 
         public static void UnPatch()
@@ -149,7 +142,7 @@ namespace XPortal
         [HarmonyPatch(typeof(TextInput), nameof(TextInput.Show))]
         static class TextInputShowPatch
         {
-            static bool Prefix(ref TextInput __instance, ref string topic)
+            static bool Prefix(ref string topic)
             {
                 if (topic.Equals("$piece_portal_tag"))
                 {

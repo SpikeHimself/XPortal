@@ -1,14 +1,10 @@
 using BepInEx;
-using Jotunn.Entities;
 using Jotunn.Managers;
 using Jotunn.Utils;
-using HarmonyLib;
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System;
-using Steamworks;
+using UnityEngine;
 
 namespace XPortal
 {
@@ -205,7 +201,7 @@ namespace XPortal
         {
             var thisPortalZDOID = portalZDO.m_uid;
             var thisKnownPortal = knownPortals[thisPortalZDOID];
-            
+
             Jotunn.Logger.LogDebug($"[OnPostPortalInteract] Interacting with: {thisKnownPortal}");
             XPortalUI.Instance.ConfigurePortal(thisKnownPortal, ref knownPortals);
         }

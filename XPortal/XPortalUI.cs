@@ -1,14 +1,9 @@
 ﻿using HarmonyLib;
 using Jotunn;
 using Jotunn.Managers;
-using Steamworks;
 using System;
-using System.CodeDom;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -98,7 +93,7 @@ namespace XPortal
             }
             mainPanel.SetActive(active);
             GUIManager.BlockInput(active);
-            if(active)
+            if (active)
             {
                 portalNameInputField.ActivateInputField();
                 portalNameInputField.Select();
@@ -176,7 +171,7 @@ namespace XPortal
                 // Skip the one we're currently interacting with
                 if (knownPortalZDOID == thisPortalZDOID)
                     continue;
-                
+
                 var portalZDO = Util.TryGetZDO(knownPortalZDOID);
 
                 // Get portal name
@@ -190,18 +185,18 @@ namespace XPortal
                 // Get portal distance
                 float distance = (int)Vector3.Distance(thisPortalPos, portalZDO.GetPosition());
                 string strDistance = string.Format("{0} m", distance.ToString());
-                if( distance >= 1000 )
+                if (distance >= 1000)
                 {
                     strDistance = string.Format("{0:0.0} km", distance / 1000);
                 }
 
                 var option = new Dropdown.OptionData($"{portalName}  ({strDistance})");
-                
+
                 // Insert at the next index
                 targetPortalDropdown.options.Insert(++index, option);
 
                 // Select it in the list if this is the current target
-                if(knownPortalZDOID == selectedTargetZDOID)
+                if (knownPortalZDOID == selectedTargetZDOID)
                 {
                     targetPortalDropdown.value = index;
                 }
@@ -222,7 +217,7 @@ namespace XPortal
             OnOkayButtonClicked();
         }
 
-         private void OnDropdownValueChanged(Dropdown change)
+        private void OnDropdownValueChanged(Dropdown change)
         {
             selectedTargetZDOID = dropdownIndexToZDOIDMapping[change.value];
             SetPingMapButtonActive(selectedTargetZDOID != ZDOID.None);
@@ -258,12 +253,12 @@ namespace XPortal
                 // Main "parent" panel
                 mainPanel = GUIManager.Instance.CreateWoodpanel(
                         parent: GUIManager.CustomGUIFront.transform,
-                        anchorMin: new Vector2(0.5f, 0.5f),  
+                        anchorMin: new Vector2(0.5f, 0.5f),
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
                         width: mainPanelWidthMin,
                         height: 260f,
-                        draggable: false); 
+                        draggable: false);
 
 
                 // Header text
@@ -303,7 +298,7 @@ namespace XPortal
                         height: rowHeight,
                         addContentSizeFitter: false);
                 portalNameLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
-                
+
                 Text portalNameLabelText = portalNameLabelObject.GetComponent<Text>();
                 portalNameLabelText.alignment = TextAnchor.MiddleLeft;
                 portalNameLabelText.horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -393,7 +388,7 @@ namespace XPortal
                         height: submitButtonHeight);
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                
+
                 // Make the whole thing slightly larger 
                 mainPanel.GetComponent<RectTransform>().localScale = new Vector3(1.1f, 1.1f, 1.1f);
 
@@ -411,7 +406,7 @@ namespace XPortal
 
                 // This property name is backwards? Should select on activate? Either way: Yes.
                 portalNameInputField.shouldActivateOnSelect = true;
-                
+
 
                 // Disable the Main Panel, for now
                 mainPanel.SetActive(false);
@@ -422,8 +417,8 @@ namespace XPortal
         {
             mainPanel?.SetActive(false);
             targetPortalDropdown?.onValueChanged.RemoveAllListeners();
-            
-            if(targetPortalDropdown != null )
+
+            if (targetPortalDropdown != null)
                 GameObject.Destroy(targetPortalDropdown);
 
             if (mainPanel!= null)
