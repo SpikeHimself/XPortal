@@ -1,6 +1,6 @@
 # XPortal 
 
- An [AnyPortal](https://www.nexusmods.com/valheim/mods/170) revamp.
+ An [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) revamp.
 
 
 ## Description
@@ -57,7 +57,6 @@ The way AnyPortal dealt with portal tags and targets has been overhauled. XPorta
 You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
 
 
-
 ## Changelog
 
 
@@ -66,13 +65,10 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 	* Initial release
 
 
-
 ## Credits
 
-
-* [sweetgiorni](https://www.nexusmods.com/valheim/users/6246023) for creating [AnyPortal](https://www.nexusmods.com/valheim/mods/170)
+* [sweetgiorni](https://valheim.thunderstore.io/package/sweetgiorni/) for creating [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/)
 
 ---
 
-[<img src="
-https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" width="217" alt="Buy me a coffee!">](https://www.buymeacoffee.com/SpikeHimself)
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right">](https://www.buymeacoffee.com/SpikeHimself)
