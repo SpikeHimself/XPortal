@@ -154,11 +154,6 @@ namespace XPortal
             var thisPortalZDO = Util.TryGetZDO(thisPortalZDOID);
             Vector3 thisPortalPos = thisPortalZDO.GetPosition();
 
-            //if(knownPortals == null)
-            //{
-            //    Jotunn.Logger.LogError("XPortalUI.PopulateDropdown: No known portals");
-            //}
-
             // Get the ZDOIDS of the known portals, but sort them by name
             var knowPortalsSorted = knownPortals.ToList();
             knowPortalsSorted.Sort((valueA, valueB) => valueA.Value.Name.CompareTo(valueB.Value.Name));
@@ -243,10 +238,14 @@ namespace XPortal
 
         private void InitialiseUI()
         {
+            if (GUIManager.IsHeadless ())
+            {
+                // This is a dedicated server, UI is not available
+                return;
+            }
+
             if (mainPanel == null || !mainPanel.IsValid())
             {
-
-
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 

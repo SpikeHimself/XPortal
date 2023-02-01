@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Jotunn.Managers;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -162,7 +163,7 @@ namespace XPortal
         {
             static void Postfix(ref bool __result)
             {
-                if (XPortalUI.Instance.IsActive())
+                if (!GUIManager.IsHeadless() && XPortalUI.Instance != null && XPortalUI.Instance.IsActive())
                 {
                     __result = true;
                 }

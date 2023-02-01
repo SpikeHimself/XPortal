@@ -4,6 +4,7 @@ using Jotunn.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace XPortal
@@ -13,12 +14,11 @@ namespace XPortal
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     public class XPortal : BaseUnityPlugin
     {
-
         #region Plugin info
         // This is the place to edit plugin details. Everywhere else will be generated based on this info.
         public const string PluginGUID = "yay.spikehimself.xportal";
         public const string PluginName = "XPortal";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
         public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string PluginWebsiteUrl = "https://github.com/SpikeHimself/XPortal";
         public const string PluginJotunnVersion = Jotunn.Main.Version;
@@ -67,6 +67,7 @@ namespace XPortal
             HarmonyPatches.OnPostPortalInteract += OnPostPortalInteract;
 
             // Subscribe to Jotunn's OnVanillaMapAvailable event. This is the earliest point where we can update the known portals.
+            // (but on dedicated servers this isn't triggered)
             MinimapManager.OnVanillaMapAvailable += OnVanillaMapAvailable;
 
             // Apply the Harmony patches
@@ -78,16 +79,16 @@ namespace XPortal
         /// </summary>
         private void Update()
         {
+            if (GUIManager.IsHeadless() || !gameStarted || !XPortalUI.Instance.IsActive())
+            {
+                return;
+            }
+
             if (submitUIOnNextFrame)
             {
                 // This weird work-around stops the chatbox from opening when you press enter in the portal UI
                 submitUIOnNextFrame = false;
                 XPortalUI.Instance.Submit();
-            }
-
-            if (!gameStarted || !XPortalUI.Instance.IsActive())
-            {
-                return;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -110,7 +111,10 @@ namespace XPortal
         private void OnDestroy()
         {
             HarmonyPatches.UnPatch();
-            XPortalUI.Instance?.Dispose();
+            if (!GUIManager.IsHeadless())
+            {
+                XPortalUI.Instance?.Dispose();
+            }
             knownPortals?.Clear();
         }
         #endregion
@@ -133,8 +137,11 @@ namespace XPortal
         /// </summary>
         internal void OnGameStart()
         {
-            XPortalUI.Instance.PortalInfoSubmitted += OnPortalInfoSubmitted;
-            XPortalUI.Instance.PingMapButtonClicked += OnPingMapButtonClicked;
+            if (!GUIManager.IsHeadless())
+            {
+                XPortalUI.Instance.PortalInfoSubmitted += OnPortalInfoSubmitted;
+                XPortalUI.Instance.PingMapButtonClicked += OnPingMapButtonClicked;
+            }
 
             ZRoutedRpc.instance.Register<ZDOID, ZDOID>(RPC_TARGETCHANGEREQUEST, new Action<long, ZDOID, ZDOID>(OnRpcTargetChangeRequest));
             ZRoutedRpc.instance.Register<ZDOID, string>(RPC_NAMECHANGEREQUEST, new Action<long, ZDOID, string>(OnRpcNameChangeRequest));
@@ -239,6 +246,13 @@ namespace XPortal
         /// <param name="targetPortalZDOID">The ZDOID of the new target. Note that this can also be `ZDOID.None`</param>
         private void OnRpcTargetChangeRequest(long sender, ZDOID thisPortalZDOID, ZDOID targetPortalZDOID)
         {
+            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
+            {
+                // On dedicated servers the list might still be empty 
+                // TODO: find an event that triggers after portals are available but before players join 
+                UpdateKnownPortals();
+            }
+
             // According to an incoming RPC message, a known portal should change target
             var knownPortal = knownPortals[thisPortalZDOID];
 
@@ -264,6 +278,13 @@ namespace XPortal
 
         private void OnRpcNameChangeRequest(long sender, ZDOID thisPortalZDOID, string newName)
         {
+            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
+            {
+                // On dedicated servers the list might still be empty 
+                // TODO: find an event that triggers after portals are available but before players join 
+                UpdateKnownPortals();
+            }
+
             // According to an incoming RPC message, a known portal should change name
             string oldName = knownPortals[thisPortalZDOID].Name;
             Jotunn.Logger.LogDebug($"[OnRpcNameChangeRequest] Portal `{oldName}` is renaming to `{newName}`");
@@ -280,6 +301,13 @@ namespace XPortal
 
         private void OnRpcRemoveRequest(long sender, ZDOID removedZDOID)
         {
+            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
+            {
+                // On dedicated servers the list might still be empty 
+                // TODO: find an event that triggers after portals are available but before players join 
+                UpdateKnownPortals();
+            }
+
             // According to an incoming RPC message, a known portal needs to be removed
             Jotunn.Logger.LogDebug($"[OnRpcRemoveRequest] Portal `{removedZDOID}` is being removed (it no longer exists)");
 
