@@ -106,6 +106,8 @@
     <None Include="PrePackage\README.bbcode" />
     <None Include="PrePackage\README.md" />
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
+    <None Include="PrePackage\Translations\French\xportal-translations-french.json" />
+    <None Include="PrePackage\Translations\Portuguese_Brazilian\xportal-translations-portuguese_brazillian.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PrePackage\manifest.tt">
