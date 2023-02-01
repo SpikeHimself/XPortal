@@ -238,7 +238,7 @@ namespace XPortal
 
         private void InitialiseUI()
         {
-            if (GUIManager.IsHeadless ())
+            if (GUIManager.IsHeadless())
             {
                 // This is a dedicated server, UI is not available
                 return;
