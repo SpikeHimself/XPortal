@@ -74,6 +74,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 ## Credits
 
 * [sweetgiorni](https://valheim.thunderstore.io/package/sweetgiorni/) for creating [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/)
+* Translations: kaiqueknup (Português (Brasil)), makou (Français)
 
 ---
 
