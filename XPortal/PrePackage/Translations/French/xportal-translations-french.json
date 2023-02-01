@@ -1,0 +1,9 @@
+{
+  "piece_portal_description": "Se connecte à un autre portail",
+  "piece_portal_settag": "Configurer",
+  "piece_portal_tag": "Nom",
+  "piece_portal_target": "Destination",
+  "piece_portal_target_none": "(Aucun)",
+  "piece_portal_tag_none": "(Sans nom)",
+  "hud_xportal_title": "Salutations, voyageur !"
+}
