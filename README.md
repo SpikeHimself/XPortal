@@ -9,7 +9,7 @@ The easiest method is to use a mod manager such as Vortex or r2modman. You can d
 ## Bugs, Issues, Feature Requests
 
 To report problems or provide feedback, please use the project's [GitHub Issues page](https://github.com/SpikeHimself/XPortal/issues).
-If you are experiencing a bug, please include the BepinEx output log and provide as many details as possible.
+If you are experiencing a bug, please include the BepInEx output log and provide as many details as possible.
 
 ## Contributing
 
