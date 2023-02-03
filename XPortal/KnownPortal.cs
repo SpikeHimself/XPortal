@@ -1,15 +1,23 @@
-﻿namespace XPortal
+﻿using System.IO;
+using System.Xml.Serialization;
+using UnityEngine;
+
+namespace XPortal
 {
     public class KnownPortal
     {
-        public ZDOID ZDOID { get; }
+        public ZDOID Id { get; set; }
         public string Name { get; set; }
         public ZDOID Target { get; set; }
+        public Vector3 Location { get; set; }
 
-        public KnownPortal(ZDOID portalZDOID, string portalName, ZDOID targetZDOID)
+        private KnownPortal() { }
+
+        public KnownPortal(ZDOID portalZDOID, string portalName, Vector3 location, ZDOID targetZDOID)
         {
-            ZDOID = portalZDOID;
+            Id = portalZDOID;
             Name = portalName;
+            Location = location;
             Target = targetZDOID == null ? ZDOID.None : targetZDOID;
         }
 
@@ -23,36 +31,58 @@
             return Target == targetZDOID;
         }
 
-        public bool IsZDOValid()
+        //public bool IsZDOValid()
+        //{
+        //    var ZDO = Util.TryGetZDO(ZDOID);
+        //    return ZDO != null && ZDO.IsValid();
+        //}
+
+        //public bool IsTargetZDOValid()
+        //{
+        //    var ZDO = Util.TryGetZDO(Target);
+        //    return ZDO != null && ZDO.IsValid();
+        //}
+
+        //private static string GetTag(ZDOID portalZDOID)
+        //{
+        //    if (portalZDOID == ZDOID.None)
+        //    {
+        //        return string.Empty;
+        //    }
+
+        //    var portalZDO = Util.TryGetZDO(portalZDOID);
+        //    return portalZDO.GetString("tag");
+        //}
+
+        public ZPackage Pack()
         {
-            var ZDO = Util.TryGetZDO(ZDOID);
-            return ZDO != null && ZDO.IsValid();
+            var pkg = new ZPackage();
+            pkg.Write(Id);
+            pkg.Write(Name);
+            pkg.Write(Location);
+            pkg.Write(Target);
+            return pkg;
         }
 
-        public bool IsTargetZDOValid()
+        public static KnownPortal Unpack(ZPackage pkg)
         {
-            var ZDO = Util.TryGetZDO(Target);
-            return ZDO != null && ZDO.IsValid();
-        }
-
-        private static string GetTag(ZDOID portalZDOID)
-        {
-            if (portalZDOID == ZDOID.None)
+            var x = new KnownPortal()
             {
-                return string.Empty;
-            }
-
-            var portalZDO = Util.TryGetZDO(portalZDOID);
-            return portalZDO.GetString("tag");
+                Id = pkg.ReadZDOID(),
+                Name = pkg.ReadString(),
+                Location = pkg.ReadVector3(),
+                Target = pkg.ReadZDOID()
+            };
+            return x;
         }
 
         public override string ToString()
         {
-            if (HasTarget() && IsTargetZDOValid())
+            if (HasTarget())
             {
-                return $"{{ ID: `{ZDOID}`, Name; `{Name}`, Target: `{GetTag(Target)}` }}";
+                return $"{{ ID: `{Id}`, Name; `{Name}`, Target: `{Target}` }}";
             }
-            return $"{{ ID: `{ZDOID}`, Name; `{Name}`, No Target }}";
+            return $"{{ ID: `{Id}`, Name; `{Name}`, No Target }}";
         }
 
     }

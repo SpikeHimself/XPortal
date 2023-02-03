@@ -14,32 +14,55 @@ namespace XPortal
     public class XPortal : BaseUnityPlugin
     {
         #region Plugin info
-        // This is the place to edit plugin details. Everywhere else will be generated based on this info.
+        // This is *the* place to edit plugin details. Everywhere else will be generated based on this info.
         public const string PluginGUID = "yay.spikehimself.xportal";
         public const string PluginName = "XPortal";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.2.0";
         public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string PluginWebsiteUrl = "https://github.com/SpikeHimself/XPortal";
         public const string PluginJotunnVersion = Jotunn.Main.Version;
         #endregion
 
         #region RPC Names
+        // Client to server
         public const string RPC_TARGETCHANGEREQUEST = "XPortal_TargetChangeRequest";
         public const string RPC_NAMECHANGEREQUEST = "XPortal_NameChangeRequest";
-        public const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
-        private const string RPC_CHATMESSAGE = "ChatMessage";
+        public const string RPC_SYNCREQUEST = "XPortal_SyncRequest";
+        public const string RPC_CHECKZDOREQUEST = "XPortal_CheckZDORequest";
+        //public const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
+        
+        // Server to client
+        public const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
+        public const string RPC_RESYNC = "XPortal_Resync";
+
+        // Client to client
+        public const string RPC_CHATMESSAGE = "ChatMessage";
         #endregion
 
         /// <summary>
         /// Set to true via Game.Start() -> HarmonyPatches.GameStartPatch() -> HarmonyPatches.OnGameStart() -> OnGameStart()
         /// </summary>
         private bool gameStarted = false;
+        
+        private bool syncRequested = false;
 
-        /// <summary>
-        /// This is the core of XPortal. This is the list of known portals, indexed by ZDOID.
-        /// Each value is a KnownPortal, which holds the ZDOID, Name, and the portal's target ZDOID.
-        /// </summary>
-        private Dictionary<ZDOID, KnownPortal> knownPortals = new Dictionary<ZDOID, KnownPortal>();
+
+        #region Determine Environment
+        public bool IsServer()
+        {
+            return ZNet.instance != null && ZNet.instance.IsServer();
+        }
+        
+        public bool IsHeadless()
+        {
+            return GUIManager.IsHeadless();
+        }
+
+        public bool IsDedicated()
+        {
+            return IsHeadless();
+        }
+        #endregion
 
         #region Unity Events
         /// <summary>
@@ -52,7 +75,7 @@ namespace XPortal
 
             // Subscribe to HarmonyPatches events
             HarmonyPatches.OnGameStart += OnGameStart;
-            //HarmonyPatches.OnPostCreateSyncList += OnPostCreateSyncList;
+            HarmonyPatches.OnPostCreateSyncList += OnPostCreateSyncList;
             HarmonyPatches.OnPrePortalHover += OnPrePortalHover;
             HarmonyPatches.OnPostPortalInteract += OnPostPortalInteract;
 
@@ -62,12 +85,15 @@ namespace XPortal
                 XPortalUI.Instance.AddInputs();
             }
 
-            // Subscribe to Jotunn's OnVanillaMapAvailable event. This is the earliest point where we can update the known portals.
+            // Subscribe to Jotunn's OnVanillaMapDataLoaded event. This is the earliest point where we can update the known portals.
             // (but on dedicated servers this isn't triggered)
-            MinimapManager.OnVanillaMapAvailable += OnVanillaMapAvailable;
+            //MinimapManager.OnVanillaMapAvailable += OnVanillaMapAvailable;
+            MinimapManager.OnVanillaMapDataLoaded += OnVanillaMapDataLoaded;
 
             // Apply the Harmony patches
             HarmonyPatches.Patch();
+
+            //NetworkManager.Instance.AddRPC()
         }
 
         /// <summary>
@@ -93,7 +119,7 @@ namespace XPortal
             {
                 XPortalUI.Instance?.Dispose();
             }
-            knownPortals?.Clear();
+            KnownPortalsManager.Instance?.Dispose();
         }
         #endregion
 
@@ -101,10 +127,31 @@ namespace XPortal
         /// <summary>
         /// https://valheim-modding.github.io/Jotunn/tutorials/events.html
         /// </summary>
-        private void OnVanillaMapAvailable()
+        private void OnVanillaMapDataLoaded()
         {
-            Jotunn.Logger.LogDebug("OnVanillaMapAvailable");
-            UpdateKnownPortals(forceRefresh: true);
+            // Ask the server to send us the portals
+            RPC.SendSyncRequest();
+        }
+        #endregion
+
+        #region Process ZDOs
+        private List<ZDO> ProcessSyncRequest()
+        {
+            var allPortalZDOs = GetAllPortalZDOs();
+            Jotunn.Logger.LogDebug($"[OnPostCreateSyncList] Fetched {allPortalZDOs.Count} portals");
+
+            ForceLocalPortalUpdate(allPortalZDOs);
+
+            RPC.SendResync(KnownPortalsManager.Instance.Pack());
+
+            return allPortalZDOs;
+        }
+
+        private List<ZDO> GetAllPortalZDOs()
+        {
+            var allPortalZDOs = new List<ZDO>();
+            ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortalZDOs);
+            return allPortalZDOs;
         }
         #endregion
 
@@ -115,101 +162,196 @@ namespace XPortal
         /// </summary>
         internal void OnGameStart()
         {
-            if (!GUIManager.IsHeadless())
+            if (!IsHeadless())
             {
+                // Remove them in case we joined another world
+                XPortalUI.Instance.PortalInfoSubmitted -= OnPortalInfoSubmitted;
+                XPortalUI.Instance.PingMapButtonClicked -= OnPingMapButtonClicked;
+
                 XPortalUI.Instance.PortalInfoSubmitted += OnPortalInfoSubmitted;
                 XPortalUI.Instance.PingMapButtonClicked += OnPingMapButtonClicked;
             }
 
             ZRoutedRpc.instance.Register<ZDOID, ZDOID>(RPC_TARGETCHANGEREQUEST, new Action<long, ZDOID, ZDOID>(OnRpcTargetChangeRequest));
             ZRoutedRpc.instance.Register<ZDOID, string>(RPC_NAMECHANGEREQUEST, new Action<long, ZDOID, string>(OnRpcNameChangeRequest));
-            ZRoutedRpc.instance.Register<ZDOID>(RPC_REMOVEREQUEST, new Action<long, ZDOID>(OnRpcRemoveRequest));
-
+            //ZRoutedRpc.instance.Register<ZDOID>(RPC_REMOVEREQUEST, new Action<long, ZDOID>(OnRpcRemoveRequest));
+            ZRoutedRpc.instance.Register(RPC_SYNCREQUEST, new Action<long>(OnRpcSyncRequest));
+            ZRoutedRpc.instance.Register<ZDOID>(RPC_CHECKZDOREQUEST, new Action<long, ZDOID>(OnRpcCheckZDORequest));
+            ZRoutedRpc.instance.Register<ZPackage>(RPC_SYNCPORTAL, new Action<long, ZPackage>(OnRpcSyncPortal));
+            ZRoutedRpc.instance.Register<ZPackage>(RPC_RESYNC, new Action<long, ZPackage>(OnRpcResync)); 
+            
             gameStarted = true;
         }
 
-        //internal void OnPostCreateSyncList(ref List<ZDO> toSync)
-        //{
-        //    ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, toSync);
-        //}
+        internal void OnPostCreateSyncList(ref List<ZDO> toSync)
+        {
+            if (syncRequested)
+            {
+                syncRequested = false;
 
+               var allPortalZDOs = ProcessSyncRequest();
+
+                // TODO not sure if this is necessary?
+                toSync.AddRange(allPortalZDOs);
+            }
+        }
+
+        private ZDOID lastHoverId = ZDOID.None;
         internal void OnPrePortalHover(out string result, ref ZDO portalZDO)
         {
-            UpdateKnownPortals();
+            if (lastHoverId != portalZDO.m_uid)
+            {
+                RPC.SendSyncRequest();
+                lastHoverId = portalZDO.m_uid;
+            }
 
             // Get information about 'this' portal
-            var thisPortalZDOID = portalZDO.m_uid;
-            var thisKnownPortal = knownPortals[thisPortalZDOID];
-            string thisPortalName = thisKnownPortal.Name;
-            if (string.IsNullOrEmpty(thisPortalName))
+            var thisPortalId = portalZDO.m_uid;
+
+            if(!KnownPortalsManager.Instance.ContainsId(thisPortalId ))
             {
-                thisPortalName = "$piece_portal_tag_none"; // "(No Name)"
+                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over unknown portal {thisPortalId}");
+                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Sending sync request..");
+                RPC.SendSyncRequest();
+                result = "Fetching portal info..";
+                return;
+            }
+
+            var thisKnownPortal = KnownPortalsManager.Instance.GetKnownPortal(thisPortalId);
+
+            string outputPortalName = thisKnownPortal.Name;
+            if (string.IsNullOrEmpty(outputPortalName))
+            {
+                outputPortalName = "$piece_portal_tag_none"; // "(No Name)"
             }
 
             // Get information about the target
-            string thisPortalDestination = "$piece_portal_target_none"; // "(None)"
+            string outputPortalDestination = "$piece_portal_target_none"; // "(None)"
             if (thisKnownPortal.HasTarget())
             {
-                var targetPortalZDOID = thisKnownPortal.Target;
-                var targetPortalZDO = Util.TryGetZDO(targetPortalZDOID);
-                if (targetPortalZDO == null || !targetPortalZDO.IsValid())
+                var targetId = thisKnownPortal.Target;
+
+                if (!KnownPortalsManager.Instance.ContainsId(targetId))
                 {
-                    // Target was set but it appears to be invalid. Maybe it got destroyed by a nasty troll on the other side..
-                    // Let everyone know that the portal was removed
-                    Jotunn.Logger.LogDebug($"[OnPrePortalHover] Send RPC {RPC_REMOVEREQUEST}");
-                    SendRpcRemoveRequest(targetPortalZDOID);
+                    Jotunn.Logger.LogDebug($"[OnPrePortalHover] Target portal {targetId} appears to be invalid");
+                    RPC.SendCheckZDORequest(targetId);
+                    result = "Fetching portal info....";
+                    return;
                 }
-                else
+
+                //var targetPortalZDO = Util.TryGetZDO(targetPortalZDOID);
+                //if (targetPortalZDO == null || !targetPortalZDO.IsValid())
+                //{
+                //    // Target was set but it appears to be invalid. Maybe it got destroyed by a nasty troll on the other side..
+                //    // Ask the server for a new portal list
+                //    Jotunn.Logger.LogDebug($"[OnPrePortalHover] Invalid ZDO. Send RPC {RPC_SYNCREQUEST}");
+                //    RPC.SendSyncRequest();
+                //}
+                //else
+                //{
+                outputPortalDestination = KnownPortalsManager.Instance.GetKnownPortal(targetId).Name;
+                if (string.IsNullOrEmpty(outputPortalDestination))
                 {
-                    thisPortalDestination = knownPortals[targetPortalZDOID].Name;
-                    if (string.IsNullOrEmpty(thisPortalDestination))
-                    {
-                        thisPortalDestination = "$piece_portal_tag_none"; // "(No Name)"
-                    }
+                    outputPortalDestination = "$piece_portal_tag_none"; // "(No Name)"
                 }
+                //}
             }
 
             result = Localization.instance.Localize(
-                         $"$piece_portal $piece_portal_tag: {thisPortalName}\n"             // "Portal Name: {name}"
-                       + $"$piece_portal_target: {thisPortalDestination}\n"                 // "Destination: {name}"
+                         $"$piece_portal $piece_portal_tag: {outputPortalName}\n"           // "Portal Name: {name}"
+                       + $"$piece_portal_target: {outputPortalDestination}\n"               // "Destination: {name}"
                        + $"[<color=yellow><b>$KEY_Use</b></color>] $piece_portal_settag"    // "[E] Configure"
                      );
         }
 
         internal void OnPostPortalInteract(ZDO portalZDO)
         {
+            Jotunn.Logger.LogDebug($"[OnPostPortalInteract] Sending sync request");
+            RPC.SendSyncRequest();
+
             var thisPortalZDOID = portalZDO.m_uid;
-            var thisKnownPortal = knownPortals[thisPortalZDOID];
+
+            if (!KnownPortalsManager.Instance.ContainsId(thisPortalZDOID))
+            {
+                return;
+            }
+
+            var thisKnownPortal = KnownPortalsManager.Instance.GetKnownPortal(thisPortalZDOID);
 
             Jotunn.Logger.LogDebug($"[OnPostPortalInteract] Interacting with: {thisKnownPortal}");
-            XPortalUI.Instance.ConfigurePortal(thisKnownPortal, ref knownPortals);
-        }
-        #endregion
-
-        #region RPC Shorthands
-        public void SendRpcTargetChangeRequest(ZDOID portalZDOID, ZDOID targetZDOID)
-        {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_TARGETCHANGEREQUEST, portalZDOID, targetZDOID);
-        }
-
-        public void SendRpcNameChangeRequest(ZDOID portalZDOID, string newName)
-        {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_NAMECHANGEREQUEST, portalZDOID, newName);
-        }
-
-        public void SendRpcRemoveRequest(ZDOID portalZDOID)
-        {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_REMOVEREQUEST, portalZDOID);
-        }
-
-        public void SendRpcPingMap(Vector3 location, string text)
-        {
-            // I have no idea what the numbers 3 and 1 mean in this context, but it works..
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_CHATMESSAGE, location, 3, text, string.Empty, 1);
+            XPortalUI.Instance.ConfigurePortal(thisKnownPortal);
         }
         #endregion
 
         #region RPC Events
+        /// <summary>
+        /// The server sent us all of the portals it knows
+        /// </summary>
+        /// <param name="sender">The server</param>
+        /// <param name="pkg">A ZPackage containing a number followed by a list of packaged portals</param>
+        private void OnRpcResync(long sender, ZPackage pkg)
+        {
+            if (IsServer())
+            {
+                return;
+            }
+
+            KnownPortalsManager.Instance.UpdateFromResyncPackage(pkg);
+        }
+
+        private void OnRpcSyncPortal(long sender, ZPackage pkg)
+        {
+            if (IsServer())
+            {
+                return;
+            }
+
+            var incomingPortal = KnownPortal.Unpack(pkg);
+
+            Jotunn.Logger.LogDebug($"[OnRpcSyncPortal] Received update to portal `{incomingPortal.Name}`");
+            KnownPortalsManager.Instance.Update(incomingPortal);
+        }
+
+        /// <summary>
+        /// A client wishes to receive the portal list
+        /// </summary>
+        /// <param name="sender"></param>
+        private void OnRpcSyncRequest(long sender)
+        {
+            Jotunn.Logger.LogDebug($"Received sync request from {sender}");
+
+            if (IsDedicated())
+            {
+                // wait for ZDOMan.CreateSyncList to initiate
+                syncRequested = true;
+            }
+            else
+            {
+                // do it immediately
+                ProcessSyncRequest();
+            }
+        }
+
+        private void OnRpcCheckZDORequest(long sender, ZDOID id) 
+        {
+            if(!IsServer())
+            {
+                return;
+            }
+
+            ZDO zdo = Util.TryGetZDO(id);
+            if (zdo == null || !zdo.IsValid())
+            {
+                var portalsWithInvalidTarget = KnownPortalsManager.Instance.GetPortalsWithTarget(id);
+                Jotunn.Logger.LogDebug($"[OnRpcCheckZDORequest] {portalsWithInvalidTarget.Count} portals have invalid target `{id}`");
+                foreach (var portal in portalsWithInvalidTarget)
+                {
+                    RPC.SendTargetChangeRequest(portal.Id, ZDOID.None);
+                }
+
+            }
+        }
+
         /// <summary>
         /// This RPC message is used when a known portal needs to change target.
         /// </summary>
@@ -218,151 +360,81 @@ namespace XPortal
         /// <param name="targetPortalZDOID">The ZDOID of the new target. Note that this can also be `ZDOID.None`</param>
         private void OnRpcTargetChangeRequest(long sender, ZDOID thisPortalZDOID, ZDOID targetPortalZDOID)
         {
-            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
+            if (IsServer())
             {
-                // On dedicated servers the list might still be empty 
-                // TODO: find an event that triggers after portals are available but before players join 
-                UpdateKnownPortals();
-            }
+                Jotunn.Logger.LogDebug($"[OnRpcTargetChangeRequest] {sender} wants `{thisPortalZDOID}` to target `{targetPortalZDOID}`");
 
-            // According to an incoming RPC message, a known portal should change target
-            var knownPortal = knownPortals[thisPortalZDOID];
+                var updatedPortal = KnownPortalsManager.Instance.UpdateTarget(thisPortalZDOID, targetPortalZDOID);
 
-            if (targetPortalZDOID == ZDOID.None || targetPortalZDOID.IsNone())
-            {
-                Jotunn.Logger.LogDebug($"[OnRpcTargetChangeRequest] Portal `{knownPortal.Name}` is disconnecting");
-            }
-            else
-            {
-                var targetName = knownPortals[targetPortalZDOID].Name;
-                Jotunn.Logger.LogDebug($"[OnRpcTargetChangeRequest] Portal `{knownPortal.Name}` is connecting to `{targetName}`");
-            }
+                var updatedPortalZDO = Util.TryGetZDO(updatedPortal.Id);
 
-            knownPortals[thisPortalZDOID].Target = targetPortalZDOID;
+                //updatedPortalZDO.SetOwner(ZDOMan.instance.GetMyID());
+                //updatedPortalZDO.SetOwner(sender);
+                updatedPortalZDO.Set("target", updatedPortal.Target);
+                ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
 
-            var thisPortalZDO = Util.TryGetZDO(thisPortalZDOID);
-            if (thisPortalZDO == null || !thisPortalZDO.IsValid())
-            {
-                Jotunn.Logger.LogError($"[OnRpcTargetChangeRequest] Invalid portal ZDO for `{thisPortalZDOID}`");
-                UpdateKnownPortals(forceRefresh: true);
+                //updatedPortalZDO.Set("tag", updatedPortal.Name);
+                //ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
+
+                RPC.SendSyncPortal(updatedPortal);
                 return;
             }
 
-            thisPortalZDO.SetOwner(ZDOMan.instance.GetMyID());
-            thisPortalZDO.Set("target", targetPortalZDOID);
-            ZDOMan.instance.ForceSendZDO(thisPortalZDOID);
-
-            Jotunn.Logger.LogInfo($"[OnRpcTargetChangeRequest] Updated portal: {knownPortals[thisPortalZDOID]}");
+            Jotunn.Logger.LogDebug($"[OnRpcNameChangeRequest] {sender} wants `{thisPortalZDOID}` to target `{targetPortalZDOID}`, but I am not the server.");
         }
 
         private void OnRpcNameChangeRequest(long sender, ZDOID thisPortalZDOID, string newName)
         {
-            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
+            if ( IsServer () )
             {
-                // On dedicated servers the list might still be empty 
-                // TODO: find an event that triggers after portals are available but before players join 
-                UpdateKnownPortals();
-            }
+                Jotunn.Logger.LogDebug($"[OnRpcNameChangeRequest] {sender} wants `{thisPortalZDOID}` to be called `{newName}`");
 
-            if (!knownPortals.ContainsKey(thisPortalZDOID))
-            {
-                UpdateKnownPortals(forceRefresh: true);
+                var updatedPortal = KnownPortalsManager.Instance.UpdateName (thisPortalZDOID, newName);
+
+                var updatedPortalZDO = Util.TryGetZDO(updatedPortal.Id);
+
+                //updatedPortalZDO.SetOwner(sender);
+                updatedPortalZDO.Set("tag", updatedPortal.Name);
+                ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
+
+                RPC.SendSyncPortal(updatedPortal);
                 return;
             }
 
-            // According to an incoming RPC message, a known portal should change name
-            string oldName = knownPortals[thisPortalZDOID].Name;
-            Jotunn.Logger.LogDebug($"[OnRpcNameChangeRequest] Portal `{oldName}` is renaming to `{newName}`");
-
-            knownPortals[thisPortalZDOID].Name = newName;
-
-            var thisPortalZDO = Util.TryGetZDO(thisPortalZDOID);
-            if (thisPortalZDO == null || !thisPortalZDO.IsValid())
-            {
-                Jotunn.Logger.LogError($"[OnRpcNameChangeRequest] Invalid portal ZDO for `{thisPortalZDOID}`");
-                UpdateKnownPortals(forceRefresh: true);
-                return;
-            }
-
-            thisPortalZDO.SetOwner(ZDOMan.instance.GetMyID());
-            thisPortalZDO.Set("tag", newName);
-            ZDOMan.instance.ForceSendZDO(thisPortalZDOID);
-
-            Jotunn.Logger.LogInfo($"[OnRpcNameChangeRequest] Renamed portal `{oldName}`: {knownPortals[thisPortalZDOID]} ");
-        }
-
-        private void OnRpcRemoveRequest(long sender, ZDOID removedZDOID)
-        {
-            if (GUIManager.IsHeadless() && knownPortals.Count == 0)
-            {
-                // On dedicated servers the list might still be empty 
-                // TODO: find an event that triggers after portals are available but before players join 
-                UpdateKnownPortals();
-            }
-
-            // According to an incoming RPC message, a known portal needs to be removed
-            Jotunn.Logger.LogDebug($"[OnRpcRemoveRequest] Portal `{removedZDOID}` is being removed (it no longer exists)");
-
-            knownPortals.Remove(removedZDOID);
-            Jotunn.Logger.LogInfo($"[OnRpcRemoveRequest] Removed Portal: {removedZDOID}");
-
-            // This may cause some other portals to lose connection, so let's send around some updates about those
-            var disconnectedPortals = knownPortals.Where(portal => portal.Value.Targets(removedZDOID)).ToList();
-            foreach (var disconnectedPortalKVP in disconnectedPortals)
-            {
-                var disconnectedPortalZDOID = disconnectedPortalKVP.Key;
-                var disconnectedKnownPortal = disconnectedPortalKVP.Value;
-                Jotunn.Logger.LogDebug($"[OnRpcRemoveRequest] Send RPC {RPC_TARGETCHANGEREQUEST} for disconnected portal `{disconnectedKnownPortal.Name}`");
-                SendRpcTargetChangeRequest(disconnectedPortalZDOID, ZDOID.None);
-            }
+            Jotunn.Logger.LogDebug($"[OnRpcNameChangeRequest] {sender} wants `{thisPortalZDOID}` to be called `{newName}`, but I am not the server.");
         }
         #endregion
 
         #region UI Events
-        private void OnPortalInfoSubmitted(ZDOID thisPortalZDOID, string newName, ZDOID targetZDOID)
+        private void OnPortalInfoSubmitted(KnownPortal thisPortal, string newName, ZDOID targetZDOID)
         {
-            KnownPortal knownPortal = knownPortals[thisPortalZDOID];
-
-            // If this is not a valid ZDO, have it removed, and don't bother updating
-            if (!knownPortal.IsZDOValid())
+            if (!thisPortal.Name.Equals(newName))
             {
-                SendRpcRemoveRequest(targetZDOID);
-                return;
-            }
-
-            if (!knownPortal.Name.Equals(newName))
-            {
-                // Send a message around so everyone can keep their stuff updated
+                // Ask the server to update the portal's name
                 Jotunn.Logger.LogDebug($"[OnPortalInfoSubmitted] Send RPC {RPC_NAMECHANGEREQUEST}");
-                SendRpcNameChangeRequest(thisPortalZDOID, newName);
+                RPC.SendNameChangeRequest(thisPortal.Id, newName);
             }
 
-            if (!knownPortal.Targets(targetZDOID))
+            if (!thisPortal.Targets(targetZDOID))
             {
-                // Spam all clients, err, I mean, tell everyone to update the target!
+                // Ask the server to update the portal's target
                 Jotunn.Logger.LogDebug($"[OnPortalInfoSubmitted] Send RPC {RPC_TARGETCHANGEREQUEST}");
-                SendRpcTargetChangeRequest(thisPortalZDOID, targetZDOID);
+                RPC.SendTargetChangeRequest(thisPortal.Id, targetZDOID);
             }
         }
 
         private void OnPingMapButtonClicked(ZDOID targetZDOID)
         {
-            Jotunn.Logger.LogDebug($"[OnPingMapButtonClicked] {knownPortals[targetZDOID]}");
-            var knownPortal = knownPortals[targetZDOID];
+            var portal = KnownPortalsManager.Instance.GetKnownPortal(targetZDOID);
 
-            // If this is not a valid ZDO, have it removed, and don't bother pinging
-            if (!knownPortal.IsZDOValid())
-            {
-                SendRpcRemoveRequest(targetZDOID);
-                return;
-            }
+            Jotunn.Logger.LogDebug($"[OnPingMapButtonClicked] {portal}");
 
             // Get selected portal name and position
-            string targetName = knownPortal.Name;
-            Vector3 targetPos = Util.GetPosition(knownPortal.ZDOID);
+            string targetName = portal.Name;
+            Vector3 targetPos = portal.Location;
 
             // Send ping to all players
-            SendRpcPingMap(targetPos, targetName);
+            RPC.SendPingMap(targetPos, targetName);
 
             // Show location on the map
             Minimap.instance.ShowPointOnMap(targetPos);
@@ -372,84 +444,20 @@ namespace XPortal
         #region Update Known Portals
         /// <summary>
         /// This method is responsible for updating our local list of known portals.
-        /// We are keeping this list as a cache of sorts, so that we don't have to query game data every time we want to know something about our portals.
         /// </summary>
-        /// <param name="forceRefresh">If true, clear the list first</param>
-        internal void UpdateKnownPortals(bool forceRefresh = false)
+        internal void ForceLocalPortalUpdate(List<ZDO> allPortals)
         {
-            if (forceRefresh)
+            //var allPortals = new List<ZDO>();
+            //ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortals);
+
+            KnownPortalsManager.Instance.UpdateFromZDOList(allPortals);
+
+            if (!IsServer())
             {
-                knownPortals.Clear();
-            }
-
-            var allPortals = new List<ZDO>();
-            ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortals);
-
-            if (allPortals.Count == 0)
-            {
-                Jotunn.Logger.LogDebug("No portals found :(");
-                return;
-            }
-
-            // Sort the list by tag
-            allPortals = allPortals.OrderBy(zdo => zdo.GetString("tag")).ToList();
-
-            // Update existing portals and update changed ones
-            foreach (var portalZDO in allPortals)
-            {
-                string portalName = portalZDO.GetString("tag");
-                var portalZDOID = portalZDO.m_uid;
-                var targetZDOID = portalZDO.GetZDOID("target");
-
-                UpdateKnownPortal(portalZDOID, portalName, targetZDOID);
-            }
-
-            // Remove portals that no longer exist
-            foreach (var portalZDOID in knownPortals.Keys.ToList())
-            {
-                var portalZDO = Util.TryGetZDO(portalZDOID);
-                if (portalZDO == null || !portalZDO.IsValid())
-                {
-                    Jotunn.Logger.LogDebug($"[UpdateKnownPortals] Forced removal of Portal `{portalZDOID}`.");
-                    knownPortals.Remove(portalZDOID);
-                }
-                else if (!allPortals.Contains(portalZDO))
-                {
-                    Jotunn.Logger.LogDebug($"[UpdateKnownPortals] Uknown Portal `{knownPortals[portalZDOID]}`, removing..");
-                    SendRpcRemoveRequest(portalZDOID);
-                }
-            }
-        }
-
-        private void UpdateKnownPortal(ZDOID portalZDOID, string updatedName, ZDOID updatedTargetZDOID)
-        {
-
-            var updatedKnownPortal = new KnownPortal(portalZDOID, updatedName, updatedTargetZDOID);
-
-            if (!knownPortals.ContainsKey(updatedKnownPortal.ZDOID))
-            {
-                Jotunn.Logger.LogDebug($"[UpdateKnownPortal] Adding portal: `{updatedKnownPortal}`");
-                knownPortals.Add(updatedKnownPortal.ZDOID, updatedKnownPortal);
-                return;
-            }
-
-            var currentKnownPortal = knownPortals[portalZDOID];
-            if (!currentKnownPortal.Targets(updatedKnownPortal.Target))
-            {
-                if (!updatedKnownPortal.HasTarget())
-                {
-                    Jotunn.Logger.LogDebug($"[UpdateKnownPortal] Portal `{updatedKnownPortal.Name}` has lost its target");
-                }
-                else
-                {
-                    Jotunn.Logger.LogDebug($"[UpdateKnownPortal] Portal `{updatedKnownPortal.Name}` now targets `{knownPortals[updatedKnownPortal.Target].Name}`");
-                }
-                knownPortals[updatedKnownPortal.ZDOID] = updatedKnownPortal;
+                Jotunn.Logger.LogDebug("[ForceLocalPortalUpdate] Send Sync Request");
+                RPC.SendSyncRequest();
             }
         }
         #endregion
-
     }
-
 }
-

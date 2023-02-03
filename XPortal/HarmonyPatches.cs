@@ -8,21 +8,22 @@ namespace XPortal
 {
     internal static class HarmonyPatches
     {
-        //public delegate void OnPostCreateSyncListAction(ref List<ZDO> syncList);
+        public delegate void OnPostCreateSyncListAction(ref List<ZDO> syncList);
+        public static event OnPostCreateSyncListAction OnPostCreateSyncList;
+
         public delegate void OnPostPortalInteractAction(ZDO portalZDO);
+        public static event OnPostPortalInteractAction OnPostPortalInteract;
+
         public delegate void OnPrePortalHoverAction(out string result, ref ZDO portalZDO);
+        public static event OnPrePortalHoverAction OnPrePortalHover;
 
         public static event Action OnGameStart;
-        //public static event OnPostCreateSyncListAction OnPostCreateSyncList;
-        public static event OnPrePortalHoverAction OnPrePortalHover;
-        //public static event Action OnPrePortalInteract;
-        public static event OnPostPortalInteractAction OnPostPortalInteract;
 
         private static readonly Harmony patcher;
 
         static HarmonyPatches()
         {
-            patcher = new Harmony("yay.spikehimself.xportal.harmony");
+            patcher = new Harmony(XPortal.PluginGUID  + ".harmony");
         }
 
         public static void Patch()
@@ -84,17 +85,17 @@ namespace XPortal
             }
         }
 
-        //[HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.CreateSyncList))]
-        //static class ZDOManCreateSyncListPatch
-        //{
-        //    static void Postfix(ref List<ZDO> toSync)
-        //    {
-        //        if (ZNet.instance.IsServer())
-        //        {
-        //            OnPostCreateSyncList(ref toSync);
-        //        }
-        //    }
-        //}
+        [HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.CreateSyncList))]
+        static class ZDOManCreateSyncListPatch
+        {
+            static void Postfix(ref List<ZDO> toSync)
+            {
+                if (ZNet.instance.IsServer())
+                {
+                    OnPostCreateSyncList(ref toSync);
+                }
+            }
+        }
 
 
         [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]

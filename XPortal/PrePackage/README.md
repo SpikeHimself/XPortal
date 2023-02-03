@@ -96,6 +96,12 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Translations added for French, Portuguese (BR), German
 
+* **v1.2.0** (2023-02-03)
+
+	* Fix portals disappearing from the dropdown
+
+	* Fix portals sometimes duplicating
+
 
 
 ## Credits

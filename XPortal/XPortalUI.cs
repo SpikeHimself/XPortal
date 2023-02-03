@@ -19,7 +19,7 @@ namespace XPortal
         ////////////////////////////
 
         #region Events
-        public delegate void PortalInfoSubmittedAction(ZDOID thisPortalZDOID, string newName, ZDOID targetZDOID);
+        public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetZDOID);
         public event PortalInfoSubmittedAction PortalInfoSubmitted;
 
         public delegate void PingMapButtonClickedAction(ZDOID targetPortalZDOID);
@@ -65,9 +65,9 @@ namespace XPortal
 
         private Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
 
-        private ZDOID thisPortalZDOID;
+        private KnownPortal thisPortal;
         private ZDOID selectedTargetZDOID;
-        private Dictionary<ZDOID, KnownPortal> knownPortals;
+        //private Dictionary<ZDOID, KnownPortal> knownPortals;
 
         #region Input Button Configs
         private ButtonConfig uiOkayButton;
@@ -277,14 +277,13 @@ namespace XPortal
         #endregion
 
         #region Values
-        public void ConfigurePortal(KnownPortal portal, ref Dictionary<ZDOID, KnownPortal> knownPortals)
+        public void ConfigurePortal(KnownPortal portal)
         {
             InitialiseUI();
 
-            this.thisPortalZDOID = portal.ZDOID;
+            this.thisPortal = portal;
             this.portalNameInputField.text = portal.Name;
             this.selectedTargetZDOID = portal.Target;
-            this.knownPortals = knownPortals;
             PopulateDropdown();
 
             Show();
@@ -307,28 +306,24 @@ namespace XPortal
             targetPortalDropdown.value = index;
             dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
 
-            var thisPortalZDO = Util.TryGetZDO(thisPortalZDOID);
-            Vector3 thisPortalPos = thisPortalZDO.GetPosition();
+            var thisPortalZDO = Util.TryGetZDO(thisPortal.Id);
 
             // Get the ZDOIDS of the known portals, but sort them by name
-            var knowPortalsSorted = knownPortals.ToList();
-            knowPortalsSorted.Sort((valueA, valueB) => valueA.Value.Name.CompareTo(valueB.Value.Name));
+            var knowPortalsSorted = KnownPortalsManager.Instance.GetSortedList();
 
-            foreach (var knownPortalKVP in knowPortalsSorted)
+            foreach (var knownPortal in knowPortalsSorted)
             {
-                var knownPortalZDOID = knownPortalKVP.Key;
-                var knownPortal = knownPortalKVP.Value;
 
                 // Skip the one we're currently interacting with
-                if (knownPortalZDOID == thisPortalZDOID)
+                if (knownPortal.Id == thisPortal.Id)
                     continue;
 
-                var portalZDO = Util.TryGetZDO(knownPortalZDOID);
-                if (portalZDO == null)
-                {
-                    // This one somehow doesn't exist anymore - don't add it to the list
-                    continue;
-                }
+                //var portalZDO = Util.TryGetZDO(knownPortalZDOID);
+                //if (portalZDO == null)
+                //{
+                //    // This one somehow doesn't exist anymore - don't add it to the list
+                //    continue;
+                //}
 
                 // Get portal name
                 string portalName = knownPortal.Name;
@@ -339,7 +334,7 @@ namespace XPortal
                 }
 
                 // Get portal distance
-                float distance = (int)Vector3.Distance(thisPortalPos, portalZDO.GetPosition());
+                float distance = (int)Vector3.Distance(thisPortal.Location, knownPortal.Location);
                 string strDistance = string.Format("{0} m", distance.ToString());
                 if (distance >= 1000)
                 {
@@ -352,12 +347,12 @@ namespace XPortal
                 targetPortalDropdown.options.Insert(++index, option);
 
                 // Select it in the list if this is the current target
-                if (knownPortalZDOID == selectedTargetZDOID)
+                if (knownPortal.Id == selectedTargetZDOID)
                 {
                     targetPortalDropdown.value = index;
                 }
 
-                dropdownIndexToZDOIDMapping.Add(index, knownPortalZDOID);
+                dropdownIndexToZDOIDMapping.Add(index, knownPortal.Id);
             }
 
             targetPortalDropdown.RefreshShownValue();
@@ -382,7 +377,7 @@ namespace XPortal
         private void OnOkayButtonClicked()
         {
             Hide();
-            PortalInfoSubmitted(thisPortalZDOID, portalNameInputField.text, selectedTargetZDOID);
+            PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetZDOID);
         }
 
         private void OnCancelButtonClicked()
