@@ -302,7 +302,7 @@ namespace XPortal
             int index = -1;
 
             // Add "None" option at index `0`
-            var strNone = Localization.instance.Localize("$piece_portal_target_none");
+            var strNone = Localization.instance.Localize("$piece_portal_target_none"); // "(None)"
             targetPortalDropdown.options.Insert(++index, new Dropdown.OptionData(strNone));
             targetPortalDropdown.value = index;
             dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
@@ -335,7 +335,7 @@ namespace XPortal
 
                 if (string.IsNullOrEmpty(portalName))
                 {
-                    portalName = Localization.instance.Localize("$piece_portal_tag_none");
+                    portalName = Localization.instance.Localize("$piece_portal_tag_none"); // "(No Name)"
                 }
 
                 // Get portal distance
@@ -444,7 +444,7 @@ namespace XPortal
 
                 // Portal name label
                 var portalNameLabelObject = GUIManager.Instance.CreateText(
-                        text: Localization.instance.Localize("$piece_portal $piece_portal_tag"),
+                        text: Localization.instance.Localize("$piece_portal $piece_portal_tag"), // "Portal Name"
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(0f, 1f),    // anchor top left
                         anchorMax: new Vector2(0f, 1f),
@@ -471,7 +471,7 @@ namespace XPortal
                         anchorMax: new Vector2(1f, 1f),     // anchor top right (so it stretches along with the panel)
                         position: new Vector2(secondColumnLeft, firstRowTop),
                         contentType: InputField.ContentType.Standard,
-                        placeholderText: Localization.instance.Localize("$piece_portal $piece_portal_tag.."),
+                        placeholderText: Localization.instance.Localize("$piece_portal $piece_portal_tag.."), // "Portal Name"
                         fontSize: 18,
                         width: inputLongWidth,
                         height: rowHeight);
@@ -581,7 +581,7 @@ namespace XPortal
             if (targetPortalDropdown != null)
                 GameObject.Destroy(targetPortalDropdown);
 
-            if (mainPanel!= null)
+            if (mainPanel != null)
                 GameObject.Destroy(mainPanel);
         }
     }
