@@ -4,6 +4,6 @@
   "version_number": "1.2.0",
   "website_url": "https://github.com/SpikeHimself/XPortal",
   "dependencies": [
-    "ValheimModding-Jotunn-2.10.3"
+    "ValheimModding-Jotunn-2.10.4"
   ]
 }
