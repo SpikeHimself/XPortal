@@ -168,6 +168,11 @@ namespace XPortal
                     continue;
 
                 var portalZDO = Util.TryGetZDO(knownPortalZDOID);
+                if (portalZDO == null)
+                {
+                    // This one somehow doesn't exist anymore - don't add it to the list
+                    continue;
+                }
 
                 // Get portal name
                 string portalName = knownPortal.Name;
