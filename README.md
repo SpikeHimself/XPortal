@@ -1,6 +1,8 @@
 # XPortal 
 
- XPortal is a Valheim mod that lets you select a portal destination from a list of existing portals. 
+ XPortal is a Valheim mod that lets you select a portal destination from a list of existing portals.
+
+ <img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="140" />
 
 ## How to install
 
@@ -16,4 +18,4 @@ If you are experiencing a bug, please include the BepInEx output log and provide
 Coming soon..
 
 
-[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right">](https://www.buymeacoffee.com/SpikeHimself)
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right" />](https://www.buymeacoffee.com/SpikeHimself)
