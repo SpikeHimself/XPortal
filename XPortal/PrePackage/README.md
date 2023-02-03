@@ -108,7 +108,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 * sweetgiorni for creating AnyPortal
 
-* Translations: kaiqueknup (Português (Brasil)), makou (Français), Smok3y97 (Deutsch)
+* Translations: kaiqueknup (Português (Brasil)), makou (Français, Español), Smok3y97 (Deutsch)
 
 ---
 
