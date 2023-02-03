@@ -36,19 +36,10 @@ namespace XPortal
         private bool gameStarted = false;
 
         /// <summary>
-        /// Pressing Enter in the "Portal Name" textfield should close the UI, but if you do that immediately, the keypress
-        /// is forwarded by the game and the Chat window will be opened. So we must delay this by one frame. Update() sets this 
-        /// to true after an Enter keypress is detected. Then on the next Update(), the keypress will be handled and this is set 
-        /// to false again.
-        /// </summary>
-        private bool submitUIOnNextFrame = false;
-
-        /// <summary>
         /// This is the core of XPortal. This is the list of known portals, indexed by ZDOID.
         /// Each value is a KnownPortal, which holds the ZDOID, Name, and the portal's target ZDOID.
         /// </summary>
         private Dictionary<ZDOID, KnownPortal> knownPortals = new Dictionary<ZDOID, KnownPortal>();
-
 
         #region Unity Events
         /// <summary>
@@ -65,6 +56,12 @@ namespace XPortal
             HarmonyPatches.OnPrePortalHover += OnPrePortalHover;
             HarmonyPatches.OnPostPortalInteract += OnPostPortalInteract;
 
+            if (!GUIManager.IsHeadless())
+            {
+                // Add buttons
+                XPortalUI.Instance.AddInputs();
+            }
+
             // Subscribe to Jotunn's OnVanillaMapAvailable event. This is the earliest point where we can update the known portals.
             // (but on dedicated servers this isn't triggered)
             MinimapManager.OnVanillaMapAvailable += OnVanillaMapAvailable;
@@ -78,30 +75,12 @@ namespace XPortal
         /// </summary>
         private void Update()
         {
-            if (GUIManager.IsHeadless() || !gameStarted || !XPortalUI.Instance.IsActive())
+            if (GUIManager.IsHeadless() || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
             {
                 return;
             }
 
-            if (submitUIOnNextFrame)
-            {
-                // This weird work-around stops the chatbox from opening when you press enter in the portal UI
-                submitUIOnNextFrame = false;
-                XPortalUI.Instance.Submit();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                XPortalUI.Instance.Hide();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.KeypadEnter) ||
-                Input.GetKeyDown(KeyCode.Return))
-            {
-                submitUIOnNextFrame = true;
-                return;
-            }
+            XPortalUI.Instance.HandleInput();
         }
 
         /// <summary>

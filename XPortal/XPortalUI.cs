@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Jotunn;
+using Jotunn.Configs;
 using Jotunn.Managers;
 using System;
 using System.Collections.Generic;
@@ -68,12 +69,123 @@ namespace XPortal
         private ZDOID selectedTargetZDOID;
         private Dictionary<ZDOID, KnownPortal> knownPortals;
 
+        #region Input Button Configs
+        private ButtonConfig uiOkayButton;
+        private ButtonConfig uiCancelButton;
+        private ButtonConfig uiPingMapButton;
+        private ButtonConfig uiToggleDropdownButton;
+        private ButtonConfig uiDropdownScrollUpButton;
+        private ButtonConfig uiDropdownScrollDownButton;
+        #endregion
+
+        private const int cfgBlockInputFrameCount = 1;
+        private int blockInput = cfgBlockInputFrameCount;
+
+        private bool dropdownExpanded = false;
+        private bool inputSubmitRequested = false;
 
         private XPortalUI()
         {
             dropdownIndexToZDOIDMapping = new Dictionary<int, ZDOID>();
-            InitialiseUI();
+            //InitialiseUI();
         }
+
+        #region Input
+        public void HandleInput()
+        {
+            if (ZInput.instance == null)
+            {
+                return;
+            }
+
+            if (blockInput > 0)
+            {
+                blockInput--;
+                return;
+            }
+
+            if (ZInput.GetButtonUp(uiCancelButton.Name))
+            {
+                Hide();
+                return;
+            }
+
+            if (ZInput.GetButtonUp(uiPingMapButton.Name))
+            {
+                if (pingMapButtonObject.activeSelf)
+                {
+                    OnPingMapButtonClicked();
+                }
+                return;
+            }
+
+            if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
+            {
+                ToggleDropdownExpanded();
+                return;
+            }
+
+            if (ZInput.GetButtonUp(uiDropdownScrollDownButton.Name))
+            {
+                ScrollDropdownItem(up: false);
+                return;
+            }
+
+            if (ZInput.GetButtonUp(uiDropdownScrollUpButton.Name))
+            {
+                ScrollDropdownItem(up: true);
+                return;
+            }
+
+            if (inputSubmitRequested)
+            {
+                Submit();
+                inputSubmitRequested = false;
+                return;
+            }
+
+            if (ZInput.GetButtonDown(uiOkayButton.Name))
+            {
+                inputSubmitRequested = true;
+                BlockInputForAWhile();
+                return;
+            }
+        }
+
+        internal void AddInputs()
+        {
+            uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
+            uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
+            uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
+            uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
+            uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
+            uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
+        }
+
+        private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
+        {
+            var newButtonConfig = new ButtonConfig
+            {
+                Name = name,
+                HintToken = hintToken,
+                ActiveInGUI = true,
+                ActiveInCustomGUI = true,
+                Key = key,
+                GamepadButton = gamepadButton,
+                RepeatDelay = 1000f,
+                BlockOtherInputs = true,
+            };
+            InputManager.Instance.AddButton(XPortal.PluginGUID, newButtonConfig);
+            return newButtonConfig;
+        }
+
+        private void BlockInputForAWhile()
+        {
+            // After anything happens in the UI, just ignore everything else for a few frames
+            // .....because working with Unity's input system is above my pay grade
+            blockInput = cfgBlockInputFrameCount;
+        }
+        #endregion
 
         #region Visibility
         public bool IsActive()
@@ -87,12 +199,15 @@ namespace XPortal
 
         public void SetActive(bool active)
         {
+            BlockInputForAWhile();
+
             if (mainPanel == null || !mainPanel.IsValid())
             {
                 InitialiseUI();
             }
-            mainPanel.SetActive(active);
+
             GUIManager.BlockInput(active);
+            mainPanel.SetActive(active);
             if (active)
             {
                 portalNameInputField.ActivateInputField();
@@ -108,6 +223,47 @@ namespace XPortal
         public void Hide()
         {
             SetActive(false);
+            dropdownExpanded = false;
+        }
+
+        public void ToggleDropdownExpanded()
+        {
+            if (dropdownExpanded)
+            {
+                targetPortalDropdown.Hide();
+            }
+            else
+            {
+                targetPortalDropdown.Show();
+            }
+            dropdownExpanded = !dropdownExpanded;
+        }
+
+        private void ScrollDropdownItem(bool up)
+        {
+            var dropdownWasExpanded = dropdownExpanded;
+
+            if (dropdownExpanded)
+            {
+                targetPortalDropdown.enabled = false;
+                dropdownExpanded = false;
+            }
+
+            if (up)
+            {
+                targetPortalDropdown.value--;
+            }
+            else
+            {
+                targetPortalDropdown.value++;
+            }
+
+            if (dropdownWasExpanded)
+            {
+                targetPortalDropdown.enabled = true;
+                targetPortalDropdown.Show();
+                dropdownExpanded = true;
+            }
         }
 
         private void SetPingMapButtonActive(bool active)
