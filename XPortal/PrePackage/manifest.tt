@@ -8,6 +8,7 @@
   "version_number": "<#= XPortal.XPortal.PluginVersion #>",
   "website_url": "<#= XPortal.XPortal.PluginWebsiteUrl #>",
   "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.1901",
     "ValheimModding-Jotunn-<#= XPortal.XPortal.PluginJotunnVersion #>"
   ]
 }

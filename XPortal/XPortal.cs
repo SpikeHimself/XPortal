@@ -19,6 +19,7 @@ namespace XPortal
         public const string PluginVersion = "1.2.0";
         public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string PluginWebsiteUrl = "https://github.com/SpikeHimself/XPortal";
+        //public const string PluginBepinVersion = ??
         public const string PluginJotunnVersion = Jotunn.Main.Version;
         #endregion
 
