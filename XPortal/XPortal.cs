@@ -3,7 +3,6 @@ using Jotunn.Managers;
 using Jotunn.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace XPortal
@@ -30,7 +29,7 @@ namespace XPortal
         public const string RPC_SYNCREQUEST = "XPortal_SyncRequest";
         public const string RPC_CHECKZDOREQUEST = "XPortal_CheckZDORequest";
         //public const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
-        
+
         // Server to client
         public const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
         public const string RPC_RESYNC = "XPortal_Resync";
@@ -79,7 +78,7 @@ namespace XPortal
             HarmonyPatches.OnPrePortalHover += OnPrePortalHover;
             HarmonyPatches.OnPostPortalInteract += OnPostPortalInteract;
 
-            if (!GUIManager.IsHeadless())
+            if (!IsHeadless())
             {
                 // Add buttons
                 XPortalUI.Instance.AddInputs();
@@ -101,7 +100,7 @@ namespace XPortal
         /// </summary>
         private void Update()
         {
-            if (GUIManager.IsHeadless() || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
+            if (IsHeadless() || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
             {
                 return;
             }
@@ -115,7 +114,7 @@ namespace XPortal
         private void OnDestroy()
         {
             HarmonyPatches.Unpatch();
-            if (!GUIManager.IsHeadless())
+            if (!IsHeadless())
             {
                 XPortalUI.Instance?.Dispose();
             }
@@ -138,7 +137,7 @@ namespace XPortal
         private List<ZDO> ProcessSyncRequest()
         {
             var allPortalZDOs = GetAllPortalZDOs();
-            Jotunn.Logger.LogDebug($"[OnPostCreateSyncList] Fetched {allPortalZDOs.Count} portals");
+            Jotunn.Logger.LogDebug($"[ProcessSyncRequest] Fetched {allPortalZDOs.Count} portals");
 
             ForceLocalPortalUpdate(allPortalZDOs);
 
@@ -208,7 +207,7 @@ namespace XPortal
             // Get information about 'this' portal
             var thisPortalId = portalZDO.m_uid;
 
-            if(!KnownPortalsManager.Instance.ContainsId(thisPortalId ))
+            if (!KnownPortalsManager.Instance.ContainsId(thisPortalId))
             {
                 Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over unknown portal {thisPortalId}");
                 Jotunn.Logger.LogDebug($"[OnPrePortalHover] Sending sync request..");

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.PlayerLoop;
-using static MeleeWeaponTrail;
 
 namespace XPortal
 {
@@ -47,6 +42,10 @@ namespace XPortal
             return knownPortals.Values.ToList();
         }
 
+        /// <summary>
+        /// Packs the list of portals into a ZPackage. The package is prepended by an int which indicates how many portals are in the package.
+        /// </summary>
+        /// <returns></returns>
         public ZPackage Pack()
         {
             var allPortals = GetList();
@@ -145,7 +144,7 @@ namespace XPortal
 
             Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromResyncPackage] Received {count} portals from server");
 
-            // First, unpack all portals 
+            // Unpack all portals 
             var portalsInPackage = new List<KnownPortal>();
             if (count>0)
             {

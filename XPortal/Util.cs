@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace XPortal
+﻿namespace XPortal
 {
     internal static class Util
     {
