@@ -30,19 +30,19 @@ XPortal completely removes the character length restriction on portal names, so 
 
 Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-#### Controller support (NEW!)
+#### Controller support
 
 As of v1.1.0, XPortal will respond to controller input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively.
 
-* `A` (XBox) / `Cross` (PlayStation): Submit (i.e. press the Okay button)
+* `A` / `Cross` - Submit (i.e. press the Okay button)
 
-* `B` (XBox) / `Circle` (PlayStation): Cancel
+* `B` / `Circle` - Cancel
 
-* `Y` (XBox) / `Triangle` (PlayStation): Ping the selected portal
+* `Y` / `Triangle` - Ping the selected portal
 
-* `X` (XBox) / `Square` (PlayStation): Show the contents of the dropdown
+* `X` / `Square` - Show the contents of the dropdown
 
-* `D-Pad Up` / `D-Pad Down`: Select the previous / next item in the dropdown
+* `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
 
 
 ## Multiplayer
