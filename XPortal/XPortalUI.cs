@@ -570,7 +570,6 @@ namespace XPortal
 
         public void Dispose()
         {
-            mainPanel?.SetActive(false);
             targetPortalDropdown?.onValueChanged.RemoveAllListeners();
 
             if (targetPortalDropdown != null)
