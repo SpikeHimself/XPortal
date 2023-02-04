@@ -7,9 +7,5 @@
             return ZDOMan.instance.GetZDO(portalZDOID);
         }
 
-        public static Vector3 GetPosition(ZDOID portalZDOID)
-        {
-            return TryGetZDO(portalZDOID).GetPosition();
-        }
     }
 }

@@ -32,7 +32,7 @@ namespace XPortal
             return knownPortals.ContainsKey(id);
         }
 
-        public KnownPortal GetKnownPortal(ZDOID id)
+        public KnownPortal GetKnownPortalById(ZDOID id)
         {
             return knownPortals[id];
         }
@@ -67,23 +67,15 @@ namespace XPortal
             list.Sort((valueA, valueB) => valueA.Name.CompareTo(valueB.Name));
             return list;
         }
-        
+
         public List<KnownPortal> GetPortalsWithTarget(ZDOID target)
         {
             return knownPortals.Values.Where(p => p.Target == target).ToList();
         }
 
-        public void Remove(KnownPortal portal)
+        public KnownPortal AddOrUpdate(KnownPortal portal)
         {
-            if (ContainsId(portal.Id))
-            {
-                knownPortals.Remove(portal.Id);
-            }
-        }
-
-        public KnownPortal Update(KnownPortal portal)
-        {
-            if(!ContainsId(portal.Id))
+            if (!ContainsId(portal.Id))
             {
                 //Jotunn.Logger.LogDebug($"[KnownPortalsManager.Update] Adding {portal}");
                 knownPortals.Add(portal.Id, portal);
@@ -93,49 +85,52 @@ namespace XPortal
                 //Jotunn.Logger.LogDebug($"[KnownPortalsManager.Update] Updating {portal}");
                 knownPortals[portal.Id] = portal;
             }
+
             return knownPortals[portal.Id];
         }
 
-        public KnownPortal Update(ZDOID id, string name, Vector3 location, ZDOID target)
-        {
-            return Update(new KnownPortal(id, name, location, target));
-        }
-        
-        public KnownPortal UpdateName(ZDOID id, string newName)
+        public KnownPortal SetName(ZDOID id, string newName)
         {
             knownPortals[id].Name= newName;
             return knownPortals[id];
         }
 
-        public KnownPortal UpdateTarget(ZDOID id, ZDOID target)
+        public KnownPortal SetTarget(ZDOID id, ZDOID target)
         {
             knownPortals[id].Target = target;
             return knownPortals[id];
         }
+        public void Remove(ZDOID id)
+        {
+            if (ContainsId(id))
+            {
+                knownPortals.Remove(id);
+            }
+        }
+
+        public void Remove(KnownPortal portal)
+        {
+            Remove(portal.Id);
+        }
 
         public void UpdateFromZDOList(List<ZDO> zdoList)
         {
-            knownPortals.Clear();
+            var portalsWithZdos = new List<KnownPortal>();
 
-            if (zdoList.Count == 0)
-            {
-                Jotunn.Logger.LogDebug("[UpdateFromZDOList] No portals to update");
-                return;
-            }
-
-            // Sort the list by tag
-            zdoList = zdoList.OrderBy(zdo => zdo.GetString("tag")).ToList();
-
-            // Update existing portals and update changed ones
+            // Create a list of all portals
             foreach (var portalZDO in zdoList)
             {
-                string portalName = portalZDO.GetString("tag");
-                var portalZDOID = portalZDO.m_uid;
+                var id = portalZDO.m_uid;
+                string name = portalZDO.GetString("tag");
                 var location = portalZDO.GetPosition();
-                var targetZDOID = portalZDO.GetZDOID("target");
+                var target = portalZDO.GetZDOID("target");
 
-                Update(portalZDOID, portalName, location, targetZDOID);
+                var knownPortal = new KnownPortal(id, name, location, target);
+                portalsWithZdos.Add(knownPortal);
             }
+
+            // Update our known portals
+            UpdateFromList(portalsWithZdos);
         }
 
         public void UpdateFromResyncPackage(ZPackage pkg)
@@ -156,31 +151,37 @@ namespace XPortal
                 }
             }
 
-            // Second, update them in our Known Portals
-            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromResyncPackage] Updating {portalsInPackage.Count} portals");
-            foreach (var portal in portalsInPackage)
+            // Update our known portals
+            UpdateFromList(portalsInPackage);
+        }
+
+        private void UpdateFromList(List<KnownPortal> updatedPortals)
+        {
+            // First, update the portals we already know, and add new ones
+            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromList] Updating {updatedPortals.Count} portals");
+            foreach (var portal in updatedPortals)
             {
-                KnownPortalsManager.Instance.Update(portal);
+                AddOrUpdate(portal);
             }
 
-            // Third, remove Known Portals that didn't appear in the sync package
+            // Second, remove Known Portals that didn't appear in the sync package
             var knownPortals = GetList();
-            var deletedPortals = knownPortals.Where(p => !portalsInPackage.Contains(p));
-            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromResyncPackage] Removing {deletedPortals.Count()} portals");
-            foreach (var deletedPortal in deletedPortals)
+            var deletedPortals = knownPortals.Where(p => !updatedPortals.Contains(p));
+            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromList] Removing {deletedPortals.Count()} portals");
+            foreach (var portal in deletedPortals)
             {
-                Remove(deletedPortal);
+                Remove(portal);
             }
 
-            // Fourth, check if any portals are targeting portals that no longer exist, and fix those
+            // Third, check if any portals are targeting portals that no longer exist, and fix those
             var targetingInvalidPortals = GetList().Where(p => p.Target != ZDOID.None && !ContainsId(p.Target));
-            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromResyncPackage] Retargeting {targetingInvalidPortals.Count()} portals");
-            foreach (var targetingInvalidPortal in targetingInvalidPortals)
+            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromList] Retargeting {targetingInvalidPortals.Count()} portals");
+            foreach (var portal in targetingInvalidPortals)
             {
-                RPC.SendTargetChangeRequest(targetingInvalidPortal.Id, ZDOID.None);
+                RPC.SendTargetChangeRequest(portal.Id, ZDOID.None);
             }
 
-            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromResyncPackage] Known portals: {Count}");
+            Jotunn.Logger.LogInfo($"[KnownPortalsManager.UpdateFromList] Known portals: {Count}");
         }
 
         public void Dispose()
