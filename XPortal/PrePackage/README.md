@@ -102,14 +102,34 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Fix portals sometimes duplicating
 
+* **v1.2.1** (2023-02-05)
+
+	* Translation added for Spanish
+
+	* Added BepInEx dependency, updated Jotunn dependency to 2.10.4
+
+	* Detect portal placement and destruction
+	
+	* Optimise portal hovering event, UI interaction, and resyncs
+
+	* Update console log messages
+
+	* Some bugfixes
 
 
 ## Credits
 
 * sweetgiorni for creating AnyPortal
 
-* Translations: kaiqueknup (Português (Brasil)), makou (Français, Español), Smok3y97 (Deutsch)
+* kaiqueknup for translating to Brazillian Portuguese 
 
----
+* makou for translating to French, Spanish
 
-[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right">](https://www.buymeacoffee.com/SpikeHimself)
+* Smok3y97 for translating to German
+
+
+## Support me
+
+XPortal is free and will remain free, for everyone to use, edit or learn from. If you enjoy XPortal and want to support my work, please consider buying me a coffee:
+
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40">](https://www.buymeacoffee.com/SpikeHimself)
