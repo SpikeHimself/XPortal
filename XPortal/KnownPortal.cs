@@ -29,29 +29,6 @@ namespace XPortal
             return Target == targetZDOID;
         }
 
-        //public bool IsZDOValid()
-        //{
-        //    var ZDO = Util.TryGetZDO(ZDOID);
-        //    return ZDO != null && ZDO.IsValid();
-        //}
-
-        //public bool IsTargetZDOValid()
-        //{
-        //    var ZDO = Util.TryGetZDO(Target);
-        //    return ZDO != null && ZDO.IsValid();
-        //}
-
-        //private static string GetTag(ZDOID portalZDOID)
-        //{
-        //    if (portalZDOID == ZDOID.None)
-        //    {
-        //        return string.Empty;
-        //    }
-
-        //    var portalZDO = Util.TryGetZDO(portalZDOID);
-        //    return portalZDO.GetString("tag");
-        //}
-
         public ZPackage Pack()
         {
             var pkg = new ZPackage();
@@ -76,11 +53,24 @@ namespace XPortal
 
         public override string ToString()
         {
-            if (HasTarget())
+            return $"{{ ID: `{Id}`, Name; `{Name}`, Location: {Location}, {TargetToString()} }}";
+        }
+
+        private string TargetToString()
+        {
+            if (!HasTarget())
             {
-                return $"{{ ID: `{Id}`, Name; `{Name}`, Target: `{Target}` }}";
+                return "No Target";
             }
-            return $"{{ ID: `{Id}`, Name; `{Name}`, No Target }}";
+
+            var targetExists = KnownPortalsManager.Instance.ContainsId(Target);
+            if (!targetExists)
+            {
+                return "Invalid Target";
+            }
+
+            var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(Target);
+            return $"Target: `{targetPortal.Name}`";
         }
 
     }

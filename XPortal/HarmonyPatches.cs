@@ -1,23 +1,27 @@
 ﻿using HarmonyLib;
-using Jotunn.Managers;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using UnityEngine;
 
 namespace XPortal
 {
     internal static class HarmonyPatches
     {
-        public delegate void OnPostCreateSyncListAction(ref List<ZDO> syncList);
-        public static event OnPostCreateSyncListAction OnPostCreateSyncList;
+        public static event Action OnGameStart;
 
-        public delegate void OnPostPortalInteractAction(ZDO portalZDO);
-        public static event OnPostPortalInteractAction OnPostPortalInteract;
-
-        public delegate void OnPrePortalHoverAction(out string result, ref ZDO portalZDO);
+        public delegate void OnPrePortalHoverAction(out string result, ZDOID portalId);
         public static event OnPrePortalHoverAction OnPrePortalHover;
 
-        public static event Action OnGameStart;
+        public delegate void OnPostPortalInteractAction(ZDOID portalId);
+        public static event OnPostPortalInteractAction OnPostPortalInteract;
+
+        public delegate void OnPortalPlacedAction(ZDOID portalId, Vector3 location);
+        public static event OnPortalPlacedAction OnPortalPlaced;
+
+        public delegate void OnPortalDestroyedAction(ZDOID portalId);
+        public static event OnPortalDestroyedAction OnPortalDestroyed;
+
 
         private static readonly Harmony patcher;
 
@@ -53,6 +57,9 @@ namespace XPortal
         [HarmonyPatch(typeof(Game), nameof(Game.Start))]
         static class GameStartPatch
         {
+            /// <summary>
+            /// The game has started!
+            /// </summary>
             static void Postfix()
             {
                 OnGameStart();
@@ -85,23 +92,11 @@ namespace XPortal
             }
         }
 
-        [HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.CreateSyncList))]
-        static class ZDOManCreateSyncListPatch
-        {
-            static void Postfix(ref List<ZDO> toSync)
-            {
-                if (ZNet.instance.IsServer())
-                {
-                    OnPostCreateSyncList(ref toSync);
-                }
-            }
-        }
-
 
         [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
         static class TeleportWorldInteractPatch
         {
-            static void Postfix(ref ZNetView ___m_nview, ref bool __result)
+            static void Postfix(ZNetView ___m_nview, bool __result)
             {
                 if (!__result)
                 {
@@ -110,9 +105,9 @@ namespace XPortal
 
                 // TODO: Deal with ward protection. The orignal method returns true either way,
                 // the only difference is that it does so before TextInput.RequestText is called.
-                // Perhaps that's a better hook for initiating the XPortal UI..?
+                // Perhaps TextInput.RequestText is a better hook for initiating the XPortal UI..?
 
-                OnPostPortalInteract(___m_nview.GetZDO());
+                OnPostPortalInteract(___m_nview.GetZDO().m_uid);
             }
         }
 
@@ -120,7 +115,10 @@ namespace XPortal
         [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.GetHoverText))]
         static class TeleportWorldGetHoverTextPatch
         {
-            static bool Prefix(ref ZNetView ___m_nview, ref string __result)
+            /// <summary>
+            /// Replace the game's hover text
+            /// </summary>
+            static bool Prefix(ZNetView ___m_nview, ref string __result)
             {
                 if (___m_nview == null || !___m_nview.IsValid())
                 {
@@ -130,7 +128,8 @@ namespace XPortal
                 else
                 {
                     ZDO portalZDO = ___m_nview.GetZDO();
-                    OnPrePortalHover(out __result, ref portalZDO);
+                    var portalId = portalZDO.m_uid;
+                    OnPrePortalHover(out __result, portalId);
                 }
 
                 // Don't run the original method at all
@@ -145,29 +144,63 @@ namespace XPortal
             /// <summary>
             /// When the game is trying to show the original "configure portal" window, deny it.
             /// </summary>
-            static bool Prefix(ref string topic)
+            static bool Prefix(string topic)
             {
                 if (topic.Equals("$piece_portal_tag"))
                 {
+                    // Don't run the original method at all
                     return false;
                 }
+
+                // Continue as normal
                 return true;
             }
         }
 
 
-        [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.IsVisible))]
-        static class InventoryGuiIsVisiblePatch
+        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.OnPlaced))]
+        static class WearNTearOnPlacedPatch
         {
             /// <summary>
-            /// InventoryGui checks whether any UI elements are currently visible.
-            /// When XPortalUI is showing, we must let it know.
+            /// After placing a piece, check if it's a portal, and if so, raise event OnPortalPlaced
             /// </summary>
-            static void Postfix(ref bool __result)
+            static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
             {
-                if (!GUIManager.IsHeadless() && XPortalUI.Instance.IsActive())
+                if (___m_piece.m_name.Equals("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview != null)
                 {
-                    __result = true;
+                    var portalZDO = ___m_nview.GetZDO();
+                    if (portalZDO == null)
+                    {
+                        return;
+                    }
+
+                    var portalId = portalZDO.m_uid;
+                    var location = portalZDO.GetPosition();
+                    OnPortalPlaced(portalId, location);
+                }
+
+            }
+
+        }
+
+        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Destroy))]
+        static class WearNTearDestroyPatch
+        {
+            /// <summary>
+            /// Before destroying a piece, check if it's a portal, and if so, raise event OnPortalDestroyed
+            /// </summary>
+            static void Prefix(Piece ___m_piece, ZNetView ___m_nview)
+            {
+                if (___m_piece.m_name.Equals("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview != null)
+                {
+                    var portalZDO = ___m_nview.GetZDO();
+                    if (portalZDO == null)
+                    {
+                        return;
+                    }
+
+                    var portalId = portalZDO.m_uid;
+                    OnPortalDestroyed(portalId);
                 }
             }
         }

@@ -62,11 +62,14 @@ namespace XPortal
         private Dropdown targetPortalDropdown;
         private InputField portalNameInputField;
 
+        // A look-up list to find the portal ZDOID by dropdown list index
         private Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
 
+        // The KnownPortal being edited
         private KnownPortal thisPortal;
+
+        // The ZDOID of the target that was selected in the dropdown
         private ZDOID selectedTargetZDOID;
-        //private Dictionary<ZDOID, KnownPortal> knownPortals;
 
         #region Input Button Configs
         private ButtonConfig uiOkayButton;
@@ -86,7 +89,6 @@ namespace XPortal
         private XPortalUI()
         {
             dropdownIndexToZDOIDMapping = new Dictionary<int, ZDOID>();
-            //InitialiseUI();
         }
 
         #region Input
@@ -280,9 +282,9 @@ namespace XPortal
         {
             InitialiseUI();
 
-            this.thisPortal = portal;
-            this.portalNameInputField.text = portal.Name;
-            this.selectedTargetZDOID = portal.Target;
+            thisPortal = portal;
+            portalNameInputField.text = portal.Name;
+            selectedTargetZDOID = portal.Target;
             PopulateDropdown();
 
             Show();
@@ -312,17 +314,9 @@ namespace XPortal
 
             foreach (var knownPortal in knowPortalsSorted)
             {
-
                 // Skip the one we're currently interacting with
                 if (knownPortal.Id == thisPortal.Id)
                     continue;
-
-                //var portalZDO = Util.TryGetZDO(knownPortalZDOID);
-                //if (portalZDO == null)
-                //{
-                //    // This one somehow doesn't exist anymore - don't add it to the list
-                //    continue;
-                //}
 
                 // Get portal name
                 string portalName = knownPortal.Name;

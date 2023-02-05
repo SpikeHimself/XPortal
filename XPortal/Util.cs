@@ -2,9 +2,9 @@
 {
     internal static class Util
     {
-        public static ZDO TryGetZDO(ZDOID portalZDOID)
+        public static ZDO TryGetZDO(ZDOID portalId)
         {
-            return ZDOMan.instance.GetZDO(portalZDOID);
+            return ZDOMan.instance.GetZDO(portalId);
         }
 
     }
