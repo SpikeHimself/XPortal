@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help XPortal improve
 title: ''
-labels: bug
+labels: bug, enhancement
 assignees: ''
 
 ---
@@ -17,7 +17,7 @@ Explain the steps needed to reproduce the behaviour.
 Describe what you expected to happen (if it's not obvious).
 
 **LogOutput file(s)**
-Please have `Debug` output enabled. Attach the file called `LogOutput.log` which can be found in the directory `Valheim\\BepInEx\\`.
+Please have `Debug` output enabled. Attach the file called `LogOutput.log` which can be found in the directory `Valheim\BepInEx\`.
 If you play on a server, include the server's `LogOutput.log` as well.
 
 **Version**
