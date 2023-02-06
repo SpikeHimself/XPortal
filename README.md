@@ -6,16 +6,20 @@
 
 ## How to install
 
-The easiest method is to use a mod manager such as Vortex or r2modman. You can download the mod on Nexus Mods or Thunderstore and let your mod manager handle the rest.
+The easiest method is to use a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). You can download the mod on [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) or [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) and let your mod manager handle the rest.
 
-## Bugs, Issues, Feature Requests
+If you prefer to install manually, download the latest release, and copy the contents of the `plugins` directory to `Steam\steamapps\common\Valheim\BepInEx\plugins`, so that `XPortal.dll` and the translation directories land in `Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\`.
 
-To report problems or provide feedback, please use the project's [GitHub Issues page](https://github.com/SpikeHimself/XPortal/issues).
-If you are experiencing a bug, please include the BepInEx output log and provide as many details as possible.
+## Bugs, Feature Requests and Translations
 
-## Contributing
+To report a bug, please navigate to the [Issues](https://github.com/SpikeHimself/XPortal/issues) page, click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
 
-Coming soon..
+For feature requests, choose `Feature request` on the [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose) page.
 
+To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
+
+## Contributing code
+
+Coming soon...
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right" />](https://www.buymeacoffee.com/SpikeHimself)
