@@ -551,10 +551,12 @@ namespace XPortal
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
 
+                // Fix the dropdown's UI layer
+                targetPortalDropdown.gameObject.layer = GUIManager.UILayer;
+                targetPortalDropdownObject.transform.Find("Template").gameObject.layer = GUIManager.UILayer;
 
                 // This property name is backwards? Should select on activate? Either way: Yes.
                 portalNameInputField.shouldActivateOnSelect = true;
-
 
                 // Disable the Main Panel, for now
                 mainPanel.SetActive(false);
