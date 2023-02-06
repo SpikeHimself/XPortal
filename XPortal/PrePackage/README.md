@@ -116,6 +116,14 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Some bugfixes
 
+* **v1.2.2** (2023-02-06)
+
+	* Fixed "Fetching portal info.." bug
+
+	* Non-placeable world items (such as wild beehives) can now be destroyed again
+
+	* It is no longer possible to configure a portal that is being protected by someone else's ward
+
 
 ## Credits
 

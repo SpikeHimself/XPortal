@@ -15,7 +15,7 @@ namespace XPortal
         // This is *the* place to edit plugin details. Everywhere else will be generated based on this info.
         public const string PluginGUID = "yay.spikehimself.xportal";
         public const string PluginName = "XPortal";
-        public const string PluginVersion = "1.2.1";
+        public const string PluginVersion = "1.2.2";
         public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string PluginWebsiteUrl = "https://github.com/SpikeHimself/XPortal";
         //public const string PluginBepinVersion = ??
