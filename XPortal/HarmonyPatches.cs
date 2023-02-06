@@ -10,7 +10,7 @@ namespace XPortal
     {
         public static event Action OnGameStart;
 
-        public delegate void OnPrePortalHoverAction(out string result, ZDOID portalId);
+        public delegate void OnPrePortalHoverAction(out string result, ZDO portalZDO, ZDOID portalId);
         public static event OnPrePortalHoverAction OnPrePortalHover;
 
         public delegate void OnPostPortalInteractAction(ZDOID portalId);
@@ -96,7 +96,7 @@ namespace XPortal
         [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
         static class TeleportWorldInteractPatch
         {
-            static void Postfix(ZNetView ___m_nview, bool __result)
+            static void Postfix(TeleportWorld __instance, ZNetView ___m_nview, bool __result, ref Humanoid human)
             {
                 if (!__result)
                 {
@@ -129,7 +129,7 @@ namespace XPortal
                 {
                     ZDO portalZDO = ___m_nview.GetZDO();
                     var portalId = portalZDO.m_uid;
-                    OnPrePortalHover(out __result, portalId);
+                    OnPrePortalHover(out __result, portalZDO, portalId);
                 }
 
                 // Don't run the original method at all

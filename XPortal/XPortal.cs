@@ -146,14 +146,19 @@ namespace XPortal
         /// </summary>
         /// <param name="result">The string output that the player gets to see</param>
         /// <param name="portalId">The ZDOID of the portal the player is hovering over</param>
-        internal void OnPrePortalHover(out string result, ZDOID portalId)
+        internal void OnPrePortalHover(out string result, ZDO portalZDO, ZDOID portalId)
         {
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
-                // Waiting for the KnownPortalsManager to update
-                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over unknown portal {portalId}");
-                result = "Fetching portal info..";
-                return;
+                // This appears to be a new portal
+                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over new portal {portalId}");
+
+                // Sometimes XPortal does not detect placement of new portals.
+                // Assuming that that is the case here, let's just create a new dummy portal for now.
+                // We'll tell the server about it *after* interacting with it (when updating the name/target in the UI).
+                // Everything will be fine. Promise.
+                var dummyPortal = new KnownPortal(portalId, string.Empty, portalZDO.GetPosition(), ZDOID.None);
+                KnownPortalsManager.Instance.AddOrUpdate(dummyPortal);
             }
 
             // Get information about the portal being hovered over
