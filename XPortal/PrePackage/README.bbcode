@@ -42,7 +42,6 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 [*][code]D-Pad Up[/code] / [code]D-Pad Down[/code] - Select the previous / next item in the dropdown
 [/list]
 
-
 [size=5][b]Multiplayer[/b][/size]
 
 XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. This server itself also needs to have XPortal installed and that too has to be same version.
@@ -56,7 +55,7 @@ If you are experiencing a bug, please include the BepInEx output log and provide
 
 [size=5][b]Improvements over AnyPortal[/b][/size]
 
-As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal updates. Also, the UI was completely overhauled.
+As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal management. Also, the UI was completely overhauled.
 Here are the most prominent changes:
 
 [b]New UI[/b]: AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
@@ -65,7 +64,7 @@ Here are the most prominent changes:
 
 [b]Smaller file[/b]: XPortal uses Jötunn's UI elements, so it no longer needs its own Unity assets.
 
-[b]Code optimisation[/b]: The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated when any portal changes name or destination. Because of this, it will not have to query game data every time you interact with a portal.
+[b]Code optimisation[/b]: The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated whenever any portal change happens. Because of this, it will not have to query game data every time you interact with a portal. If you run Valheim as host, you will no longer experience a harsh performance hit while others are in your game.
 
 [b]Scalability[/b]: You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [url=https://github.com/SpikeHimself/XPortal]GitHub page[/url]!
 
@@ -78,7 +77,6 @@ Here are the most prominent changes:
 [*]makou for translating to French, Spanish
 [*]Smok3y97 for translating to German
 [/list]
-
 
 [size=5][b]Support me[/b][/size]
 

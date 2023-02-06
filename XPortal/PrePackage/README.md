@@ -58,7 +58,7 @@ If you are experiencing a bug, please include the BepInEx output log and provide
 
 ## Improvements over AnyPortal
 
-As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal updates. Also, the UI was completely overhauled.
+As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal management. Also, the UI was completely overhauled.
 
 Here are the most prominent changes:
 
@@ -72,7 +72,7 @@ AnyPortal updates the information on your screen when you interact with a portal
 XPortal uses Jötunn's UI elements, so it no longer needs its own Unity assets.
 
 * **Code optimisation**:
-The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated when any portal changes name or destination. Because of this, it will not have to query game data every time you interact with a portal.
+The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated whenever any portal change happens. Because of this, it will not have to query game data every time you interact with a portal. If you run Valheim as host, you will no longer experience a harsh performance hit while others are in your game.
 
 * **Scalability**:
 You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
