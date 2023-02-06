@@ -103,9 +103,16 @@ namespace XPortal
                     return;
                 }
 
-                // TODO: Deal with ward protection. The orignal method returns true either way,
-                // the only difference is that it does so before TextInput.RequestText is called.
+                // TODO: Deal with ward protection properly. The orignal method returns true either way, the only
+                // difference is that it does so before TextInput.RequestText is called.
                 // Perhaps TextInput.RequestText is a better hook for initiating the XPortal UI..?
+
+                // For now, just duplicate the original code:
+                if (!PrivateArea.CheckAccess(__instance.transform.position))
+                {
+                    human.Message(MessageHud.MessageType.Center, "$piece_noaccess");
+                    return;
+                }
 
                 OnPostPortalInteract(___m_nview.GetZDO().m_uid);
             }
