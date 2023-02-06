@@ -75,8 +75,6 @@ namespace XPortal
 
             // Apply the Harmony patches
             HarmonyPatches.Patch();
-
-
         }
 
         /// <summary>
@@ -221,9 +219,6 @@ namespace XPortal
         /// <param name="location">The location in the world where the portal was placed</param>
         internal void OnPortalPlaced(ZDOID portalId, Vector3 location)
         {
-            ZDOMan.instance.ForceSendZDO(portalId);
-            ZDOMan.instance.FlushClientObjects();
-
             Jotunn.Logger.LogDebug($"[OnPortalPlaced] Portal `{portalId}` was placed");
 
             var portal = new KnownPortal(portalId, string.Empty, location, ZDOID.None);
@@ -266,8 +261,6 @@ namespace XPortal
         /// <returns>A list of portal ZDOs</returns>
         private static List<ZDO> GetAllPortalZDOs()
         {
-            ZDOMan.instance.FlushClientObjects();
-
             var allPortalZDOs = new List<ZDO>();
             ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortalZDOs);
             return allPortalZDOs;
