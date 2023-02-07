@@ -52,8 +52,13 @@ XPortal has been built with multiplayer support at its core. This does require a
 
 ## Bugs, Issues, Feature Requests
 
-To report problems or provide feedback, please use the project's [GitHub Issues page](https://github.com/SpikeHimself/XPortal/issues).
-If you are experiencing a bug, please include the BepInEx output log and provide as many details as possible.
+If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/)
+
+To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
+
+For feature requests, choose `Feature request` on the [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose) page.
+
+To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
 
 ## Improvements over AnyPortal
