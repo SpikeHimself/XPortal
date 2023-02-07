@@ -18,6 +18,7 @@ namespace XPortal
         public const string PluginVersion = "1.2.2";
         public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string PluginWebsiteUrl = "https://github.com/SpikeHimself/XPortal";
+        public const int PluginNexusId = 2239;
         //public const string PluginBepinVersion = ??
         public const string PluginJotunnVersion = Jotunn.Main.Version;
         #endregion
@@ -55,6 +56,9 @@ namespace XPortal
         {
             // Hello, world!
             Jotunn.Logger.LogDebug("I HAVE ARRIVED!");
+
+            // https://www.nexusmods.com/valheim/mods/102
+            Config.Bind<int>("General", "NexusID", PluginNexusId, "Nexus mod ID for updates (do not change)");
 
             // Subscribe to HarmonyPatches events
             HarmonyPatches.OnGameStart += OnGameStart;
