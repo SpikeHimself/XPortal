@@ -6,9 +6,9 @@
 
 ## How to install
 
-The easiest method is to use a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). You can download the mod on [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) or [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) and let your mod manager handle the rest.
+The easiest method is to use a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). You can download XPortal on [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) or [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) and let your mod manager handle the rest.
 
-If you prefer to install manually, download the latest release, and copy the contents of the `plugins` directory to `Steam\steamapps\common\Valheim\BepInEx\plugins`, so that `XPortal.dll` and the translation directories land in `Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\`.
+If you prefer to install manually, download the latest release from one of the links mentioned above, or [right here on GitHub](https://github.com/SpikeHimself/XPortal/releases), and copy the contents of the `plugins` directory to `Steam\steamapps\common\Valheim\BepInEx\plugins`, so that `XPortal.dll` and the translation directories land in `Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\`.
 
 ## Bugs, Feature Requests and Translations
 
