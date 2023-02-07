@@ -50,7 +50,7 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. This server itself also needs to have XPortal installed and that too has to be same version.
 
 
-## Bugs, Issues, Feature Requests
+## Bugs, Feature Requests and Translations
 
 If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/)
 
