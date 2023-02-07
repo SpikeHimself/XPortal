@@ -366,10 +366,9 @@ FodyWeavers.xsd
 
 # automated build output
 XPortal/[Pp]ackage
-[Rr]elease
 
 # not the libraries folder
 !libraries/*
 
-# not the valheim path file
-!Environment.props
+# the valheim paths config
+[Ee]nvironment.props
