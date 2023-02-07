@@ -18,7 +18,10 @@ The portal on the other side is a "destination". Please do not use the word "tar
 **Configure**
 When a user opens the XPortal window to change the name and destination of a portal, this is called "configuring the portal". Please try to find an equivalent of the word "Configure". Do not use "Manage" or "Edit".
 
-**Please replace the English translations in question marks below:**
+**What is the name of the language you are translating to?**
+Please use the English name as it is used on this page:  https://valheim-modding.github.io/Jotunn/data/localization/language-list.html
+
+**Please replace the English translations in quotation marks below:**
 
 Portal description: "Connects to another portal",
 Set tag: "Configure",
