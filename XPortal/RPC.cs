@@ -172,13 +172,11 @@ namespace XPortal
 
             Jotunn.Logger.LogDebug($"[RPC_AddOrUpdateRequest] {sender} wants `{portal.Id}` to be added or updated");
 
-            var isNewPortal = !KnownPortalsManager.Instance.ContainsId(portal.Id);
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            if (!isNewPortal)
+            var portalZDO = Util.TryGetZDO(updatedPortal.Id);
+            if (portalZDO != null)
             {
-                var portalZDO = Util.TryGetZDO(updatedPortal.Id);
-
                 portalZDO.Set("tag", updatedPortal.Name);
                 portalZDO.Set("target", updatedPortal.Target);
                 ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
