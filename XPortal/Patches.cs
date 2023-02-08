@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace XPortal
 {
-    internal static class HarmonyPatches
+    internal static class Patches
     {
         public static event Action OnGameStart;
 
@@ -25,7 +25,7 @@ namespace XPortal
 
         private static readonly Harmony patcher;
 
-        static HarmonyPatches()
+        static Patches()
         {
             patcher = new Harmony(XPortal.PluginGUID  + ".harmony");
         }

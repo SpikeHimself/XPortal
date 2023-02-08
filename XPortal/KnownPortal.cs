@@ -11,12 +11,12 @@ namespace XPortal
 
         private KnownPortal() { }
 
-        public KnownPortal(ZDOID portalZDOID, string portalName, Vector3 location, ZDOID targetZDOID)
+        public KnownPortal(ZDOID id, string portalName, Vector3 location, ZDOID targetId)
         {
-            Id = portalZDOID;
+            Id = id;
             Name = portalName;
             Location = location;
-            Target = targetZDOID == null ? ZDOID.None : targetZDOID;
+            Target = targetId == null ? ZDOID.None : targetId;
         }
 
         public bool HasTarget()
@@ -24,9 +24,9 @@ namespace XPortal
             return Target != ZDOID.None && !Target.IsNone();
         }
 
-        public bool Targets(ZDOID targetZDOID)
+        public bool Targets(ZDOID targetId)
         {
-            return Target == targetZDOID;
+            return Target == targetId;
         }
 
         public ZPackage Pack()

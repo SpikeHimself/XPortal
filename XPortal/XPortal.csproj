@@ -84,7 +84,7 @@
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="RPC.cs" />
     <Compile Include="XPortalUI.cs" />
-    <Compile Include="HarmonyPatches.cs" />
+    <Compile Include="Patches.cs" />
     <Compile Include="KnownPortal.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="XPortal.cs" />

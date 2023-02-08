@@ -89,18 +89,6 @@ namespace XPortal
             return knownPortals[portal.Id];
         }
 
-        //public KnownPortal SetName(ZDOID id, string newName)
-        //{
-        //    knownPortals[id].Name= newName;
-        //    return knownPortals[id];
-        //}
-
-        //public KnownPortal SetTarget(ZDOID id, ZDOID target)
-        //{
-        //    knownPortals[id].Target = target;
-        //    return knownPortals[id];
-        //}
-
         public bool Remove(ZDOID id)
         {
             if (ContainsId(id))

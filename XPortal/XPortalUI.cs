@@ -18,10 +18,10 @@ namespace XPortal
         ////////////////////////////
 
         #region Events
-        public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetZDOID);
+        public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetId);
         public event PortalInfoSubmittedAction PortalInfoSubmitted;
 
-        public delegate void PingMapButtonClickedAction(ZDOID targetPortalZDOID);
+        public delegate void PingMapButtonClickedAction(ZDOID targetId);
         public event PingMapButtonClickedAction PingMapButtonClicked;
         #endregion
 
@@ -69,7 +69,7 @@ namespace XPortal
         private KnownPortal thisPortal;
 
         // The ZDOID of the target that was selected in the dropdown
-        private ZDOID selectedTargetZDOID;
+        private ZDOID selectedTargetId;
 
         #region Input Button Configs
         private ButtonConfig uiOkayButton;
@@ -92,6 +92,32 @@ namespace XPortal
         }
 
         #region Input
+        internal void AddInputs()
+        {
+            uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
+            uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
+            uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
+            uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
+            uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
+            uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
+        }
+        private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
+        {
+            var newButtonConfig = new ButtonConfig
+            {
+                Name = name,
+                HintToken = hintToken,
+                ActiveInGUI = true,
+                ActiveInCustomGUI = true,
+                Key = key,
+                GamepadButton = gamepadButton,
+                RepeatDelay = 1000f,
+                BlockOtherInputs = true,
+            };
+            InputManager.Instance.AddButton(XPortal.PluginGUID, newButtonConfig);
+            return newButtonConfig;
+        }
+
         public void HandleInput()
         {
             if (ZInput.instance == null)
@@ -153,33 +179,6 @@ namespace XPortal
             }
         }
 
-        internal void AddInputs()
-        {
-            uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
-            uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
-            uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
-            uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
-            uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
-            uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
-        }
-
-        private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
-        {
-            var newButtonConfig = new ButtonConfig
-            {
-                Name = name,
-                HintToken = hintToken,
-                ActiveInGUI = true,
-                ActiveInCustomGUI = true,
-                Key = key,
-                GamepadButton = gamepadButton,
-                RepeatDelay = 1000f,
-                BlockOtherInputs = true,
-            };
-            InputManager.Instance.AddButton(XPortal.PluginGUID, newButtonConfig);
-            return newButtonConfig;
-        }
-
         private void BlockInputForAWhile()
         {
             // After anything happens in the UI, just ignore everything else for a few frames
@@ -191,11 +190,7 @@ namespace XPortal
         #region Visibility
         public bool IsActive()
         {
-            if (mainPanel == null)
-            {
-                return false;
-            }
-            return mainPanel.activeSelf;
+            return mainPanel != null && mainPanel.activeSelf;
         }
 
         public void SetActive(bool active)
@@ -284,7 +279,7 @@ namespace XPortal
 
             thisPortal = portal;
             portalNameInputField.text = portal.Name;
-            selectedTargetZDOID = portal.Target;
+            selectedTargetId = portal.Target;
             PopulateDropdown();
 
             Show();
@@ -307,27 +302,27 @@ namespace XPortal
             targetPortalDropdown.value = index;
             dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
 
-            var thisPortalZDO = Util.TryGetZDO(thisPortal.Id);
+            // Get all KnownPortals, sorted by Name
+            var portalsSorted = KnownPortalsManager.Instance.GetSortedList();
 
-            // Get the ZDOIDS of the known portals, but sort them by name
-            var knowPortalsSorted = KnownPortalsManager.Instance.GetSortedList();
-
-            foreach (var knownPortal in knowPortalsSorted)
+            foreach (var portal in portalsSorted)
             {
                 // Skip the one we're currently interacting with
-                if (knownPortal.Id == thisPortal.Id)
+                if (portal.Id == thisPortal.Id)
+                {
                     continue;
+                }
 
                 // Get portal name
-                string portalName = knownPortal.Name;
+                string portalName = portal.Name;
 
                 if (string.IsNullOrEmpty(portalName))
                 {
                     portalName = Localization.instance.Localize("$piece_portal_tag_none"); // "(No Name)"
                 }
 
-                // Get portal distance
-                float distance = (int)Vector3.Distance(thisPortal.Location, knownPortal.Location);
+                // Calculate portal distance
+                float distance = (int)Vector3.Distance(thisPortal.Location, portal.Location);
                 string strDistance = string.Format("{0} m", distance.ToString());
                 if (distance >= 1000)
                 {
@@ -340,16 +335,16 @@ namespace XPortal
                 targetPortalDropdown.options.Insert(++index, option);
 
                 // Select it in the list if this is the current target
-                if (knownPortal.Id == selectedTargetZDOID)
+                if (portal.Id == selectedTargetId)
                 {
                     targetPortalDropdown.value = index;
                 }
 
-                dropdownIndexToZDOIDMapping.Add(index, knownPortal.Id);
+                dropdownIndexToZDOIDMapping.Add(index, portal.Id);
             }
 
             targetPortalDropdown.RefreshShownValue();
-            SetPingMapButtonActive(selectedTargetZDOID != ZDOID.None);
+            SetPingMapButtonActive(selectedTargetId != ZDOID.None);
 
             targetPortalDropdown.onValueChanged.AddListener(delegate { OnDropdownValueChanged(targetPortalDropdown); });
         }
@@ -363,14 +358,14 @@ namespace XPortal
 
         private void OnDropdownValueChanged(Dropdown change)
         {
-            selectedTargetZDOID = dropdownIndexToZDOIDMapping[change.value];
-            SetPingMapButtonActive(selectedTargetZDOID != ZDOID.None);
+            selectedTargetId = dropdownIndexToZDOIDMapping[change.value];
+            SetPingMapButtonActive(selectedTargetId != ZDOID.None);
         }
 
         private void OnOkayButtonClicked()
         {
             Hide();
-            PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetZDOID);
+            PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId);
         }
 
         private void OnCancelButtonClicked()
@@ -381,7 +376,7 @@ namespace XPortal
         private void OnPingMapButtonClicked()
         {
             Hide();
-            PingMapButtonClicked(selectedTargetZDOID);
+            PingMapButtonClicked(selectedTargetId);
         }
         #endregion
 

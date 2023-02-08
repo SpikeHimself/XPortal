@@ -7,14 +7,14 @@ namespace XPortal
     {
 
         #region RPC Names
-        // Client to server
+        // Server RPCs
+        public const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
+        public const string RPC_RESYNC = "XPortal_Resync";
+
+        // Client RPCs
         public const string RPC_SYNCREQUEST = "XPortal_SyncRequest";
         public const string RPC_ADDORUPDATEREQUEST = "XPortal_AddOrUpdateRequest";
         public const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
-
-        // Server to client
-        public const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
-        public const string RPC_RESYNC = "XPortal_Resync";
 
         // Client to client
         public const string RPC_CHATMESSAGE = "ChatMessage";
@@ -27,12 +27,14 @@ namespace XPortal
 
         public static void RegisterRPCs()
         {
+            // Server RPCs
+            ZRoutedRpc.instance.Register<ZPackage>(RPC_SYNCPORTAL, new Action<long, ZPackage>(RPC_SyncPortal));
+            ZRoutedRpc.instance.Register<ZPackage, string>(RPC_RESYNC, new Action<long, ZPackage, string>(RPC_Resync));
+
+            // Client RPCs
             ZRoutedRpc.instance.Register<string>(RPC_SYNCREQUEST, new Action<long, string>(RPC_SyncRequest));
             ZRoutedRpc.instance.Register<ZPackage>(RPC_ADDORUPDATEREQUEST, new Action<long, ZPackage>(RPC_AddOrUpdateRequest));
             ZRoutedRpc.instance.Register<ZDOID>(RPC_REMOVEREQUEST, new Action<long, ZDOID>(RPC_RemoveRequest));
-
-            ZRoutedRpc.instance.Register<ZPackage>(RPC_SYNCPORTAL, new Action<long, ZPackage>(RPC_SyncPortal));
-            ZRoutedRpc.instance.Register<ZPackage, string>(RPC_RESYNC, new Action<long, ZPackage, string>(RPC_Resync));
         }
 
         #region From Server
@@ -108,42 +110,7 @@ namespace XPortal
         }
         #endregion
 
-        #region RPC Events
-        /// <summary>
-        /// The server sent us all of the portals it knows
-        /// </summary>
-        /// <param name="sender">The server</param>
-        /// <param name="pkg">A ZPackage containing a number followed by a list of packaged portals</param>
-        /// <param name="reason">The reason that was given for the Resync Request</param>
-        private static void RPC_Resync(long sender, ZPackage pkg, string reason)
-        {
-            if (XPortal.IsServer())
-            {
-                return;
-            }
-
-            Jotunn.Logger.LogInfo($"Resyncing because: {reason}");
-            KnownPortalsManager.Instance.UpdateFromResyncPackage(pkg);
-        }
-
-        /// <summary>
-        /// The server sent us a KnownPortal that was added or updated
-        /// </summary>
-        /// <param name="sender">The server</param>
-        /// <param name="pkg">A ZPackage containing the KnownPortal that was added or updated</param>
-        private static void RPC_SyncPortal(long sender, ZPackage pkg)
-        {
-            if (XPortal.IsServer())
-            {
-                return;
-            }
-
-            var incomingPortal = KnownPortal.Unpack(pkg);
-
-            Jotunn.Logger.LogDebug($"[OnRpcSyncPortal] Received update to portal `{incomingPortal.Name}`");
-            KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
-        }
-
+        #region RPC Events (Server)
         /// <summary>
         /// A client wishes to receive the portal list
         /// </summary>
@@ -221,6 +188,43 @@ namespace XPortal
 
                 SendResyncToClients(KnownPortalsManager.Instance.Pack(), "A portal was removed");
             }
+        }
+        #endregion
+
+        #region RPC Events (Client)
+        /// <summary>
+        /// The server sent us all of the portals it knows
+        /// </summary>
+        /// <param name="sender">The server</param>
+        /// <param name="pkg">A ZPackage containing a number followed by a list of packaged portals</param>
+        /// <param name="reason">The reason that was given for the Resync Request</param>
+        private static void RPC_Resync(long sender, ZPackage pkg, string reason)
+        {
+            if (XPortal.IsServer())
+            {
+                return;
+            }
+
+            Jotunn.Logger.LogInfo($"Resyncing because: {reason}");
+            KnownPortalsManager.Instance.UpdateFromResyncPackage(pkg);
+        }
+
+        /// <summary>
+        /// The server sent us a KnownPortal that was added or updated
+        /// </summary>
+        /// <param name="sender">The server</param>
+        /// <param name="pkg">A ZPackage containing the KnownPortal that was added or updated</param>
+        private static void RPC_SyncPortal(long sender, ZPackage pkg)
+        {
+            if (XPortal.IsServer())
+            {
+                return;
+            }
+
+            var incomingPortal = KnownPortal.Unpack(pkg);
+
+            Jotunn.Logger.LogDebug($"[OnRpcSyncPortal] Received update to portal `{incomingPortal.Name}`");
+            KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
         }
         #endregion
 

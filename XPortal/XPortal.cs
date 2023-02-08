@@ -24,7 +24,7 @@ namespace XPortal
         #endregion
 
         /// <summary>
-        /// Set to true via Game.Start() -> HarmonyPatches.GameStartPatch() -> HarmonyPatches.OnGameStart() -> OnGameStart()
+        /// Set to true via Game.Start() -> Patches.GameStartPatch.Postfix() -> Patches_OnGameStart()
         /// </summary>
         private bool gameStarted = false;
 
@@ -60,12 +60,12 @@ namespace XPortal
             // https://www.nexusmods.com/valheim/mods/102
             Config.Bind<int>("General", "NexusID", PluginNexusId, "Nexus mod ID for updates (do not change)");
 
-            // Subscribe to HarmonyPatches events
-            HarmonyPatches.OnGameStart += OnGameStart;
-            HarmonyPatches.OnPrePortalHover += OnPrePortalHover;
-            HarmonyPatches.OnPostPortalInteract += OnPostPortalInteract;
-            HarmonyPatches.OnPortalPlaced += OnPortalPlaced;
-            HarmonyPatches.OnPortalDestroyed += OnPortalDestroyed;
+            // Subscribe to Patches events
+            Patches.OnGameStart += Patches_OnGameStart;
+            Patches.OnPrePortalHover += Patches_OnPrePortalHover;
+            Patches.OnPostPortalInteract += Patches_OnPostPortalInteract;
+            Patches.OnPortalPlaced += Patches_OnPortalPlaced;
+            Patches.OnPortalDestroyed += Patches_OnPortalDestroyed;
 
             if (!IsHeadless())
             {
@@ -75,10 +75,10 @@ namespace XPortal
 
             // Subscribe to Jotunn's OnVanillaMapDataLoaded event. This is the earliest point where we can update the known portals.
             // (but on dedicated servers this isn't triggered)
-            MinimapManager.OnVanillaMapDataLoaded += OnVanillaMapDataLoaded;
+            MinimapManager.OnVanillaMapDataLoaded += MinimapManager_OnVanillaMapDataLoaded;
 
             // Apply the Harmony patches
-            HarmonyPatches.Patch();
+            Patches.Patch();
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace XPortal
         /// </summary>
         private void OnDestroy()
         {
-            HarmonyPatches.Unpatch();
+            Patches.Unpatch();
             if (!IsHeadless())
             {
                 XPortalUI.Instance?.Dispose();
@@ -112,30 +112,28 @@ namespace XPortal
         /// <summary>
         /// https://valheim-modding.github.io/Jotunn/tutorials/events.html
         /// </summary>
-        private void OnVanillaMapDataLoaded()
+        private void MinimapManager_OnVanillaMapDataLoaded()
         {
             // Ask the server to send us the portals
             var myId = ZDOMan.instance.GetMyID();
-            //var myName = Player.GetPlayer(myId).GetPlayerName();
             RPC.SendSyncRequestToServer($"{myId} has joined the game");
         }
         #endregion
 
         #region Patch Events
         /// <summary>
-        /// OnGameStart will be called by HarmonyPatches.GameStartPatch which patches Game.Start.
+        /// OnGameStart will be called by Patch.GameStartPatch which patches Game.Start.
         /// At this point the world is beginning to load. The portals don't exist yet.
         /// </summary>
-        internal void OnGameStart()
+        internal void Patches_OnGameStart()
         {
             if (!IsHeadless())
             {
-                // Remove them in case we joined another world
-                XPortalUI.Instance.PortalInfoSubmitted -= OnPortalInfoSubmitted;
-                XPortalUI.Instance.PingMapButtonClicked -= OnPingMapButtonClicked;
+                XPortalUI.Instance.PortalInfoSubmitted -= XPortalUI_OnPortalInfoSubmitted;
+                XPortalUI.Instance.PortalInfoSubmitted += XPortalUI_OnPortalInfoSubmitted;
 
-                XPortalUI.Instance.PortalInfoSubmitted += OnPortalInfoSubmitted;
-                XPortalUI.Instance.PingMapButtonClicked += OnPingMapButtonClicked;
+                XPortalUI.Instance.PingMapButtonClicked -= XPortalUI_OnPingMapButtonClicked;
+                XPortalUI.Instance.PingMapButtonClicked += XPortalUI_OnPingMapButtonClicked;
             }
 
             RPC.RegisterRPCs();
@@ -148,7 +146,7 @@ namespace XPortal
         /// </summary>
         /// <param name="result">The string output that the player gets to see</param>
         /// <param name="portalId">The ZDOID of the portal the player is hovering over</param>
-        internal void OnPrePortalHover(out string result, ZDO portalZDO, ZDOID portalId)
+        internal void Patches_OnPrePortalHover(out string result, ZDO portalZDO, ZDOID portalId)
         {
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
@@ -202,7 +200,7 @@ namespace XPortal
         /// When interacting with a portal, we want to show the XPortal UI
         /// </summary>
         /// <param name="portalZDO"></param>
-        internal void OnPostPortalInteract(ZDOID portalId)
+        internal void Patches_OnPostPortalInteract(ZDOID portalId)
         {
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
@@ -221,7 +219,7 @@ namespace XPortal
         /// </summary>
         /// <param name="portalId">The ZDOID of the portal being placed</param>
         /// <param name="location">The location in the world where the portal was placed</param>
-        internal void OnPortalPlaced(ZDOID portalId, Vector3 location)
+        internal void Patches_OnPortalPlaced(ZDOID portalId, Vector3 location)
         {
             Jotunn.Logger.LogDebug($"[OnPortalPlaced] Portal `{portalId}` was placed");
 
@@ -233,7 +231,7 @@ namespace XPortal
         /// A portal was destroyed by damage or by a hammer
         /// </summary>
         /// <param name="portalId">The ZDOID of the portal being destroyed</param>
-        internal void OnPortalDestroyed(ZDOID portalId)
+        internal void Patches_OnPortalDestroyed(ZDOID portalId)
         {
             var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
             Jotunn.Logger.LogDebug($"[OnPortalDestroyed] Portal `{portalName}` is being destroyed");
@@ -293,7 +291,7 @@ namespace XPortal
         /// <param name="portal">The KnownPortal that was being configured</param>
         /// <param name="newName">The new name for the portal</param>
         /// <param name="newTarget">The new target for the portal</param>
-        private void OnPortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget)
+        private void XPortalUI_OnPortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget)
         {
             if (!portal.Name.Equals(newName) || !portal.Targets(newTarget))
             {
@@ -310,7 +308,7 @@ namespace XPortal
         /// The Ping Map button was clicked in the XPortal UI
         /// </summary>
         /// <param name="targetId">The ZDOID of the portal to ping</param>
-        private void OnPingMapButtonClicked(ZDOID targetId)
+        private void XPortalUI_OnPingMapButtonClicked(ZDOID targetId)
         {
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(targetId);
 
