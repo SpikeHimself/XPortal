@@ -190,7 +190,7 @@ namespace XPortal
             }
 
             result = Localization.instance.Localize(
-                         $"$piece_portal $piece_portal_tag: {outputPortalName}\n"           // "Portal Name: {name}"
+                         $"$piece_portal_tag: {outputPortalName}\n"                         // "Name: {name}"
                        + $"$piece_portal_target: {outputPortalDestination}\n"               // "Destination: {name}"
                        + $"[<color=yellow><b>$KEY_Use</b></color>] $piece_portal_settag"    // "[E] Configure"
                      );
