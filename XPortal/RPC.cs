@@ -118,7 +118,7 @@ namespace XPortal
         /// <param name="reason">The reason for the Resync Request</param>
         private static void RPC_SyncRequest(long sender, string reason)
         {
-            Jotunn.Logger.LogInfo($"Received sync request from {sender} because: {reason}");
+            Jotunn.Logger.LogInfo($"Received sync request from `{sender}` because: {reason}");
             XPortal.ProcessSyncRequest(reason);
         }
 
@@ -144,11 +144,11 @@ namespace XPortal
             var portalZDO = Util.TryGetZDO(updatedPortal.Id);
             if (portalZDO != null)
             {
+                Jotunn.Logger.LogInfo($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
                 portalZDO.Set("tag", updatedPortal.Name);
                 portalZDO.Set("target", updatedPortal.Target);
                 ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
             }
-
             SendSyncPortalToClients(updatedPortal);
         }
 
