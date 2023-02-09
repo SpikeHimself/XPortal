@@ -135,6 +135,18 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* It is no longer possible to configure a portal that is being protected by someone else's ward
 
+* **v1.2.3** (2023-02-09)
+
+	* Add support for [Nexus Update Check](https://www.nexusmods.com/valheim/mods/102)
+
+	* Minor UI modifications to accomodate longer translations
+
+	* Added translations for Polish and Russian
+
+	* Updated description/readme
+
+	* Code cleanup and minor bugfixes
+
 
 ## Credits
 
