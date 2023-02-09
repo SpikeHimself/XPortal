@@ -101,6 +101,8 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 * MexExe for translating to Polish, Russian
 
+* hanawa07 for translating to Korean
+
 
 ## Changelogs
 

@@ -1,0 +1,9 @@
+{
+  "piece_portal_description": "다른 포털에 연결",
+  "piece_portal_settag": "구성",
+  "piece_portal_tag": "이름",
+  "piece_portal_target": "목적지",
+  "piece_portal_target_none": "(없음)",
+  "piece_portal_tag_none": "(이름 없음)",
+  "hud_xportal_title": "여행자여, 만세!"
+}

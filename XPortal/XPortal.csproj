@@ -110,6 +110,7 @@
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="PrePackage\Translations\French\xportal-translations-french.json" />
     <None Include="PrePackage\Translations\German\xportal-translations-german.json" />
+    <None Include="PrePackage\Translations\Korean\xportal-translations-korean.json" />
     <None Include="PrePackage\Translations\Polish\xportal-translations-polish.json" />
     <None Include="PrePackage\Translations\Portuguese_Brazilian\xportal-translations-portuguese_brazillian.json" />
     <None Include="PrePackage\Translations\Russian\xportal-translations-russian.json" />
@@ -131,6 +132,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="JotunnPostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -ValheimPath &quot;$(VALHEIM_INSTALL.TrimEnd('\'))&quot; -ProjectPath &quot;$(ProjectDir.TrimEnd('\'))&quot; -DeployPath &quot;$(MOD_DEPLOYPATH.TrimEnd('\'))&quot;" />
