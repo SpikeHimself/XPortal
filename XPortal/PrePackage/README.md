@@ -49,6 +49,13 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
 
 
+## Installation instructions
+
+The easiest method to install XPortal is by using a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). You can download XPortal on [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) or [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) and let your mod manager handle the rest.
+
+If you prefer to install manually, download the latest release from one of the links mentioned above, or on [GitHub](https://github.com/SpikeHimself/XPortal/releases), and copy the contents of the `plugins` directory to `Steam\steamapps\common\Valheim\BepInEx\plugins`, so that `XPortal.dll` and the translation directories land in `Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\`.
+
+
 ## Bugs, Feature Requests and Translations
 
 If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/)
