@@ -30,6 +30,10 @@ XPortal completely removes the character length restriction on portal names, so 
 
 Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
+#### Multiplayer
+
+XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
+
 #### Controller support
 
 As of v1.1.0, XPortal will respond to controller input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively.
@@ -43,10 +47,6 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 * `X` / `Square` - Show the contents of the dropdown
 
 * `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
-
-#### Multiplayer
-
-XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
 
 
 ## Installation instructions
@@ -73,7 +73,7 @@ As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most pl
 
 Here are the most prominent changes:
 
-* **New UI**:
+* **[New UI](#)**:
 AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
 
 * **Robust network synchronisation**:
@@ -89,29 +89,43 @@ The way AnyPortal dealt with portal tags and targets has been overhauled. XPorta
 You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
 
 
-## Changelog
+## Credits
 
-* **v1.0.0** (2023-02-01)
-	
-	* Initial release
+* sweetgiorni for creating AnyPortal
 
-* **v1.0.1** (2023-02-01)
+* kaiqueknup for translating to Brazillian Portuguese 
 
-	* Improvements for dedicated servers
+* makou for translating to French, Spanish
 
-	* Fix a bug that stopped XPortal showing the UI after destroying a portal
+* Smok3y97 for translating to German
 
-* **v1.1.0** (2023-02-03)
+* MexExe for translating to Polish, Russian
 
-	* Controller support!
 
-	* Translations added for French, Portuguese (BR), German
+## Changelogs
 
-* **v1.2.0** (2023-02-03)
+* **v1.2.3** (2023-02-09)
 
-	* Fix portals disappearing from the dropdown
+	* Add support for [Nexus Update Check](https://www.nexusmods.com/valheim/mods/102)
 
-	* Fix portals sometimes duplicating
+	* Minor UI modifications to accomodate longer translations
+
+	* Added translations for Polish and Russian
+
+	* Updated description/readme
+
+	* Code cleanup and minor bugfixes
+
+<details>
+<summary>Click to view previous versions</summary>
+
+* **v1.2.2** (2023-02-06)
+
+	* Fixed "Fetching portal info.." bug
+
+	* Non-placeable world items (such as wild beehives) can now be destroyed again
+
+	* It is no longer possible to configure a portal that is being protected by someone else's ward
 
 * **v1.2.1** (2023-02-05)
 
@@ -127,38 +141,28 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Some bugfixes
 
-* **v1.2.2** (2023-02-06)
+* **v1.2.0** (2023-02-03)
 
-	* Fixed "Fetching portal info.." bug
+	* Fix portals disappearing from the dropdown
 
-	* Non-placeable world items (such as wild beehives) can now be destroyed again
+	* Fix portals sometimes duplicating
 
-	* It is no longer possible to configure a portal that is being protected by someone else's ward
+* **v1.1.0** (2023-02-03)
 
-* **v1.2.3** (2023-02-09)
+	* Controller support!
 
-	* Add support for [Nexus Update Check](https://www.nexusmods.com/valheim/mods/102)
+	* Translations added for French, Portuguese (BR), German
 
-	* Minor UI modifications to accomodate longer translations
+* **v1.0.1** (2023-02-01)
 
-	* Added translations for Polish and Russian
+	* Improvements for dedicated servers
 
-	* Updated description/readme
+	* Fix a bug that stopped XPortal showing the UI after destroying a portal
 
-	* Code cleanup and minor bugfixes
-
-
-## Credits
-
-* sweetgiorni for creating AnyPortal
-
-* kaiqueknup for translating to Brazillian Portuguese 
-
-* makou for translating to French, Spanish
-
-* Smok3y97 for translating to German
-
-* MexExe for translating to Polish, Russian
+* **v1.0.0** (2023-02-01)
+	
+	* Initial release
+</details>
 
 
 ## Support me
