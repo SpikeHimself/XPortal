@@ -43,11 +43,11 @@ namespace XPortal
         // So apart from the header and footer, we can define locations and offsets for "rows", "columns", "padding", ..
         static readonly float padding = 20f;
         static readonly float rowHeight = 32f;
-        static readonly float labelWidth = 100f;
+        static readonly float labelWidth = 160f;
         static readonly float buttonWidth = 90f;
         static readonly float submitButtonWidth = 110f;
         static readonly float submitButtonHeight = 48f;
-        static readonly float inputShortWidth = 440f;
+        static readonly float inputShortWidth = 460f;
         static readonly float inputLongWidth = inputShortWidth + padding + buttonWidth;
         static readonly float firstRowTop = -60f - padding;
         static readonly float secondRowTop = firstRowTop - rowHeight - padding;
@@ -530,10 +530,6 @@ namespace XPortal
                         width: submitButtonWidth,
                         height: submitButtonHeight);
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
-
-
-                // Make the whole thing slightly larger 
-                mainPanel.GetComponent<RectTransform>().localScale = new Vector3(1.1f, 1.1f, 1.1f);
 
 
                 // Add listeners to button click events
