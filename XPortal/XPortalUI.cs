@@ -65,7 +65,7 @@ namespace XPortal
         // A look-up list to find the portal ZDOID by dropdown list index
         private Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
 
-        // The KnownPortal being edited
+        // The KnownPortal being configured
         private KnownPortal thisPortal;
 
         // The ZDOID of the target that was selected in the dropdown
@@ -537,8 +537,7 @@ namespace XPortal
                 okayButtonObject.GetComponent<Button>().onClick.AddListener(OnOkayButtonClicked);
                 cancelButtonObject.GetComponent<Button>().onClick.AddListener(OnCancelButtonClicked);
 
-
-                // Keep references to the these fields
+                // Keep references to these fields
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
 
