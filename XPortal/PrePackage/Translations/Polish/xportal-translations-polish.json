@@ -1,0 +1,9 @@
+{
+  "piece_portal_description": "Łączy z innym Portalem",
+  "piece_portal_settag": "Konfiguracja",
+  "piece_portal_tag": "Nazwa Portalu",
+  "piece_portal_target": "Portal Docelowy",
+  "piece_portal_target_none": "(Brak Celu)",
+  "piece_portal_tag_none": "(Bez Nazwy)",
+  "hud_xportal_title": "Witaj, Podróżniku!"
+}

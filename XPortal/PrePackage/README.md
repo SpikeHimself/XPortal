@@ -140,6 +140,8 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 * Smok3y97 for translating to German
 
+* KarolWielki for translating to Polish, Russian
+
 
 ## Support me
 

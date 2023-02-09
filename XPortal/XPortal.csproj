@@ -110,7 +110,9 @@
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="PrePackage\Translations\French\xportal-translations-french.json" />
     <None Include="PrePackage\Translations\German\xportal-translations-german.json" />
+    <None Include="PrePackage\Translations\Polish\xportal-translations-polish.json" />
     <None Include="PrePackage\Translations\Portuguese_Brazilian\xportal-translations-portuguese_brazillian.json" />
+    <None Include="PrePackage\Translations\Russian\xportal-translations-russian.json" />
     <None Include="PrePackage\Translations\Spanish\xportal-translations-spanish.json" />
   </ItemGroup>
   <ItemGroup>

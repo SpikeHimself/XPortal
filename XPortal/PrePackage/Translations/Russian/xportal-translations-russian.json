@@ -1,0 +1,9 @@
+{
+  "piece_portal_description": "Подключается к другому порталу",
+  "piece_portal_settag": "Конфигурация",
+  "piece_portal_tag": "Имя Портала",
+  "piece_portal_target": "Пункт Назначения",
+  "piece_portal_target_none": "(Нет Цели)",
+  "piece_portal_tag_none": "(Без Имени)",
+  "hud_xportal_title": "Привет, путник!"
+}
