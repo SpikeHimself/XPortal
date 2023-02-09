@@ -44,10 +44,9 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 
 * `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
 
+#### Multiplayer
 
-## Multiplayer
-
-XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. This server itself also needs to have XPortal installed and that too has to be same version.
+XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
 
 
 ## Bugs, Feature Requests and Translations
