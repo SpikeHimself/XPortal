@@ -460,6 +460,8 @@ namespace XPortal
                         height: rowHeight);
                 portalNameInputObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
+                portalNameInputField = portalNameInputObject.GetComponent<InputField>();
+
 
                 // Target portal label
                 var targetPortalLabelObject = GUIManager.Instance.CreateText(
@@ -492,8 +494,10 @@ namespace XPortal
                         fontSize: 18,
                         width: inputShortWidth,
                         height: rowHeight);
-                targetPortalDropdownObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
-                targetPortalDropdownObject.transform.Find("Template").GetComponent<RectTransform>().sizeDelta =new Vector2(0f, 400f); // make the expanded list larger
+                targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
+                targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
+                
+                ApplyDropdownStyle(targetPortalDropdown);
 
 
                 // Ping on Map button
@@ -537,13 +541,6 @@ namespace XPortal
                 okayButtonObject.GetComponent<Button>().onClick.AddListener(OnOkayButtonClicked);
                 cancelButtonObject.GetComponent<Button>().onClick.AddListener(OnCancelButtonClicked);
 
-                // Keep references to these fields
-                portalNameInputField = portalNameInputObject.GetComponent<InputField>();
-                targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
-
-                // Fix the dropdown's UI layer
-                targetPortalDropdown.gameObject.layer = GUIManager.UILayer;
-                targetPortalDropdownObject.transform.Find("Template").gameObject.layer = GUIManager.UILayer;
 
                 // This property name is backwards? Should select on activate? Either way: Yes.
                 portalNameInputField.shouldActivateOnSelect = true;
@@ -552,6 +549,31 @@ namespace XPortal
                 mainPanel.SetActive(false);
             }
         }
+
+        private void ApplyDropdownStyle(Dropdown dropdown)
+        {
+            // Fix the dropdown's UI layer
+            dropdown.gameObject.layer = GUIManager.UILayer;
+            dropdown.template.gameObject.layer = GUIManager.UILayer;
+
+            // Make the expanded list larger
+            dropdown.template.GetComponent<RectTransform>().sizeDelta =new Vector2(0f, 400f);
+
+            // Highlight items when hovering over them
+            var toggle = dropdown.template.Find("Viewport/Content/Item").gameObject.GetComponent<Toggle>();
+            toggle.targetGraphic.enabled = true;
+            toggle.colors = new ColorBlock
+            {
+                normalColor = new Color(0.25f, 0.25f, 0.25f, 1f),
+                highlightedColor = new Color(0.25f, 0.25f, 0.25f, 1f),
+                pressedColor = new Color(0.3f, 0.3f, 0.3f, 1f),
+                selectedColor = new Color(0.3f, 0.3f, 0.3f, 1f),
+                disabledColor = new Color(0.784f, 0.784f, 0.784f, 0.502f),
+                colorMultiplier = 1f,
+                fadeDuration = 0.1f
+            }; ;
+        }
+
 
         public void Dispose()
         {
