@@ -63,7 +63,6 @@ namespace XPortal
             // Subscribe to Patches events
             Patches.OnGameStart += Patches_OnGameStart;
             Patches.OnPrePortalHover += Patches_OnPrePortalHover;
-            //Patches.OnPostPortalInteract += Patches_OnPostPortalInteract;
             Patches.OnPortalRequestText += Patches_OnPortalRequestText;
             Patches.OnPortalPlaced += Patches_OnPortalPlaced;
             Patches.OnPortalDestroyed += Patches_OnPortalDestroyed;

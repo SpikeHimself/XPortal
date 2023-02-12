@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 using UnityEngine;
 
 namespace XPortal
@@ -14,9 +12,6 @@ namespace XPortal
 
         public delegate void OnPrePortalHoverAction(out string result, ZDO portalZDO, ZDOID portalId);
         public static event OnPrePortalHoverAction OnPrePortalHover;
-
-        //public delegate void OnPostPortalInteractAction(ZDOID portalId);
-        //public static event OnPostPortalInteractAction OnPostPortalInteract;
 
         public delegate void OnPortalRequestTextAction(ZDOID portalId);
         public static event OnPortalRequestTextAction OnPortalRequestText;
