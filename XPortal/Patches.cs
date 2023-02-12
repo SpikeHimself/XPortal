@@ -8,20 +8,25 @@ namespace XPortal
 {
     internal static class Patches
     {
+
+        #region Events
         public static event Action OnGameStart;
 
         public delegate void OnPrePortalHoverAction(out string result, ZDO portalZDO, ZDOID portalId);
         public static event OnPrePortalHoverAction OnPrePortalHover;
 
-        public delegate void OnPostPortalInteractAction(ZDOID portalId);
-        public static event OnPostPortalInteractAction OnPostPortalInteract;
+        //public delegate void OnPostPortalInteractAction(ZDOID portalId);
+        //public static event OnPostPortalInteractAction OnPostPortalInteract;
+
+        public delegate void OnPortalRequestTextAction(ZDOID portalId);
+        public static event OnPortalRequestTextAction OnPortalRequestText;
 
         public delegate void OnPortalPlacedAction(ZDOID portalId, Vector3 location);
         public static event OnPortalPlacedAction OnPortalPlaced;
 
         public delegate void OnPortalDestroyedAction(ZDOID portalId);
         public static event OnPortalDestroyedAction OnPortalDestroyed;
-
+        #endregion
 
         private static readonly Harmony patcher;
 
@@ -64,57 +69,16 @@ namespace XPortal
             {
                 OnGameStart();
             }
-
-            /// <summary>
-            /// The Game.ConnectPortals() coroutine updates portal connections every half second.
-            /// Since we want to customise how portals are linked, this needs to be disabled completely
-            /// </summary>
-            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-            {
-                bool shouldNop = false;
-                foreach (CodeInstruction instruction in instructions)
-                {
-                    if (instruction.opcode == OpCodes.Ldstr && ((System.String)instruction.operand) == "ConnectPortals")
-                    {
-                        shouldNop = true;
-                        yield return new CodeInstruction(OpCodes.Nop);
-                    }
-                    else if (shouldNop)
-                    {
-                        yield return new CodeInstruction(OpCodes.Nop);
-                        shouldNop = false;
-
-                    }
-                    else
-                        yield return instruction;
-                }
-                yield break;
-            }
         }
 
 
-        [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
-        static class TeleportWorldInteractPatch
+        [HarmonyPatch(typeof(Game), nameof(Game.ConnectPortals))]
+        static class GameConnectPortalsPatch
         {
-            static void Postfix(TeleportWorld __instance, ZNetView ___m_nview, bool __result, ref Humanoid human)
+            static bool Prefix()
             {
-                if (!__result)
-                {
-                    return;
-                }
-
-                // TODO: Deal with ward protection properly. The orignal method returns true either way, the only
-                // difference is that it does so before TextInput.RequestText is called.
-                // Perhaps TextInput.RequestText is a better hook for initiating the XPortal UI..?
-
-                // For now, just duplicate the original code:
-                if (!PrivateArea.CheckAccess(__instance.transform.position))
-                {
-                    human.Message(MessageHud.MessageType.Center, "$piece_noaccess");
-                    return;
-                }
-
-                OnPostPortalInteract(___m_nview.GetZDO().m_uid);
+                // Do not run this method.
+                return false;
             }
         }
 
@@ -145,16 +109,20 @@ namespace XPortal
         }
 
 
-        [HarmonyPatch(typeof(TextInput), nameof(TextInput.Show))]
-        static class TextInputShowPatch
+        [HarmonyPatch(typeof(TextInput), nameof(TextInput.RequestText))]
+        static class TextInputRequestTextPatch
         {
             /// <summary>
             /// When the game is trying to show the original "configure portal" window, deny it.
             /// </summary>
-            static bool Prefix(string topic)
+            static bool Prefix(TextReceiver sign)
             {
-                if (topic.Equals("$piece_portal_tag"))
+                // Get the TeleportWorld reference
+                if (sign is TeleportWorld teleportWorld)
                 {
+                    // Request the XPortal UI here instead of the vanilla "set tag" window
+                    OnPortalRequestText(teleportWorld.m_nview.GetZDO().m_uid);
+
                     // Don't run the original method at all
                     return false;
                 }
@@ -190,6 +158,7 @@ namespace XPortal
             }
 
         }
+
 
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Destroy))]
         static class WearNTearDestroyPatch

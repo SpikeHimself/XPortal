@@ -63,7 +63,8 @@ namespace XPortal
             // Subscribe to Patches events
             Patches.OnGameStart += Patches_OnGameStart;
             Patches.OnPrePortalHover += Patches_OnPrePortalHover;
-            Patches.OnPostPortalInteract += Patches_OnPostPortalInteract;
+            //Patches.OnPostPortalInteract += Patches_OnPostPortalInteract;
+            Patches.OnPortalRequestText += Patches_OnPortalRequestText;
             Patches.OnPortalPlaced += Patches_OnPortalPlaced;
             Patches.OnPortalDestroyed += Patches_OnPortalDestroyed;
 
@@ -200,7 +201,7 @@ namespace XPortal
         /// When interacting with a portal, we want to show the XPortal UI
         /// </summary>
         /// <param name="portalZDO"></param>
-        internal void Patches_OnPostPortalInteract(ZDOID portalId)
+        internal void Patches_OnPortalRequestText(ZDOID portalId)
         {
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
