@@ -459,7 +459,6 @@ namespace XPortal
                         width: inputLongWidth,
                         height: rowHeight);
                 portalNameInputObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
-
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
 
 
@@ -496,7 +495,6 @@ namespace XPortal
                         height: rowHeight);
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
                 targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
-                
                 ApplyDropdownStyle(targetPortalDropdown);
 
 
@@ -559,19 +557,32 @@ namespace XPortal
             // Make the expanded list larger
             dropdown.template.GetComponent<RectTransform>().sizeDelta =new Vector2(0f, 400f);
 
+            // Get the template item
+            var templateItem = dropdown.template.Find("Viewport/Content/Item");
+
             // Highlight items when hovering over them
-            var toggle = dropdown.template.Find("Viewport/Content/Item").gameObject.GetComponent<Toggle>();
-            toggle.targetGraphic.enabled = true;
-            toggle.colors = new ColorBlock
+            var templateItemToggle = templateItem.gameObject.GetComponent<Toggle>();
+            templateItemToggle.targetGraphic.enabled = true;
+            templateItemToggle.colors = new ColorBlock
             {
                 normalColor = new Color(0.25f, 0.25f, 0.25f, 1f),
-                highlightedColor = new Color(0.25f, 0.25f, 0.25f, 1f),
+                highlightedColor = new Color(0.3f, 0.3f, 0.3f, 1f),
                 pressedColor = new Color(0.3f, 0.3f, 0.3f, 1f),
                 selectedColor = new Color(0.3f, 0.3f, 0.3f, 1f),
                 disabledColor = new Color(0.784f, 0.784f, 0.784f, 0.502f),
                 colorMultiplier = 1f,
                 fadeDuration = 0.1f
-            }; ;
+            };
+
+            // Fix vertical item overlap
+            var itemLabel = templateItem.Find("Item Label");
+
+            var itemLabelText = itemLabel.GetComponent<Text>();
+            itemLabelText.verticalOverflow = VerticalWrapMode.Overflow;
+
+            var itemLabelRect = itemLabel.GetComponent<RectTransform>();
+            itemLabelRect.offsetMin = new Vector2(itemLabelRect.offsetMin.x, 0f);
+            itemLabelRect.offsetMax = new Vector2(itemLabelRect.offsetMax.x, 0f);
         }
 
 
