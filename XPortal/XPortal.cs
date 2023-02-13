@@ -210,7 +210,7 @@ namespace XPortal
             }
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
-            Jotunn.Logger.LogDebug($"[OnPostPortalInteract] Interacting with: {portal}");
+            Jotunn.Logger.LogDebug($"[OnPortalRequestText] Interacting with: {portal}");
             XPortalUI.Instance.ConfigurePortal(portal);
         }
 
