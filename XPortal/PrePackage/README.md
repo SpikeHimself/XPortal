@@ -14,7 +14,7 @@ No more tag pairing, and no more portal hubs!
 
 ## Features
 
-#### Select a destination
+### Select a destination
 
 When interacting with a portal, instead of entering a tag which has to match another portal's, XPortal lets you choose the portal's destination from a list.
 
@@ -22,19 +22,21 @@ The "edit tag" window has been replaced by XPortal's own configuration window. Y
 
 For your convenience, the list also shows you how far away the portals are.
 
-#### Longer names
+### Longer names
 
 XPortal completely removes the character length restriction on portal names, so that you can give your portals clear and descriptive titles.
 
-#### Ping a portal location
+### Ping a portal location
 
 Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-#### Multiplayer
+As of v1.2.4, a configuration option exists which disables this functionality. If you want to play without a map or just don't want to be able to ping  your portals, XPortal now lets you do so. The option can be found in XPortal's config file, and is called `PingMapDisabled`. By default the Ping Map button is *enabled*!
+
+### Multiplayer
 
 XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
 
-#### Controller support
+### Controller support
 
 As of v1.1.0, XPortal will respond to controller input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively.
 
@@ -58,7 +60,7 @@ If you prefer to install manually, download the latest release from one of the l
 
 ## Bugs, Feature Requests and Translations
 
-If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/)
+### If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/).
 
 To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
 
@@ -73,7 +75,7 @@ As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most pl
 
 Here are the most prominent changes:
 
-* **[New UI](#)**:
+* **New UI**:
 AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
 
 * **Robust network synchronisation**:
@@ -106,6 +108,21 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 ## Changelogs
 
+* **v1.2.4** (2023-02-13)
+
+	* Add translation to Korean
+
+	* Items in the dropdown no longer overlap each other
+
+	* Items in the dropdown are now highlighted when you hover over them
+
+	* Added configuration option `PingMapDisabled` which disables the ability to ping portals in the list. By default the Ping Map button remains *enabled*.
+
+	* Various code optimisations
+
+<details>
+<summary>Click to view previous versions</summary>
+
 * **v1.2.3** (2023-02-09)
 
 	* Add support for [Nexus Update Check](https://www.nexusmods.com/valheim/mods/102)
@@ -117,9 +134,6 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 	* Updated description/readme
 
 	* Code cleanup and minor bugfixes
-
-<details>
-<summary>Click to view previous versions</summary>
 
 * **v1.2.2** (2023-02-06)
 
