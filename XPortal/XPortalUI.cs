@@ -264,8 +264,8 @@ namespace XPortal
 
         private void SetPingMapButtonActive(bool active)
         {
-            // Never show the Ping Map button if the server has PingMapDisabled set
-            if (XPortalConfig.Instance.Server.PingMapDisabled)
+            // Never show the Ping Map button if either "nomap" is active, or the server has PingMapDisabled set
+            if (ZoneSystem.instance.GetGlobalKey("nomap") || XPortalConfig.Instance.Server.PingMapDisabled)
             {
                 active = false;
             }
