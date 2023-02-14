@@ -1,5 +1,4 @@
 using BepInEx;
-using BepInEx.Configuration;
 using Jotunn.Managers;
 using Jotunn.Utils;
 using System.Collections.Generic;
@@ -28,10 +27,6 @@ namespace XPortal
         /// Set to true via Game.Start() -> Patches.GameStartPatch.Postfix() -> Patches_OnGameStart()
         /// </summary>
         private bool gameStarted = false;
-
-        #region BepInEx configuration
-        private ConfigEntry<bool> cfgPingMapDisabled;
-        #endregion
 
         #region Determine Environment
         /// <summary>
@@ -62,11 +57,8 @@ namespace XPortal
             // Hello, world!
             Jotunn.Logger.LogDebug("I HAVE ARRIVED!");
 
-            // Add Nexus ID to config for Nexus Update Check (https://www.nexusmods.com/valheim/mods/102)
-            Config.Bind<int>("General", "NexusID", PluginNexusId, "Nexus mod ID for updates (do not change)");
-
-            // Add DisablePing option which disables the Ping Map button
-            cfgPingMapDisabled = Config.Bind<bool>("General", "PingMapDisabled", false, "Disable the Ping Map button completely. For players who wish to play without a map.");
+            // Load config
+            XPortalConfig.Instance.LoadConfigFile(Config);
 
             // Subscribe to Patches events
             Patches.OnGameStart += Patches_OnGameStart;
@@ -125,6 +117,9 @@ namespace XPortal
             // Ask the server to send us the portals
             var myId = ZDOMan.instance.GetMyID();
             RPC.SendSyncRequestToServer($"{myId} has joined the game");
+
+            // Ask the server to send us the config
+            RPC.SendConfigRequestToServer();
         }
         #endregion
 
@@ -219,7 +214,7 @@ namespace XPortal
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
             Jotunn.Logger.LogDebug($"[OnPortalRequestText] Interacting with: {portal}");
-            XPortalUI.Instance.ConfigurePortal(portal, cfgPingMapDisabled.Value);
+            XPortalUI.Instance.ConfigurePortal(portal);
         }
 
         /// <summary>
@@ -318,7 +313,7 @@ namespace XPortal
         /// <param name="targetId">The ZDOID of the portal to ping</param>
         private void XPortalUI_OnPingMapButtonClicked(ZDOID targetId)
         {
-            if (cfgPingMapDisabled.Value)
+            if (XPortalConfig.Instance.Server.PingMapDisabled)
             {
                 return;
             }

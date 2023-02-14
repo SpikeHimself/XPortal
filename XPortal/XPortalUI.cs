@@ -56,7 +56,6 @@ namespace XPortal
         // Great. Anyway, let's move on now..
         #endregion
 
-        private bool pingMapDisabled;
         private GameObject mainPanel;
         private GameObject pingMapButtonObject;
         private GameObject targetPortalDropdownObject;
@@ -265,7 +264,8 @@ namespace XPortal
 
         private void SetPingMapButtonActive(bool active)
         {
-            if (pingMapDisabled)
+            // Never show the Ping Map button if the server has PingMapDisabled set
+            if (XPortalConfig.Instance.Server.PingMapDisabled)
             {
                 active = false;
             }
@@ -279,10 +279,9 @@ namespace XPortal
         #endregion
 
         #region Values
-        public void ConfigurePortal(KnownPortal portal, bool cfgPingMapDisabled)
+        public void ConfigurePortal(KnownPortal portal)
         {
             InitialiseUI();
-            pingMapDisabled = cfgPingMapDisabled;
             thisPortal = portal;
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;

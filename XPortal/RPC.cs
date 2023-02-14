@@ -8,16 +8,18 @@ namespace XPortal
 
         #region RPC Names
         // Server RPCs
-        public const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
-        public const string RPC_RESYNC = "XPortal_Resync";
+        private const string RPC_SYNCPORTAL = "XPortal_SyncPortal";
+        private const string RPC_RESYNC = "XPortal_Resync";
+        private const string RPC_CONFIG = "XPortal_Config";
 
         // Client RPCs
-        public const string RPC_SYNCREQUEST = "XPortal_SyncRequest";
-        public const string RPC_ADDORUPDATEREQUEST = "XPortal_AddOrUpdateRequest";
-        public const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
+        private const string RPC_SYNCREQUEST = "XPortal_SyncRequest";
+        private const string RPC_ADDORUPDATEREQUEST = "XPortal_AddOrUpdateRequest";
+        private const string RPC_REMOVEREQUEST = "XPortal_RemoveRequest";
+        private const string RPC_CONFIGREQUEST = "XPortal_ConfigRequest";
 
         // Client to client
-        public const string RPC_CHATMESSAGE = "ChatMessage";
+        private const string RPC_CHATMESSAGE = "ChatMessage";
         #endregion
 
         private static long GetServerPeerId()
@@ -25,16 +27,21 @@ namespace XPortal
             return ZRoutedRpc.instance.GetServerPeerID();
         }
 
+        /// <summary>
+        /// Register our RPCs with ZRoutedRpc, so that the game knows which function to call when these messages arrive
+        /// </summary>
         public static void RegisterRPCs()
         {
             // Server RPCs
             ZRoutedRpc.instance.Register<ZPackage>(RPC_SYNCPORTAL, new Action<long, ZPackage>(RPC_SyncPortal));
             ZRoutedRpc.instance.Register<ZPackage, string>(RPC_RESYNC, new Action<long, ZPackage, string>(RPC_Resync));
+            ZRoutedRpc.instance.Register<ZPackage>(RPC_CONFIG, new Action<long, ZPackage>(RPC_Config));
 
             // Client RPCs
             ZRoutedRpc.instance.Register<string>(RPC_SYNCREQUEST, new Action<long, string>(RPC_SyncRequest));
             ZRoutedRpc.instance.Register<ZPackage>(RPC_ADDORUPDATEREQUEST, new Action<long, ZPackage>(RPC_AddOrUpdateRequest));
             ZRoutedRpc.instance.Register<ZDOID>(RPC_REMOVEREQUEST, new Action<long, ZDOID>(RPC_RemoveRequest));
+            ZRoutedRpc.instance.Register(RPC_CONFIGREQUEST, new Action<long>(RPC_ConfigRequest));
         }
 
         #region From Server
@@ -59,6 +66,27 @@ namespace XPortal
         {
             Jotunn.Logger.LogDebug($"[RPC.SendResync] Sending all portals to everybody, because: {reason}");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_RESYNC, pkg, reason);
+        }
+
+        /// <summary>
+        /// Send a package of all config settings to a client
+        /// </summary>
+        /// <param name="clientPeerID">The client to send the package to</param>
+        /// <param name="pkg">A ZPackage containing all config settings</param>
+        public static void SendConfigToClient(long clientPeerID, ZPackage pkg)
+        {
+            Jotunn.Logger.LogDebug($"[RPC.SendConfigToClient] Sending config to {clientPeerID}");
+            ZRoutedRpc.instance.InvokeRoutedRPC(clientPeerID, RPC_CONFIG, pkg);
+        }
+
+        /// <summary>
+        /// Send a package of all config settings to all clients
+        /// </summary>
+        /// <param name="pkg">A ZPackage containing all config settings</param>
+        public static void SendConfigToClients(ZPackage pkg)
+        {
+            Jotunn.Logger.LogDebug($"[RPC.SendConfigToClients] Sending config to everyone");
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_CONFIG, pkg);
         }
         #endregion
 
@@ -93,6 +121,15 @@ namespace XPortal
         {
             Jotunn.Logger.LogDebug($"[RPC.SendRemoveRequestToServer] {id}");
             ZRoutedRpc.instance.InvokeRoutedRPC(GetServerPeerId(), RPC_REMOVEREQUEST, id);
+        }
+
+        /// <summary>
+        /// Ask the server for the config settings
+        /// </summary>
+        public static void SendConfigRequestToServer()
+        {
+            Jotunn.Logger.LogDebug("[RPC.SendConfigRequestToServer]");
+            ZRoutedRpc.instance.InvokeRoutedRPC(GetServerPeerId(), RPC_CONFIGREQUEST);
         }
         #endregion
 
@@ -189,6 +226,23 @@ namespace XPortal
                 SendResyncToClients(KnownPortalsManager.Instance.Pack(), "A portal was removed");
             }
         }
+
+        /// <summary>
+        /// A client has asked for the server's config settings
+        /// </summary>
+        /// <param name="sender">The id of the sender</param>
+        private static void RPC_ConfigRequest(long sender)
+        {
+            if (!XPortal.IsServer())
+            {
+                Jotunn.Logger.LogDebug($"[RPC_ConfigRequest] {sender} wants to receive the config, but I am not the server.");
+                return;
+            }
+
+            Jotunn.Logger.LogDebug($"[RPC_ConfigRequest] {sender} wants to receive the config");
+            var pkg = XPortalConfig.Instance.Pack();
+            SendConfigToClient(sender, pkg);
+        }
         #endregion
 
         #region RPC Events (Client)
@@ -225,6 +279,22 @@ namespace XPortal
 
             Jotunn.Logger.LogDebug($"[OnRpcSyncPortal] Received update to portal `{incomingPortal.Name}`");
             KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
+        }
+
+        /// <summary>
+        /// The server sent us a package containing all config settings
+        /// </summary>
+        /// <param name="sender">The server</param>
+        /// <param name="pkg">A ZPackage containing all config settings</param>
+        private static void RPC_Config(long sender, ZPackage pkg)
+        {
+            if (XPortal.IsServer())
+            {
+                return;
+            }
+
+            Jotunn.Logger.LogInfo($"Received XPortal Config from server");
+            XPortalConfig.Instance.ReceiveFromServer(pkg);
         }
         #endregion
 
