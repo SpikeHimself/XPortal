@@ -202,7 +202,7 @@ namespace XPortal
         /// <summary>
         /// When interacting with a portal, we want to show the XPortal UI
         /// </summary>
-        /// <param name="portalZDO"></param>
+        /// <param name="portalId"></param>
         internal void Patches_OnPortalRequestText(ZDOID portalId)
         {
             if (!KnownPortalsManager.Instance.ContainsId(portalId))

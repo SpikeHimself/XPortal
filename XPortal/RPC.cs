@@ -51,20 +51,20 @@ namespace XPortal
         /// <param name="portal">The KnownPortal to send to the clients</param>
         public static void SendSyncPortalToClients(KnownPortal portal)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendSyncPortal] Sending {portal} to everybody");
+            Jotunn.Logger.LogDebug($"[RPC.SendSyncPortalToClients] Sending {portal} to everybody");
 
             var pkg = portal.Pack();
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_SYNCPORTAL, pkg);
         }
 
         /// <summary>
-        /// Send a package of all portals
+        /// Send a package of all portals to all clients
         /// </summary>
-        /// <param name="pkg">A ZPackage containing a count followed by all KnownPortals</param>
+        /// <param name="pkg">A ZPackage containing a count followed by a ZPackage for each KnownPortal</param>
         /// <param name="reason">The reason that was given for the Resync Request</param>
         public static void SendResyncToClients(ZPackage pkg, string reason)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendResync] Sending all portals to everybody, because: {reason}");
+            Jotunn.Logger.LogDebug($"[RPC.SendResyncToClients] Sending all portals to everybody, because: {reason}");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_RESYNC, pkg, reason);
         }
 
@@ -141,9 +141,8 @@ namespace XPortal
         /// <param name="text">The text that should appear on the ping message</param>
         public static void SendPingMapToEverybody(Vector3 location, string text)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendPingMap] {location}, {text}");
-            // I have no idea what the numbers 3 and 1 mean in this context, but it works..
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_CHATMESSAGE, location, 3, text, string.Empty, 1);
+            Jotunn.Logger.LogDebug($"[RPC.SendPingMapToEverybody] `{text}` at `{location}`");
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPC_CHATMESSAGE, location, 3, text, string.Empty, PrivilegeManager.GetNetworkUserId());
         }
         #endregion
 
@@ -277,7 +276,7 @@ namespace XPortal
 
             var incomingPortal = KnownPortal.Unpack(pkg);
 
-            Jotunn.Logger.LogDebug($"[OnRpcSyncPortal] Received update to portal `{incomingPortal.Name}`");
+            Jotunn.Logger.LogDebug($"[RPC_SyncPortal] Received update to portal `{incomingPortal.Name}`");
             KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
         }
 
