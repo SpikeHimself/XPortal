@@ -30,7 +30,9 @@ XPortal completely removes the character length restriction on portal names, so 
 
 Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-As of v1.2.4, a configuration option exists which disables this functionality. If you want to play without a map or just don't want to be able to ping  your portals, XPortal now lets you do so. The option can be found in XPortal's config file, and is called `PingMapDisabled`. By default the Ping Map button is *enabled*!
+As of v1.2.4, a configuration option exists which disables this functionality. If you want to play without a map or just don't want to be able to ping  your portals, XPortal now lets you do so. The option can be found in XPortal's config file, and is called `PingMapDisabled`. By default the Ping Map button is *enabled*!  If you play on a server, the server's setting will be leading.
+
+And as of v1.2.5, the Ping Map functionality will be disabled when the "nomap" global key is set (which you can do by typing "nomap" in the console).
 
 ### Multiplayer
 
@@ -108,6 +110,17 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 ## Changelogs
 
+* **v1.2.5** (2023-02-15)
+
+	* Hide the Ping Map button when the "[nomap](https://valheim.fandom.com/wiki/Global_Keys)" global key is set (you can do this by typing "nomap" in the console).
+
+	* The "PingMapDisabled" config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
+
+	* Add sync support for the stone portal object. This fixes a compatibility issue with the mod [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/)
+
+<details>
+<summary>Click to view previous versions</summary>
+
 * **v1.2.4** (2023-02-13)
 
 	* Add translation to Korean
@@ -119,9 +132,6 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 	* Added configuration option `PingMapDisabled` which disables the ability to ping portals in the list. By default the Ping Map button remains *enabled*.
 
 	* Various code optimisations
-
-<details>
-<summary>Click to view previous versions</summary>
 
 * **v1.2.3** (2023-02-09)
 
