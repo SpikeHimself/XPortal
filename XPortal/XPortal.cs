@@ -23,6 +23,8 @@ namespace XPortal
         public const string PluginJotunnVersion = Jotunn.Main.Version;
         #endregion
 
+        public const string StonePortalPrefabName = "portal";
+
         /// <summary>
         /// Set to true via Game.Start() -> Patches.GameStartPatch.Postfix() -> Patches_OnGameStart()
         /// </summary>
@@ -268,6 +270,7 @@ namespace XPortal
         {
             var allPortalZDOs = new List<ZDO>();
             ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortalZDOs);
+            ZDOMan.instance.GetAllZDOsWithPrefab(StonePortalPrefabName, allPortalZDOs);
             return allPortalZDOs;
         }
 
