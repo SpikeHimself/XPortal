@@ -114,7 +114,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Hide the Ping Map button when the "[nomap](https://valheim.fandom.com/wiki/Global_Keys)" global key is set (you can do this by typing "nomap" in the console).
 
-	* The "PingMapDisabled" config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
+	* The `PingMapDisabled` config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
 
 	* Add sync support for the stone portal object. This fixes a compatibility issue with the mod [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/)
 
