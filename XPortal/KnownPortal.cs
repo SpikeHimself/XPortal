@@ -9,24 +9,29 @@ namespace XPortal
         public ZDOID Target { get; set; }
         public Vector3 Location { get; set; }
 
-        private KnownPortal() { }
-
-        public KnownPortal(ZDOID id, string portalName, Vector3 location, ZDOID targetId)
+        public KnownPortal(ZDOID id, string name, Vector3 location, ZDOID target)
         {
             Id = id;
-            Name = portalName;
+            Name = name;
             Location = location;
-            Target = targetId == null ? ZDOID.None : targetId;
+            Target = target == null ? ZDOID.None : target;
         }
+
+        public KnownPortal() : this(
+            id: ZDOID.None,
+            name: string.Empty,
+            location: new Vector3(),
+            target: ZDOID.None)
+        { }
 
         public bool HasTarget()
         {
-            return Target != ZDOID.None && !Target.IsNone();
+            return Target != null && Target != ZDOID.None && !Target.IsNone();
         }
 
-        public bool Targets(ZDOID targetId)
+        public bool Targets(ZDOID target)
         {
-            return Target == targetId;
+            return Target == target;
         }
 
         public ZPackage Pack()
@@ -53,24 +58,39 @@ namespace XPortal
 
         public override string ToString()
         {
-            return $"{{ ID: `{Id}`, Name; `{Name}`, Location: {Location}, {TargetToString()} }}";
+            var portalName = Name;
+            if (string.IsNullOrEmpty(portalName))
+            {
+                portalName = Localization.instance.Localize("$piece_portal_tag_none");  // "(No Name)"
+            }
+            else
+            {
+                portalName = $"`{portalName}`";
+            }
+
+            return $"{{ ID: `{Id}`, Name; {portalName}, Location: `{Location}`, {TargetToString()} }}";
         }
 
         private string TargetToString()
         {
             if (!HasTarget())
             {
-                return "No Target";
+                var targetNone = Localization.instance.Localize("$piece_portal_target_none");   // "(None)"
+                return $"Target: {targetNone}";
             }
 
             var targetExists = KnownPortalsManager.Instance.ContainsId(Target);
             if (!targetExists)
             {
-                return "Invalid Target";
+                return $"Target (invalid): `{Target}`";
             }
 
-            var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(Target);
-            return $"Target: `{targetPortal.Name}`";
+            var targetName = KnownPortalsManager.Instance.GetPortalName(Target);
+            if (string.IsNullOrEmpty(targetName))
+            {
+                targetName = Localization.instance.Localize("$piece_portal_tag_none");  // "(No Name)"
+            }
+            return $"Target: `{targetName}`";
         }
 
     }

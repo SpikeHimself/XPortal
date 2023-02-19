@@ -37,6 +37,15 @@ namespace XPortal
             return knownPortals[id];
         }
 
+        public string GetPortalName(ZDOID id)
+        {
+            if (ContainsId(id))
+            {
+                return GetKnownPortalById(id).Name;
+            }
+            return string.Empty;
+        }
+
         public List<KnownPortal> GetList()
         {
             return knownPortals.Values.ToList();
@@ -111,12 +120,14 @@ namespace XPortal
             // Create a list of all portals
             foreach (var portalZDO in zdoList)
             {
-                var id = portalZDO.m_uid;
-                string name = portalZDO.GetString("tag");
-                var location = portalZDO.GetPosition();
-                var target = portalZDO.GetZDOID("target");
+                var knownPortal = new KnownPortal()
+                {
+                    Id = portalZDO.m_uid,
+                    Name = portalZDO.GetString("tag"),
+                    Location = portalZDO.GetPosition(),
+                    Target = portalZDO.GetZDOID("target")
+                };
 
-                var knownPortal = new KnownPortal(id, name, location, target);
                 portalsWithZdos.Add(knownPortal);
             }
 
@@ -173,7 +184,7 @@ namespace XPortal
                 RPC.SendAddOrUpdateRequestToServer(portal);
             }
 
-            Jotunn.Logger.LogInfo($"Known portals updated. Total: {Count}");
+            Jotunn.Logger.LogInfo($"Known portals updated. Current total: {Count}");
         }
 
         public void Dispose()

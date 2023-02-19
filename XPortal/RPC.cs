@@ -177,7 +177,7 @@ namespace XPortal
 
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            var portalZDO = Util.TryGetZDO(updatedPortal.Id);
+            var portalZDO = ZDOMan.instance.GetZDO(updatedPortal.Id);
             if (portalZDO != null)
             {
                 Jotunn.Logger.LogInfo($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
