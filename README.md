@@ -1,10 +1,10 @@
-# XPortal 
+# XPortal
 
- XPortal is a Valheim mod that lets you select a portal destination from a list of existing portals.
+XPortal is a Valheim mod that lets you select a portal destination from a list of existing portals.
 
- <img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="140" />
+<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="140" />
 
-## Download and installation instructions (for players)
+# Download and installation instructions (for players)
 
 XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this. If you use Vortex, you can't even get rid of BepInEx - it forces you to use it. I recommend using Vortex for many reasons and this is one of them.
 
@@ -29,7 +29,7 @@ Just as a side note, do not skip the Translations directory. The English transla
 
 Once again, you do not have take *any* of these steps if you used a mod manager.
 
-## Bugs, Feature Requests and Translations
+# Bugs, Feature Requests and Translations
 
 First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
 
@@ -41,7 +41,7 @@ For feature requests, choose `Feature request` on the [New issue](https://github
 
 To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
-## Installation instructions (for developers)
+# Installation instructions (for developers)
 
 I will soon write a guide to get XPortal working in your development environment. For now, you can probably figure some stuff out by having a look at the [JotunnModStub](https://github.com/Valheim-Modding/JotunnModStub) project that XPortal inherited from AnyPortal. Please bear in mind that the information there might have changed since XPortal was created, and that XPortal itself may over time have diverted from the steps laid out there. Again, a guide will follow soon!
 
