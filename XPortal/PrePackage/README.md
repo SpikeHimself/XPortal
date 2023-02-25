@@ -76,7 +76,7 @@ With that out of the way, if for whatever unearthly reason you still want to pro
 
 Just as a side note, do not skip the Translations directory. The English translations inside of it are also required for XPortal to function correctly.
 
-Once again, you do not have take *any* of these steps if you used a mod manager.
+Once again, you do not have to take *any* of these steps if you used a mod manager.
 
 
 # Bugs, Feature Requests and Translations
