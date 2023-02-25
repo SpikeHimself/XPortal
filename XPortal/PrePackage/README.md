@@ -5,14 +5,14 @@
  <img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="140" />
 
 
-## Description
+# Description
 
 XPortal lets you select a portal destination from a list of existing portals. 
 
 No more tag pairing, and no more portal hubs!
 
 
-## Features
+# Features
 
 ### Select a destination
 
@@ -53,16 +53,37 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 * `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
 
 
-## Installation instructions
+# Installation instructions
 
-The easiest method to install XPortal is by using a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). You can download XPortal on [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) or [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) and let your mod manager handle the rest.
+XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this. If you use Vortex, you can't even get rid of BepInEx - it forces you to use it. I recommend using Vortex for many reasons and this is one of them.
 
-If you prefer to install manually, download the latest release from one of the links mentioned above, or on [GitHub](https://github.com/SpikeHimself/XPortal/releases), and copy the contents of the `plugins` directory into `Steam\steamapps\common\Valheim\BepInEx\plugins\`, so that `XPortal.dll` and the `Translations` directory land in `Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\`.
+XPortal makes use of the [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/) library, so you must install that before installing XPortal. If you do not install Jötunn, XPortal will simply not be loaded by your game and it will not work.
+
+**If you are new to modding or you're just not sure what the best approach is**, I *very strongly advise* that you install a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). They will take care of everything for you and you don't have to worry about which files go where.
+
+Let me emphasise this point just a little more. If you just want to mess around with the files and download manually because you're learning things, you are probably at a level where *you don't need installation instructions*. The fact you are here and reading this indicates that *you are better off not installing manually, but should instead use one of the mod managers mentioned above*.
+
+With that out of the way, if for whatever unearthly reason you still want to proceed and install manually (**I really don't recommend this, in case that wasn't clear yet**), here is how to do it:
+
+1. Install [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/). Instructions for manual installation can be found [here](https://docs.bepinex.dev/articles/user_guide/installation/index.html).
+2. Install [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/). Instructions can be found [here](https://valheim-modding.github.io/Jotunn/guides/installation.html).
+3. Download XPortal from [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239), [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) or [GitHub](https://github.com/SpikeHimself/XPortal/releases).
+4. Directly inside of the XPortal .zip file you will come across some files related to thunderstore publication. *You do not need these files*. You will also find a directory called `plugins`. You will need the contents of that directory in the following steps.
+6. Locate your BepInEx plugins directory. It should be inside the Valheim installation directory. If you run Steam, you will find it here: `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins`.
+7. Extract *all* contents of XPortal's `plugins` directory to that same `plugins` directory in your game directory. When you have done this successfully, you should have:
+	* `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\XPortal.dll`
+	* `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\Translations\` (and its contents)
+
+Just as a side note, do not skip the Translations directory. The English translations inside of it are also required for XPortal to function correctly.
+
+Once again, you do not have take *any* of these steps if you used a mod manager.
 
 
-## Bugs, Feature Requests and Translations
+# Bugs, Feature Requests and Translations
 
-### If you have issues or feedback, please use XPortal's [GitHub page](https://github.com/SpikeHimself/XPortal/).
+First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
+
+It is important to me that I can make XPortal as bug free as possible, but **please bear in mind that without your "LogOutput.log", I will not be able to debug your issue at all.** Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
 
 To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
 
@@ -71,7 +92,7 @@ For feature requests, choose `Feature request` on the [New issue](https://github
 To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
 
-## Improvements over AnyPortal
+# Improvements over AnyPortal
 
 As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal management. Also, the UI was completely overhauled.
 
@@ -93,7 +114,7 @@ The way AnyPortal dealt with portal tags and targets has been overhauled. XPorta
 You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
 
 
-## Credits
+# Credits
 
 * sweetgiorni for creating AnyPortal
 
@@ -108,7 +129,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 * hanawa07 for translating to Korean
 
 
-## Changelogs
+# Changelogs
 
 * **v1.2.5** (2023-02-15)
 
@@ -157,7 +178,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 
 	* Translation added for Spanish
 
-	* Added BepInEx dependency, updated Jotunn dependency to 2.10.4
+	* Added BepInEx dependency, updated Jötunn dependency to 2.10.4
 
 	* Detect portal placement and destruction
 	
@@ -191,7 +212,7 @@ You won't notice this in your game, but the way XPortal's code is organised shou
 </details>
 
 
-## Support me
+# Support me
 
 XPortal is free and will remain free, for everyone to use, edit or learn from. If you enjoy XPortal and want to support my work, please consider buying me a coffee:
 

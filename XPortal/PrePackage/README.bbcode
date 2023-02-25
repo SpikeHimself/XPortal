@@ -51,9 +51,28 @@ As of v1.1.0, XPortal will respond to controller input when configuring your por
 
 [size=5][b][color=#FFA03C]Installation instructions[/color][/b][/size]
 
-The easiest method to install XPortal is by using a mod manager such as [url=https://www.nexusmods.com/site/mods/1]Vortex[/url] or [url=https://valheim.thunderstore.io/package/ebkr/r2modman/]r2modman[/url]. You can download XPortal on [url=https://www.nexusmods.com/valheim/mods/2239]Nexus Mods[/url] or [url=https://valheim.thunderstore.io/package/SpikeHimself/XPortal/]Thunderstore[/url] and let your mod manager handle the rest.
+XPortal is a [url=https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/]BepInEx[/url] plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this. If you use Vortex, you can't even get rid of BepInEx - it forces you to use it. I recommend using Vortex for many reasons and this is one of them.
 
-If you prefer to install manually, download the latest release from one of the links mentioned above, or on [url=https://github.com/SpikeHimself/XPortal/releases]GitHub[/url], and copy the contents of the [code]plugins[/code] directory into [code]Steam\steamapps\common\Valheim\BepInEx\plugins\[/code], so that [code]XPortal.dll[/code] and the Translations directory land in [code]Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\[/code].
+XPortal makes use of the [url=https://www.nexusmods.com/valheim/mods/1138]Jotunn[/url] library, so you must install that before installing XPortal. If you do not install Jötunn, XPortal will simply not be loaded by your game and it will not work.
+
+[b]If you are new to modding or you're just not sure what the best approach is[/b], I [i]very strongly advise[/i] that you install a mod manager such as [url=https://www.nexusmods.com/site/mods/1]Vortex[/url] or [url=https://valheim.thunderstore.io/package/ebkr/r2modman/]r2modman[/url]. They will take care of everything for you and you don't have to worry about which files go where.
+
+Let me emphasise this point just a little more. If you just want to mess around with the files and download manually because you're learning things, you are probably at a level where [i]you don't need installation instructions[/i]. The fact you are here and reading this indicates that [i]you are better off not installing manually, but should instead use one of the mod managers mentioned above[/i].
+
+With that out of the way, if for whatever unearthly reason you still want to proceed and install manually ([b]I really don't recommend this, in case that wasn't clear yet[/b]), here is how to do it:
+
+[list=1]
+[*]Install [url=https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/]BepInEx[/url]. Instructions for manual installation can be found [url=https://docs.bepinex.dev/articles/user_guide/installation/index.html]here[/url].
+[*]Install [url=https://valheim.thunderstore.io/package/ValheimModding/Jotunn/]Jotunn[/url]. Instructions can be found [url=https://valheim-modding.github.io/Jotunn/guides/installation.html]here[/url].
+[*]Download XPortal from [url=https://www.nexusmods.com/valheim/mods/2239]Nexus Mods[/url], [url=https://valheim.thunderstore.io/package/SpikeHimself/XPortal/]Thunderstore[/url] or [url=https://github.com/SpikeHimself/XPortal/releases]GitHub[/url].
+[*]Directly inside of the XPortal .zip file you will come across some files related to thunderstore publication. [i]You do not need these files[/i]. You will also find a directory called "plugins". You will need the contents of that directory in the following steps.
+[*]Locate your BepInEx plugins directory. It should be inside the Valheim installation directory. If you run Steam, you will find it here: "[..]\Steam\steamapps\common\Valheim\BepInEx\plugins".
+[*]Extract [i]all[/i] contents of XPortal's "plugins" directory to that same "plugins" directory in your game directory. When you have done this successfully, you should have:[/list]
+[list][*]"[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\XPortal.dll"
+[*]"[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\Translations\" (and its contents)[/list]
+Just as a side note, do not skip the Translations directory. The English translations inside of it are also required for XPortal to function correctly.
+
+Once again, you do not have take [i]any[/i] of these steps if you used a mod manager.
 
 
 [size=5][b][color=#FFA03C]Bugs, Feature Requests and Translations[/color][/b][/size]
