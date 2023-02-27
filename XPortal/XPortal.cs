@@ -7,6 +7,7 @@ using UnityEngine;
 namespace XPortal
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    [BepInIncompatibility("com.sweetgiorni.anyportal")]
     [BepInDependency(Jotunn.Main.ModGuid)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     public class XPortal : BaseUnityPlugin
