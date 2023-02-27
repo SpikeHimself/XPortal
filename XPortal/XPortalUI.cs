@@ -190,14 +190,14 @@ namespace XPortal
         #region Visibility
         public bool IsActive()
         {
-            return mainPanel != null && mainPanel.activeSelf;
+            return mainPanel && mainPanel.activeSelf;
         }
 
         public void SetActive(bool active)
         {
             BlockInputForAWhile();
 
-            if (mainPanel == null || !mainPanel.IsValid())
+            if (!mainPanel || !mainPanel.IsValid())
             {
                 InitialiseUI();
             }
@@ -393,7 +393,7 @@ namespace XPortal
                 return;
             }
 
-            if (mainPanel == null || !mainPanel.IsValid())
+            if (!mainPanel || !mainPanel.IsValid())
             {
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
@@ -595,10 +595,10 @@ namespace XPortal
         {
             targetPortalDropdown?.onValueChanged.RemoveAllListeners();
 
-            if (targetPortalDropdown != null)
+            if (targetPortalDropdown)
                 GameObject.Destroy(targetPortalDropdown);
 
-            if (mainPanel != null)
+            if (mainPanel)
                 GameObject.Destroy(mainPanel);
         }
     }

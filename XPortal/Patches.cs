@@ -86,7 +86,7 @@ namespace XPortal
             /// </summary>
             static bool Prefix(ZNetView ___m_nview, ref string __result)
             {
-                if (___m_nview == null || !___m_nview.IsValid())
+                if (!___m_nview || !___m_nview.IsValid())
                 {
                     Jotunn.Logger.LogError("TeleportWorldGetHoverTextPatch: This portal does not exist. Odin strokes his beard in confusion..");
                     __result = "This portal doesn't actually appear to exist. Heimdallr sees you...";
@@ -136,7 +136,7 @@ namespace XPortal
             /// </summary>
             static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
             {
-                if (___m_piece.m_name.Equals("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview != null)
+                if (___m_piece.m_name.Equals("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
                 {
                     var portalZDO = ___m_nview.GetZDO();
                     if (portalZDO == null)
@@ -164,13 +164,13 @@ namespace XPortal
             static void Prefix(WearNTear __instance)
             {
                 var piece = __instance.m_piece;
-                if (piece == null)
+                if (!piece)
                 {
                     return;
                 }
 
                 var nview = piece.m_nview;
-                if (nview == null)
+                if (!nview)
                 {
                     return;
                 }
