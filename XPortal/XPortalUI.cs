@@ -63,7 +63,7 @@ namespace XPortal
         private InputField portalNameInputField;
 
         // A look-up list to find the portal ZDOID by dropdown list index
-        private Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
+        private readonly Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
 
         // The KnownPortal being configured
         private KnownPortal thisPortal;
@@ -183,7 +183,7 @@ namespace XPortal
         {
             // After anything happens in the UI, just ignore everything else for a few frames
             // .....because working with Unity's input system is above my pay grade
-            blockInput = cfgBlockInputFrameCount;
+            blockInput += cfgBlockInputFrameCount;
         }
         #endregion
 

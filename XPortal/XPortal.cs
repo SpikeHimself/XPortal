@@ -55,6 +55,7 @@ namespace XPortal
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Awake is called when the script instance is being loaded.")]
         private void Awake()
         {
             // Hello, world!
@@ -87,6 +88,7 @@ namespace XPortal
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Update is called every frame, if the MonoBehaviour is enabled.")]
         private void Update()
         {
             if (IsHeadless() || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
@@ -100,6 +102,7 @@ namespace XPortal
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDestroy.html
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.OnDestroy occurs when a Scene or game ends.")]
         private void OnDestroy()
         {
             Patches.Unpatch();
