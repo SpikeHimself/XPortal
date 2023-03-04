@@ -115,7 +115,8 @@ namespace XPortal
         {
             // Ask the server to send us the portals
             var myId = ZDOMan.instance.GetMyID();
-            RPC.SendSyncRequestToServer($"{myId} has joined the game");
+            var myName = Game.instance.GetPlayerProfile().GetName();
+            RPC.SendSyncRequestToServer($"{myName} ({myId}) has joined the game");
 
             // Ask the server to send us the config
             RPC.SendConfigRequestToServer();
@@ -143,7 +144,7 @@ namespace XPortal
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
                 // This appears to be a new portal
-                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over new portal {portalId}");
+                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over new portal `{portalId}`");
 
                 // Sometimes XPortal does not detect placement of new portals.
                 // Assuming that that is the case here, let's just create a new dummy portal for now.
