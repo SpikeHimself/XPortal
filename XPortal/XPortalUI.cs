@@ -334,7 +334,13 @@ namespace XPortal
                     strDistance = string.Format("{0:0.0} km", distance / 1000);
                 }
 
-                var option = new Dropdown.OptionData($"{portalName}  ({strDistance})");
+                var colourTag = string.Empty;
+                if (XPortalConfig.Instance.Local.DisplayPortalColour)
+                {
+                    colourTag = $"<color={portal.Colour}>>> </color>";
+                }
+
+                var option = new Dropdown.OptionData($"{colourTag}{portalName}  ({strDistance})");
 
                 // Insert at the next index
                 targetPortalDropdown.options.Insert(++index, option);
