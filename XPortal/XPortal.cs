@@ -166,35 +166,25 @@ namespace XPortal
                 // Assuming that that is the case here, let's just create a new dummy portal for now.
                 // We'll tell the server about it *after* interacting with it (when updating the name/target in the UI).
                 // Everything will be fine. Promise.
-                var dummyPortal = new KnownPortal(portalId, string.Empty, portalZDO.GetPosition(), ZDOID.None);
+                var dummyPortal = new KnownPortal(portalId);
                 KnownPortalsManager.Instance.AddOrUpdate(dummyPortal);
             }
 
             // Get information about the portal being hovered over
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
-            string outputPortalName = portal.Name;
-            if (string.IsNullOrEmpty(outputPortalName))
-            {
-                outputPortalName = "$piece_portal_tag_none"; // "(No Name)"
-            }
+            string outputPortalName = portal.GetFriendlyName();
+            string outputPortalDestination = portal.GetFriendlyTargetName();
 
-            string outputPortalDestination = "$piece_portal_target_none"; // "(None)"
             if (portal.HasTarget())
             {
                 // Get information about the portal's destination
                 var targetId = portal.Target;
                 if (!KnownPortalsManager.Instance.ContainsId(targetId))
                 {
-                    Jotunn.Logger.LogDebug($"[OnPrePortalHover] Target portal {targetId} appears to be invalid");
-                    RPC.SendSyncRequestToServer("Hovering over portal with invalid target");
-                    result = "Fetching portal info....";
+                    Jotunn.Logger.LogError($"[OnPrePortalHover] Target portal {targetId} appears to be invalid");
+                    RPC.SendSyncRequestToServer($"Hovering over portal `{outputPortalName}` which has invalid target `{targetId}`");
+                    result = "Fetching portal info...";
                     return;
-                }
-
-                outputPortalDestination = KnownPortalsManager.Instance.GetKnownPortalById(targetId).Name;
-                if (string.IsNullOrEmpty(outputPortalDestination))
-                {
-                    outputPortalDestination = "$piece_portal_tag_none"; // "(No Name)"
                 }
             }
 
@@ -232,7 +222,7 @@ namespace XPortal
         {
             Jotunn.Logger.LogDebug($"[OnPortalPlaced] Portal `{portalId}` was placed");
 
-            var portal = new KnownPortal(portalId, string.Empty, location, ZDOID.None);
+            var portal = new KnownPortal(portalId, location);
             RPC.SendAddOrUpdateRequestToServer(portal);
         }
 
