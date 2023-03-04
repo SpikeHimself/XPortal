@@ -120,12 +120,11 @@ namespace XPortal
             // Create a list of all portals
             foreach (var portalZDO in zdoList)
             {
-                var knownPortal = new KnownPortal()
+                var knownPortal = new KnownPortal(portalZDO.m_uid)
                 {
-                    Id = portalZDO.m_uid,
                     Name = portalZDO.GetString("tag"),
                     Location = portalZDO.GetPosition(),
-                    Target = portalZDO.GetZDOID("target")
+                    Target = portalZDO.GetZDOID("target"),
                 };
 
                 portalsWithZdos.Add(knownPortal);
@@ -143,12 +142,12 @@ namespace XPortal
 
             // Unpack all portals 
             var portalsInPackage = new List<KnownPortal>();
-            if (count>0)
+            if (count > 0)
             {
-                for (int i = 0; i<count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     var portalPkg = pkg.ReadPackage();
-                    var portal = KnownPortal.Unpack(portalPkg);
+                    var portal = new KnownPortal(portalPkg);
                     portalsInPackage.Add(portal);
                 }
             }

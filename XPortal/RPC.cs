@@ -165,14 +165,13 @@ namespace XPortal
         /// <param name="pkg">A ZPackage containing the packed KnownPortal</param>
         private static void RPC_AddOrUpdateRequest(long sender, ZPackage pkg)
         {
-            var portal = KnownPortal.Unpack(pkg);
-
             if (!XPortal.IsServer())
             {
-                Jotunn.Logger.LogDebug($"[RPC_AddOrUpdateRequest] {sender} wants `{portal.Id}` to be added or updated, but I am not the server.");
+                Jotunn.Logger.LogDebug($"[RPC_AddOrUpdateRequest] `{sender}` wants a portal to be added or updated, but I am not the server.");
                 return;
             }
 
+            var portal = new KnownPortal(pkg);
             Jotunn.Logger.LogDebug($"[RPC_AddOrUpdateRequest] {sender} wants `{portal.Id}` to be added or updated");
 
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
@@ -274,8 +273,7 @@ namespace XPortal
                 return;
             }
 
-            var incomingPortal = KnownPortal.Unpack(pkg);
-
+            var incomingPortal = new KnownPortal(pkg);
             Jotunn.Logger.LogDebug($"[RPC_SyncPortal] Received update to portal `{incomingPortal.Name}`");
             KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
         }
