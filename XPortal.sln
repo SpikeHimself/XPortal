@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31019.35
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPortal", "XPortal\XPortal.csproj", "{DEAF4438-8089-40ED-8175-398E1261D45B}"
 EndProject
@@ -23,4 +22,3 @@ Global
 		SolutionGuid = {04FA40AF-91D5-4CE8-92ED-7530C8DF0D5E}
 	EndGlobalSection
 EndGlobal
-
