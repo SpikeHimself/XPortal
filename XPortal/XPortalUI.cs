@@ -17,14 +17,6 @@ namespace XPortal
         public static XPortalUI Instance { get { return lazy.Value; } }
         ////////////////////////////
 
-        #region Events
-        //public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetId);
-        //public event PortalInfoSubmittedAction PortalInfoSubmitted;
-
-        //public delegate void PingMapButtonClickedAction(ZDOID targetId);
-        //public event PingMapButtonClickedAction PingMapButtonClicked;
-        #endregion
-
         #region Pain
         // Creating the UI was incredibly painful. I will never change the layout again. Ever.
         // ...but we can use some variables to tweak widths, heights, offsets, and such
