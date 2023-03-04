@@ -37,15 +37,6 @@ namespace XPortal
             return knownPortals[id];
         }
 
-        public string GetPortalName(ZDOID id)
-        {
-            if (ContainsId(id))
-            {
-                return GetKnownPortalById(id).Name;
-            }
-            return string.Empty;
-        }
-
         public List<KnownPortal> GetList()
         {
             return knownPortals.Values.ToList();
@@ -100,12 +91,7 @@ namespace XPortal
 
         public bool Remove(ZDOID id)
         {
-            if (ContainsId(id))
-            {
-                knownPortals.Remove(id);
-                return true;
-            }
-            return false;
+            return knownPortals.Remove(id);
         }
 
         public bool Remove(KnownPortal portal)

@@ -273,7 +273,7 @@ namespace XPortal
             pingMapButtonObject.SetActive(active);
 
             var mainPanelRT = mainPanel.GetComponent<RectTransform>();
-            float dropdownWidth = (active ? inputShortWidth : inputLongWidth) -  mainPanelRT.sizeDelta.x;
+            float dropdownWidth = (active ? inputShortWidth : inputLongWidth) - mainPanelRT.sizeDelta.x;
             targetPortalDropdownObject.GetComponent<RectTransform>().sizeDelta = new Vector2(dropdownWidth, rowHeight);
         }
         #endregion
@@ -566,7 +566,7 @@ namespace XPortal
             dropdown.template.gameObject.layer = GUIManager.UILayer;
 
             // Make the expanded list larger
-            dropdown.template.GetComponent<RectTransform>().sizeDelta =new Vector2(0f, 400f);
+            dropdown.template.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 400f);
 
             // Get the template item
             var templateItem = dropdown.template.Find("Viewport/Content/Item");

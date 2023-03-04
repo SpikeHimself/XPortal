@@ -130,7 +130,6 @@ namespace XPortal
         internal static void OnGameStart()
         {
             RPC.RegisterRPCs();
-
             gameStarted = true;
         }
 

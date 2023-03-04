@@ -1,6 +1,4 @@
 ﻿using HarmonyLib;
-using System;
-using UnityEngine;
 
 namespace XPortal
 {
@@ -10,7 +8,7 @@ namespace XPortal
 
         static Patches()
         {
-            patcher = new Harmony(XPortal.PluginGUID  + ".harmony");
+            patcher = new Harmony(XPortal.PluginGUID + ".harmony");
         }
 
         public static void Patch()
