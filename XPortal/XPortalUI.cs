@@ -18,11 +18,11 @@ namespace XPortal
         ////////////////////////////
 
         #region Events
-        public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetId);
-        public event PortalInfoSubmittedAction PortalInfoSubmitted;
+        //public delegate void PortalInfoSubmittedAction(KnownPortal thisPortal, string newName, ZDOID targetId);
+        //public event PortalInfoSubmittedAction PortalInfoSubmitted;
 
-        public delegate void PingMapButtonClickedAction(ZDOID targetId);
-        public event PingMapButtonClickedAction PingMapButtonClicked;
+        //public delegate void PingMapButtonClickedAction(ZDOID targetId);
+        //public event PingMapButtonClickedAction PingMapButtonClicked;
         #endregion
 
         #region Pain
@@ -376,7 +376,7 @@ namespace XPortal
         private void OnOkayButtonClicked()
         {
             Hide();
-            PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId);
+            XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId);
         }
 
         private void OnCancelButtonClicked()
@@ -387,7 +387,7 @@ namespace XPortal
         private void OnPingMapButtonClicked()
         {
             Hide();
-            PingMapButtonClicked(selectedTargetId);
+            XPortal.PingMapButtonClicked(selectedTargetId);
         }
         #endregion
 

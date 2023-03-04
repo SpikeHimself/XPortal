@@ -6,23 +6,6 @@ namespace XPortal
 {
     internal static class Patches
     {
-
-        #region Events
-        public static event Action OnGameStart;
-
-        public delegate void OnPrePortalHoverAction(out string result, ZDO portalZDO, ZDOID portalId);
-        public static event OnPrePortalHoverAction OnPrePortalHover;
-
-        public delegate void OnPortalRequestTextAction(ZDOID portalId);
-        public static event OnPortalRequestTextAction OnPortalRequestText;
-
-        public delegate void OnPortalPlacedAction(ZDOID portalId, Vector3 location);
-        public static event OnPortalPlacedAction OnPortalPlaced;
-
-        public delegate void OnPortalDestroyedAction(ZDOID portalId);
-        public static event OnPortalDestroyedAction OnPortalDestroyed;
-        #endregion
-
         private static readonly Harmony patcher;
 
         static Patches()
@@ -62,7 +45,7 @@ namespace XPortal
             /// </summary>
             static void Postfix()
             {
-                OnGameStart();
+                XPortal.OnGameStart();
             }
         }
 
@@ -95,7 +78,8 @@ namespace XPortal
                 {
                     ZDO portalZDO = ___m_nview.GetZDO();
                     var portalId = portalZDO.m_uid;
-                    OnPrePortalHover(out __result, portalZDO, portalId);
+                    var location = portalZDO.GetPosition();
+                    XPortal.OnPrePortalHover(out __result, portalId, location);
                 }
 
                 // Don't run the original method at all
@@ -116,7 +100,7 @@ namespace XPortal
                 if (sign is TeleportWorld teleportWorld)
                 {
                     // Request the XPortal UI here instead of the vanilla "set tag" window
-                    OnPortalRequestText(teleportWorld.m_nview.GetZDO().m_uid);
+                    XPortal.OnPortalRequestText(teleportWorld.m_nview.GetZDO().m_uid);
 
                     // Don't run the original method at all
                     return false;
@@ -147,7 +131,7 @@ namespace XPortal
 
                     var portalId = portalZDO.m_uid;
                     var location = portalZDO.GetPosition();
-                    OnPortalPlaced(portalId, location);
+                    XPortal.OnPortalPlaced(portalId, location);
                 }
 
             }
@@ -184,7 +168,7 @@ namespace XPortal
                     }
 
                     var portalId = portalZDO.m_uid;
-                    OnPortalDestroyed(portalId);
+                    XPortal.OnPortalDestroyed(portalId);
                 }
             }
         }
