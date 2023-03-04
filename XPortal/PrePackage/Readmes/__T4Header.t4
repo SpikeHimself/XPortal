@@ -1,0 +1,6 @@
+﻿<# 
+	var urlThisModNexus = "https://www.nexusmods.com/valheim/mods/2239";
+	var urlThisModThunderstore = "https://valheim.thunderstore.io/package/SpikeHimself/XPortal/";
+	var urlThisModGitHub = "https://github.com/SpikeHimself/XPortal";
+	var urlThisModGitHubReleases = "https://github.com/SpikeHimself/XPortal/releases";
+#>

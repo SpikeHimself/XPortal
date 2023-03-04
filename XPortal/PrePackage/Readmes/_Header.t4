@@ -1,0 +1,12 @@
+﻿<#= mf.Heading("XPortal") #>
+
+An <#= linkAnyPortal #> revamp.
+
+<#= mf.Image("https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif", height: 140) #>
+
+
+<#= mf.Heading("Description") #>
+
+XPortal lets you select a portal destination from a list of existing portals. 
+
+No more tag pairing, and no more portal hubs!

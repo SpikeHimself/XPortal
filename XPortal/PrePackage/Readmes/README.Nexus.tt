@@ -1,0 +1,27 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" #>
+<#@ import namespace="XPortal.PrePackage.Readmes" #>
+<#@ import namespace="ManyFormats" #>
+<#@ import namespace="ManyFormats.Formats" #>
+<#@ output extension=".bbcode" #>
+<#@ include file="__T4Header.t4" once="true" #>
+<# 
+	var mf = new NexusBbcode();
+	var Target = Targets.NexusMods; 
+#>
+<#@ include file="_Urls.t4" once="true" #>
+<#@ include file="_Header.t4" once="true" #>
+
+<#@ include file="Features.t4" once="true" #>
+
+<#@ include file="Installation.t4" once="true" #>
+
+<#@ include file="Bugs.t4" once="true" #>
+
+<#@ include file="Improvements.t4" once="true" #>
+
+<#@ include file="Credits.t4" once="true" #>
+
+<#@ include file="_Footer.t4" once="true" #>

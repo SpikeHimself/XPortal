@@ -1,0 +1,14 @@
+﻿<#= mf.Heading("Improvements over AnyPortal") #>
+
+As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal management. Also, the UI was completely overhauled.
+
+Here are the most prominent changes:
+<#= 
+mf.List(ListBullets.Asterisk, spacedItems: true, items: new string[] {
+	$"{mf.Bold("New UI")}: AnyPortal built its UI incorporating the existing \"edit tag\" window. XPortal doesn't use the original \"edit tag\" window at all.",
+	$"{mf.Bold("Robust network synchronisation")}: AnyPortal updates the information on your screen when you interact with a portal. XPortal updates all portal information at the very moment that any portal is changed, even when someone else does it.",
+	$"{mf.Bold("Smaller file")}: XPortal uses Jötunn's UI elements, so it no longer needs its own Unity assets.",
+	$"{mf.Bold("Code optimisation")}: The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated whenever any portal change happens. Because of this, it will not have to query game data every time you interact with a portal. If you run Valheim as host, you will no longer experience a harsh performance hit while others are in your game.",
+	$"{mf.Bold("Scalability")}: You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's {mf.Link("GitHub page", urlThisModGitHub)}!",
+})
+#>

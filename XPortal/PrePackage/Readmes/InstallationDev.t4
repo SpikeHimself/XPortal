@@ -1,0 +1,3 @@
+﻿<#= mf.Heading("Installation instructions (for developers)") #>
+
+I will soon write a guide to get XPortal working in your development environment. For now, you can probably figure some stuff out by having a look at the <#= mf.Link("JotunnModStub", "https://github.com/Valheim-Modding/JotunnModStub") #> project that XPortal inherited from AnyPortal. Please bear in mind that the information there might have changed since XPortal was created, and that XPortal itself may over time have diverted from the steps laid out there. Again, a guide will follow soon!

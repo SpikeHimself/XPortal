@@ -1,0 +1,37 @@
+﻿<#
+	string CreateUrl(int nexusId, string package)
+	{
+		return (Target != Targets.Thunderstore) 
+			? $"https://www.nexusmods.com/valheim/mods/{nexusId}" 
+			: $"https://valheim.thunderstore.io/package/{package}/";
+	}
+
+	string CreateLink(string text, int nexusId, string package)
+	{
+		var url = CreateUrl(nexusId, package);
+		return mf.Link(text, url);
+	}
+
+	// External mods
+	var linkAnyPortal = CreateLink("AnyPortal", 170, "sweetgiorni/AnyPortal");
+	var linkJotunn = CreateLink("Jötunn", 1138, "ValheimModding/Jotunn");
+	var linkStonePortal = CreateLink("Stone Portal", 2007, "JereKuusela/Stone_Portal");
+
+	// My other mods
+	var urlXPortal= CreateUrl(2239, "SpikeHimself/XPortal");
+	var linkXPortal = mf.Link("XPortal", urlXPortal);
+
+	var urlXStorage = CreateUrl(2290, "SpikeHimself/XStorage");
+	var linkXStorage = mf.Link("XStorage", urlXStorage);
+
+	// Static links to other pages
+	var linkBepInEx = mf.Link("BepInEx", "https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/");
+	var linkVortex = mf.Link("Vortex", "https://www.nexusmods.com/site/mods/1");
+	var linkR2modman = mf.Link("r2modman", "https://valheim.thunderstore.io/package/ebkr/r2modman/");
+
+	// My GitHub pages
+	var urlGitHubIssues = "https://github.com/SpikeHimself/XPortal/issues";
+	var urlGitHubNewIssue = "https://github.com/SpikeHimself/XPortal/issues/new/choose";
+	var linkGitHubIssues = mf.Link("Issues page", urlGitHubIssues);
+	var linkGitHubNewIssue = mf.Link("New issue", urlGitHubNewIssue);
+#>

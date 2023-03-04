@@ -50,6 +50,12 @@
     </Reference>
     <Reference Include="Jotunn, Version=2.10.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JotunnLib.2.10.4\lib\net462\Jotunn.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ManyFormats, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\ManyFormats.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.dll</HintPath>
@@ -82,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KnownPortalsManager.cs" />
+    <Compile Include="PrePackage\Readmes\ReadmeHelper.cs" />
     <Compile Include="RPC.cs" />
     <Compile Include="XPortalConfig.cs" />
     <Compile Include="XPortalUI.cs" />
@@ -104,6 +111,29 @@
       <DependentUpon>manifest.tt</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="PrePackage\Readmes\README.GitHub.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>README.GitHub.tt</DependentUpon>
+    </None>
+    <None Include="PrePackage\Readmes\README.Nexus.bbcode">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>README.Nexus.tt</DependentUpon>
+    </None>
+    <None Include="PrePackage\Readmes\README.Thunderstore.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>README.Thunderstore.tt</DependentUpon>
+    </None>
+    <None Include="PrePackage\Readmes\Changelogs.t4" />
+    <None Include="PrePackage\Readmes\Credits.t4" />
+    <None Include="PrePackage\Readmes\InstallationDev.t4" />
+    <None Include="PrePackage\Readmes\_Footer.t4" />
+    <None Include="PrePackage\Readmes\_Header.t4" />
+    <None Include="PrePackage\Readmes\Improvements.t4" />
+    <None Include="PrePackage\Readmes\Installation.t4" />
+    <None Include="PrePackage\Readmes\_HeaderGitHub.t4" />
     <None Include="PrePackage\Translations\English\xportal-translations-english.json" />
     <None Include="PrePackage\README.bbcode" />
     <None Include="PrePackage\README.md" />
@@ -132,7 +162,26 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="PrePackage\Readmes\README.GitHub.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.GitHub.md</LastGenOutput>
+    </Content>
+    <Content Include="PrePackage\Readmes\README.Thunderstore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.Thunderstore.md</LastGenOutput>
+    </Content>
+    <None Include="PrePackage\Readmes\__T4Header.t4">
+      <LastGenOutput>__T4Header.cs</LastGenOutput>
+    </None>
+    <None Include="PrePackage\Readmes\Bugs.t4" />
+    <None Include="PrePackage\Readmes\Features.t4" />
+    <None Include="PrePackage\Readmes\_Urls.t4" />
+    <Content Include="PrePackage\Readmes\README.Nexus.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.Nexus.bbcode</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="JotunnPostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -ValheimPath &quot;$(VALHEIM_INSTALL.TrimEnd('\'))&quot; -ProjectPath &quot;$(ProjectDir.TrimEnd('\'))&quot; -DeployPath &quot;$(MOD_DEPLOYPATH.TrimEnd('\'))&quot;" />

@@ -1,0 +1,12 @@
+﻿<#= mf.Heading("Credits") #>
+
+<#= 
+mf.List(ListBullets.Asterisk, items: new string[] {
+	$"sweetgiorni for creating AnyPortal",
+	$"kaiqueknup for translating to Brazillian Portuguese",
+	$"makou for translating to French, Spanish",
+	$"Smok3y97 for translating to German",
+	$"MexExe for translating to Polish, Russian",
+	$"hanawa07 for translating to Korean",
+}) 
+#>
