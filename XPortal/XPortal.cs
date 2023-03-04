@@ -150,7 +150,7 @@ namespace XPortal
                 // Assuming that that is the case here, let's just create a new dummy portal for now.
                 // We'll tell the server about it *after* interacting with it (when updating the name/target in the UI).
                 // Everything will be fine. Promise.
-                var dummyPortal = new KnownPortal(portalId);
+                var dummyPortal = new KnownPortal(portalId, location);
                 KnownPortalsManager.Instance.AddOrUpdate(dummyPortal);
             }
 
