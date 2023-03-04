@@ -184,6 +184,7 @@ namespace XPortal
                 portalZDO.Set("target", updatedPortal.Target);
                 ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
             }
+
             SendSyncPortalToClients(updatedPortal);
         }
 
@@ -238,7 +239,7 @@ namespace XPortal
             }
 
             Jotunn.Logger.LogDebug($"[RPC_ConfigRequest] {sender} wants to receive the config");
-            var pkg = XPortalConfig.Instance.Pack();
+            var pkg = XPortalConfig.Instance.PackLocalConfig();
             SendConfigToClient(sender, pkg);
         }
         #endregion
@@ -285,13 +286,8 @@ namespace XPortal
         /// <param name="pkg">A ZPackage containing all config settings</param>
         private static void RPC_Config(long sender, ZPackage pkg)
         {
-            if (XPortal.IsServer())
-            {
-                return;
-            }
-
             Jotunn.Logger.LogInfo($"Received XPortal Config from server");
-            XPortalConfig.Instance.ReceiveFromServer(pkg);
+            XPortalConfig.Instance.ReceiveServerConfig(pkg);
         }
         #endregion
 
