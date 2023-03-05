@@ -126,16 +126,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>README.Thunderstore.tt</DependentUpon>
     </None>
-    <None Include="PrePackage\Readmes\Changelogs.t4" />
-    <None Include="PrePackage\Readmes\Credits.t4" />
-    <None Include="PrePackage\Readmes\InstallationDev.t4" />
-    <None Include="PrePackage\Readmes\_Footer.t4" />
-    <None Include="PrePackage\Readmes\_Header.t4" />
-    <None Include="PrePackage\Readmes\Installation.t4" />
-    <None Include="PrePackage\Readmes\_HeaderGitHub.t4" />
+    <None Include="PrePackage\Readmes\Modules\50Changelogs.t4" />
+    <None Include="PrePackage\Readmes\Modules\60Credits.t4" />
+    <None Include="PrePackage\Readmes\Modules\90InstallationDev.t4" />
+    <None Include="PrePackage\Readmes\Modules\99Footer.t4" />
+    <None Include="PrePackage\Readmes\Modules\10Header.t4" />
+    <None Include="PrePackage\Readmes\Modules\30Installation.t4" />
+    <None Include="PrePackage\Readmes\Modules\11HeaderGitHub.t4" />
+    <None Include="PrePackage\Readmes\_Header.t4">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_Header.tt</DependentUpon>
+    </None>
     <None Include="PrePackage\Translations\English\xportal-translations-english.json" />
-    <None Include="PrePackage\README.bbcode" />
-    <None Include="PrePackage\README.md" />
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="PrePackage\Translations\French\xportal-translations-french.json" />
     <None Include="PrePackage\Translations\German\xportal-translations-german.json" />
@@ -170,12 +173,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.Thunderstore.md</LastGenOutput>
     </Content>
-    <None Include="PrePackage\Readmes\__T4Header.t4">
-      <LastGenOutput>__T4Header.cs</LastGenOutput>
-    </None>
-    <None Include="PrePackage\Readmes\Bugs.t4" />
-    <None Include="PrePackage\Readmes\Features.t4" />
-    <None Include="PrePackage\Readmes\_Urls.t4" />
+    <Content Include="PrePackage\Readmes\_Header.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>_Header.t4</LastGenOutput>
+    </Content>
+    <None Include="PrePackage\Readmes\Modules\40Bugs.t4" />
+    <None Include="PrePackage\Readmes\Modules\20Features.t4" />
+    <None Include="PrePackage\Readmes\Modules\00Urls.t4" />
     <Content Include="PrePackage\Readmes\README.Nexus.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.Nexus.bbcode</LastGenOutput>

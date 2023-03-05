@@ -1,20 +1,20 @@
-<#@ include file="__T4Header.t4" once="true" #>
+<#@ include file="_Header.t4" once="true" #>
 <#@ output extension=".md" #>
 <# 
 	var mf = new Markdown();
 	var Target = Targets.Thunderstore; 
 #>
-<#@ include file="_Urls.t4" once="true" #>
-<#@ include file="_Header.t4" once="true" #>
+<#@ include file="Modules\00Urls.t4" once="true" #>
+<#@ include file="Modules\10Header.t4" once="true" #>
 
-<#@ include file="Features.t4" once="true" #>
+<#@ include file="Modules\20Features.t4" once="true" #>
 
-<#@ include file="Installation.t4" once="true" #>
+<#@ include file="Modules\30Installation.t4" once="true" #>
 
-<#@ include file="Bugs.t4" once="true" #>
+<#@ include file="Modules\50Changelogs.t4" once="true" #>
 
-<#@ include file="Changelogs.t4" once="true" #>
+<#@ include file="Modules\40Bugs.t4" once="true" #>
 
-<#@ include file="Credits.t4" once="true" #>
+<#@ include file="Modules\60Credits.t4" once="true" #>
 
-<#@ include file="_Footer.t4" once="true" #>
+<#@ include file="Modules\99Footer.t4" once="true" #>

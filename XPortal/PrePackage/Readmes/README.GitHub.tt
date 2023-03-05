@@ -1,14 +1,16 @@
-<#@ include file="__T4Header.t4" once="true" #>
+<#@ include file="_Header.t4" once="true" #>
 <#@ output extension=".md" #>
 <# 
 	var mf = new Markdown();
 	var Target = Targets.GitHub; 
 #>
-<#@ include file="_Urls.t4" once="true" #>
-<#@ include file="_HeaderGitHub.t4" once="true" #>
+<#@ include file="Modules\00Urls.t4" once="true" #>
+<#@ include file="Modules\11HeaderGitHub.t4" once="true" #>
 
-<#@ include file="Installation.t4" once="true" #>
+<#@ include file="Modules\30Installation.t4" once="true" #>
 
-<#@ include file="Bugs.t4" once="true" #>
+<#@ include file="Modules\40Bugs.t4" once="true" #>
 
-<#@ include file="_Footer.t4" once="true" #>
+<#@ include file="Modules\90InstallationDev.t4" once="true" #>
+
+<#@ include file="Modules\99Footer.t4" once="true" #>

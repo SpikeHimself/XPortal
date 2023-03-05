@@ -72,19 +72,6 @@ I very strongly recommend using a mod manager such as [Vortex](https://www.nexus
 
 
 
-# Bugs, Feature Requests and Translations
-
-First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
-
-It is important to me that I can make XPortal as bug free as possible, but **please bear in mind that without your `LogOutput.log`, I will not be able to debug your issue at all**. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
-
-To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
-
-For feature requests, choose `Feature request` on the [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose) page.
-
-To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
-
-
 # Changelogs
 
 * **v1.2.6** (2023-03-05)
@@ -102,7 +89,7 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 
 * **v1.2.5** (2023-02-15)
 
-	* Hide the Ping Map button when the `[nomap](https://valheim.fandom.com/wiki/Global_Keys)` global key is set (you can do this by typing `nomap` in the console).
+	* Hide the Ping Map button when the [nomap](https://valheim.fandom.com/wiki/Global_Keys) global key is set (you can do this by typing `nomap` in the console).
 
 	* The `PingMapDisabled` config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
 
@@ -177,6 +164,19 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 	* Initial release.
 
 </details>
+
+
+# Bugs, Feature Requests and Translations
+
+First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
+
+It is important to me that I can make XPortal as bug free as possible, but **please bear in mind that without your `LogOutput.log`, I will not be able to debug your issue at all**. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
+
+To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
+
+For feature requests, choose `Feature request` on the [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose) page.
+
+To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
 
 # Credits

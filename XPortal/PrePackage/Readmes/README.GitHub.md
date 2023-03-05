@@ -31,6 +31,11 @@ For feature requests, choose `Feature request` on the [New issue](https://github
 To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
 
+# Installation instructions (for developers)
+
+I will soon write a guide to get XPortal working in your development environment. For now, you can probably figure some stuff out by having a look at the [JotunnModStub](https://github.com/Valheim-Modding/JotunnModStub) project that XPortal inherited from AnyPortal. Please bear in mind that the information there might have changed since XPortal was created, and that XPortal itself may over time have diverted from the steps laid out there. Again, a guide will follow soon!
+
+
 # I did more too!
 
 Please have a look at my other mod too! [XStorage](https://www.nexusmods.com/valheim/mods/2290) lets you open multiple chests at once, rename them, and move items/stacks to the most suitable chest.

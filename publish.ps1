@@ -69,6 +69,9 @@ if ($Target.Equals("Debug"))
 
 if($Target.Equals("Release")) 
 {
+    Write-Host "Copying GitHub readme to SolutionDir..."
+    Copy-Item -Path "$PrePackagePath\Readmes\README.GitHub.md" -Destination "$(Get-Location)\README.md" -Force
+
     Write-Host "Packaging for ThunderStore..."
     $Package="Package"
     $PackagePath="$ProjectPath\$Package"
