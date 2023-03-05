@@ -15,7 +15,7 @@
 
 * **v1.2.5** (2023-02-15)
 
-	* Hide the Ping Map button when the `[nomap](https://valheim.fandom.com/wiki/Global_Keys)` global key is set (you can do this by typing `nomap` in the console).
+	* Hide the Ping Map button when the [nomap](https://valheim.fandom.com/wiki/Global_Keys) global key is set (you can do this by typing `nomap` in the console).
 
 	* The `PingMapDisabled` config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
 
