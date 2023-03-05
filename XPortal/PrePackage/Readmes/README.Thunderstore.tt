@@ -1,6 +1,5 @@
 <#@ include file="__T4Header.t4" once="true" #>
-<#@ output extension=".md" encoding="utf-8" #>
-<#@ include file="__T4Header.t4" once="true" #>
+<#@ output extension=".md" #>
 <# 
 	var mf = new Markdown();
 	var Target = Targets.Thunderstore; 

@@ -30,7 +30,7 @@
 	var linkNexusUpdateCheck = CreateLink("Nexus Update Check", 102, "nexusreupload/aedenthorn_Nexus_Update_Check");
 	var linkAnyPortal = CreateLink("AnyPortal", 170, "sweetgiorni/AnyPortal");
 	var linkValheimVR = CreateLink("VHVR - Valheim VR", 847, "Maynard/VHVR");
-	var linkJotunn = CreateLink("Jötunn", 1138, "ValheimModding/Jotunn");
+	var linkJotunn = CreateLink("Jotunn", 1138, "ValheimModding/Jotunn");
 	var linkStonePortal = CreateLink("Stone Portal", 2007, "JereKuusela/Stone_Portal");
 	var linkAdvancedPortals = CreateLink("Advanced Portals", 2187, "RandyKnapp/AdvancedPortals");
 

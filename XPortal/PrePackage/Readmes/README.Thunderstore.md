@@ -1,4 +1,4 @@
-﻿# XPortal
+# XPortal
 
 An [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) revamp.
 
@@ -63,11 +63,11 @@ XPortal is known to be incompatible with:
 
 XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
 
-XPortal makes use of the [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/) library, so you must install that before installing XPortal. If you do not install Jötunn, XPortal will simply not be loaded by your game and it will not work.
+XPortal makes use of the [Jotunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/) library, so you must install that before installing XPortal. If you do not install Jotunn, XPortal will simply not be loaded by your game and it will not work.
 
 I very strongly recommend using a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). They will take care of everything for you and you don't have to worry about which files go where. I recommend against manual installation.
 1. Make sure you have [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) installed.
-2. Install [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/).
+2. Install [Jotunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/).
 3. On [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) click 'Mod manager download', or on [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) click 'Install with Mod Manager'.
 
 
@@ -144,7 +144,7 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 
 	* Translation added for Spanish
 
-	* Added BepInEx dependency, updated Jötunn dependency to 2.10.4.
+	* Added BepInEx dependency, updated Jotunn dependency to 2.10.4.
 
 	* Detect portal placement and destruction.
 	

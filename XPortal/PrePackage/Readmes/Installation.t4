@@ -6,7 +6,7 @@
 
 <#= thisModName #> is a <#= linkBepInEx #> plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
 
-<#= thisModName #> makes use of the <#= linkJotunn #> library, so you must install that before installing <#= thisModName #>. If you do not install Jötunn, <#= thisModName #> will simply not be loaded by your game and it will not work.
+<#= thisModName #> makes use of the <#= linkJotunn #> library, so you must install that before installing <#= thisModName #>. If you do not install Jotunn, <#= thisModName #> will simply not be loaded by your game and it will not work.
 
 I very strongly recommend using a mod manager such as <#= linkVortex #> or <#= linkR2modman #>. They will take care of everything for you and you don't have to worry about which files go where. I recommend against manual installation.
 <#=

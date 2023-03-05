@@ -1,5 +1,5 @@
 <#@ include file="__T4Header.t4" once="true" #>
-<#@ output extension=".bbcode" encoding="utf-8" #>
+<#@ output extension=".bbcode" #>
 <# 
 	var mf = new NexusBbcode();
 	var Target = Targets.NexusMods; 

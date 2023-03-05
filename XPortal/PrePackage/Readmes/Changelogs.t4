@@ -57,7 +57,7 @@
 
 	* Translation added for Spanish
 
-	* Added BepInEx dependency, updated Jötunn dependency to 2.10.4.
+	* Added BepInEx dependency, updated Jotunn dependency to 2.10.4.
 
 	* Detect portal placement and destruction.
 	
