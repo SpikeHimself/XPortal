@@ -131,7 +131,6 @@
     <None Include="PrePackage\Readmes\InstallationDev.t4" />
     <None Include="PrePackage\Readmes\_Footer.t4" />
     <None Include="PrePackage\Readmes\_Header.t4" />
-    <None Include="PrePackage\Readmes\Improvements.t4" />
     <None Include="PrePackage\Readmes\Installation.t4" />
     <None Include="PrePackage\Readmes\_HeaderGitHub.t4" />
     <None Include="PrePackage\Translations\English\xportal-translations-english.json" />
