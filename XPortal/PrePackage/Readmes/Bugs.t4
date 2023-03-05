@@ -1,13 +1,13 @@
 ﻿<#= mf.Heading("Bugs, Feature Requests and Translations") #>
 
-First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
+First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by <#= thisModName #>. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable <#= thisModName #>, and see if that makes the problem go away. If you discover that <#= thisModName #> is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
 
-It is important to me that I can make XPortal as bug free as possible, but <#= mf.Bold($"please bear in mind that without your {mf.Code("LogOutput.log")}, I will not be able to debug your issue at all") #>. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
+It is important to me that I can make <#= thisModName #> as bug free as possible, but <#= mf.Bold($"please bear in mind that without your {mf.Code("LogOutput.log")}, I will not be able to debug your issue at all") #>. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
 
 <#
 if (Target == Targets.NexusMods)
 {
-	WriteLine( mf.Size(mf.Bold($"If you have issues or feedback, please use XPortal's {mf.Link("GitHub page", urlThisModGitHub)}."), FontSize.Four) );
+	WriteLine( mf.Size(mf.Bold($"If you have issues or feedback, please use {thisModName}'s {mf.Link("GitHub page", urlThisModGitHub)}."), FontSize.Four) );
 	WriteLine("");
 }
 #>
@@ -15,4 +15,4 @@ To report a bug, please navigate to the <#= linkGitHubIssues #>, click <#= linkG
 
 For feature requests, choose <#= mf.Code("Feature request") #> on the <#= linkGitHubNewIssue #> page.
 
-To add a translation to XPortal, choose <#= mf.Code("Translation") #> when submitting a <#= linkGitHubNewIssue #>.
+To add a translation to <#= thisModName #>, choose <#= mf.Code("Translation") #> when submitting a <#= linkGitHubNewIssue #>.

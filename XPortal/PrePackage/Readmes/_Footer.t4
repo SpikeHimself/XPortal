@@ -4,6 +4,7 @@ Please have a look at my other mod too! <#= linkXStorage #> lets you open multip
 
 
 <#= mf.Heading("Support me") #>
+
 <# 
 var endorseButton = "Endorse";
 if (Target == Targets.Thunderstore) endorseButton = "Like";

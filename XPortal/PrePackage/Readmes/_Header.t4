@@ -2,7 +2,7 @@
 
 An <#= linkAnyPortal #> revamp.
 
-<#= mf.Image("https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif", height: 140) #>
+<#= mf.Image("https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif", height: 180) #>
 
 
 <#= mf.Heading("Description") #>

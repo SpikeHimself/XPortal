@@ -1,6 +1,23 @@
-﻿<# 
-	var urlThisModNexus = "https://www.nexusmods.com/valheim/mods/2239";
-	var urlThisModThunderstore = "https://valheim.thunderstore.io/package/SpikeHimself/XPortal/";
-	var urlThisModGitHub = "https://github.com/SpikeHimself/XPortal";
-	var urlThisModGitHubReleases = "https://github.com/SpikeHimself/XPortal/releases";
+﻿<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
+<#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="false" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" #>
+<#@ import namespace="XPortal" #>
+<#@ import namespace="XPortal.PrePackage.Readmes" #>
+<#@ import namespace="ManyFormats" #>
+<#@ import namespace="ManyFormats.Formats" #>
+<#
+	var thisModName = XPortal.PluginName;
+	var thisModNexusId = XPortal.PluginNexusId;
+	var thisModPackageName = $"{XPortal.PluginAuthor}/{XPortal.PluginName}";
+	var thisModGitHubRepo = XPortal.PluginGitHubRepo;
+	
+	var urlThisModNexus = $"https://www.nexusmods.com/valheim/mods/{thisModNexusId}";
+	var urlThisModThunderstore = $"https://valheim.thunderstore.io/package/{thisModPackageName}/";
+	var urlThisModGitHub = $"https://github.com/{thisModGitHubRepo}";
+
+	var urlThisModGitHubReleases = $"{urlThisModGitHub}/releases";
+	var urlThisModGitHubIssues = $"{urlThisModGitHub}/issues";
+	var urlThisModGitHubNewIssue = $"{urlThisModGitHub}/issues/new/choose";
 #>

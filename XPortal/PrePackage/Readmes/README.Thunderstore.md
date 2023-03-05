@@ -2,7 +2,7 @@
 
 An [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) revamp.
 
-<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="140" />
+<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="180" />
 
 
 # Description
@@ -17,10 +17,7 @@ No more tag pairing, and no more portal hubs!
 #### Select a destination
 
 When interacting with a portal, instead of entering a tag which has to match another portal's, XPortal lets you choose the portal's destination from a list.
-
-The "edit tag" window has been replaced by XPortal's own configuration window. You can now enter a Name and choose a Destination. Portal connections can now be one-way. In other words, you can go from portal A to portal B, all while portal B might be connected to portal C, or not even connected at all!
-
-For your convenience, the list also shows you how far away the portals are.
+For your convenience, this list also shows you how far away the portals are.
 
 #### Longer names
 
@@ -28,20 +25,17 @@ XPortal completely removes the character length restriction on portal names, so 
 
 #### Ping a portal location
 
-Forgot where you put your portal? You don't need to go through it to find out. Just press the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
+Forgot where you put your portal? You don't need to teleport to it to find out. Just click the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-As of v1.2.4, a configuration option exists which disables this functionality. If you want to play without a map or just don't want to be able to ping  your portals, XPortal now lets you do so. The option can be found in XPortal's config file, and is called `PingMapDisabled`. By default the Ping Map button is *enabled*!  If you play on a server, the server's setting will be leading.
-
-And as of v1.2.5, the Ping Map functionality will be disabled when the "nomap" global key is set (which you can do by typing "nomap" in the console).
+If you prefer play without a map, this button can be hidden, either by using the `nomap` global key, or by setting `PingMapDisabled` to `True`.
 
 #### Multiplayer
 
-XPortal has been built with multiplayer support at its core. This does require all players on the server to run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
+XPortal has been built with multiplayer support at its core. All players must run the same version of XPortal. If you play on a dedicated server, that too needs to have same version of XPortal installed.
 
 #### Gamepad support
 
-As of v1.1.0, XPortal will respond to gamepad input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively.
-
+The XPortal UI will respond to gamepad input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively:
 * `A` / `Cross` - Submit (i.e. press the Okay button)
 * `B`/ `Circle` - Cancel
 * `Y` / `Triangle` - Ping the selected portal
@@ -49,30 +43,33 @@ As of v1.1.0, XPortal will respond to gamepad input when configuring your portal
 * `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
 
 
+#### Mod compatibility and integration
+
+XPortal has been made fully compatible with the following mods:
+* [Nexus Update Check](https://valheim.thunderstore.io/package/nexusreupload/aedenthorn_Nexus_Update_Check/) by aedenthorn
+* [VHVR - Valheim VR](https://valheim.thunderstore.io/package/Maynard/VHVR/) by Flatscreen to VR Modders
+* [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/) by Jere Kuusela
+* [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/) by Randy Knapp
+
+Furthermore, XPortal has a configuration option to fully integrate with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/). If you set `DisplayPortalColour` to `True`, each portal in XPortal's dropdown list will be prepended by a ">>" tag that has the same colour as the light that the portal emits:
+
+<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/advancedportals.png" height="280" />
+
+XPortal is known to be incompatible with:
+* [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) by sweetgiorni
+
+
 # Installation instructions
 
-XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this. If you use Vortex, you can't even get rid of BepInEx - it forces you to use it. I recommend using Vortex for many reasons and this is one of them.
+XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
 
 XPortal makes use of the [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/) library, so you must install that before installing XPortal. If you do not install Jötunn, XPortal will simply not be loaded by your game and it will not work.
 
-**If you are new to modding or you're just not sure what the best approach is**, I *very strongly advise* that you install a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). They will take care of everything for you and you don't have to worry about which files go where.
+I very strongly recommend using a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). They will take care of everything for you and you don't have to worry about which files go where. I recommend against manual installation.
+1. Make sure you have [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) installed.
+2. Install [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/).
+3. On [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) click 'Mod manager download', or on [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) click 'Install with Mod Manager'.
 
-Let me emphasise this point just a little more. If you just want to mess around with the files and download manually because you're learning things, you are probably at a level where *you don't need installation instructions*. The fact you are here and reading this indicates that *you are better off not installing manually, but should instead use one of the mod managers mentioned above*.
-
-With that out of the way, if for whatever unearthly reason you still want to proceed and install manually (**I really don't recommend this, in case that wasn't clear yet**), here is how to do it:
-
-1. Install [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/). Instructions for manual installation can be found [here](https://docs.bepinex.dev/articles/user_guide/installation/index.html).
-2. Install [Jötunn](https://valheim.thunderstore.io/package/ValheimModding/Jotunn/). Instructions can be found [here](https://valheim-modding.github.io/Jotunn/guides/installation.html).
-3. Download XPortal from [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239), [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) or [GitHub](https://github.com/SpikeHimself/XPortal/releases).
-4. Directly inside of the XPortal .zip file you will come across some files related to thunderstore publication. *You do not need these files*. You will also find a directory called `plugins`. You do need the contents of that directory in the following steps.
-5. Locate your BepInEx plugins directory. It should be inside the Valheim installation directory. If you run Steam, you will find it here: `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins`.
-6. Extract *all* contents of XPortal's `plugins` directory to that same `plugins` directory in your game directory. When you have done this successfully, you should have:
-	* `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\XPortal.dll`
-	* `[..]\Steam\steamapps\common\Valheim\BepInEx\plugins\XPortal\Translations\` (and its contents)
-
-Just as a side note, do not skip the Translations directory. The English translations inside of it are also required for XPortal to function correctly.
-
-Once again, you do not have to take *any* of these steps if you used a mod manager.
 
 
 # Bugs, Feature Requests and Translations
@@ -88,34 +85,28 @@ For feature requests, choose `Feature request` on the [New issue](https://github
 To add a translation to XPortal, choose `Translation` when submitting a [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose).
 
 
-# Improvements over AnyPortal
-
-As mentioned earlier, XPortal is a rewrite of the popular AnyPortal mod. Most players won't necessarily notice much difference, bar a few bugfixes. Under the hood, though, XPortal takes a completely different approach to portal management. Also, the UI was completely overhauled.
-
-Here are the most prominent changes:
-* **New UI**: AnyPortal built its UI incorporating the existing "edit tag" window. XPortal doesn't use the original "edit tag" window at all.
-
-* **Robust network synchronisation**: AnyPortal updates the information on your screen when you interact with a portal. XPortal updates all portal information at the very moment that any portal is changed, even when someone else does it.
-
-* **Smaller file**: XPortal uses Jötunn's UI elements, so it no longer needs its own Unity assets.
-
-* **Code optimisation**: The way AnyPortal dealt with portal tags and targets has been overhauled. XPortal keeps its own list and keeps that updated whenever any portal change happens. Because of this, it will not have to query game data every time you interact with a portal. If you run Valheim as host, you will no longer experience a harsh performance hit while others are in your game.
-
-* **Scalability**: You won't notice this in your game, but the way XPortal's code is organised should make it much easier to maintain. So when a Valheim update breaks everything, it shouldn't be too hard for me to get things up and running again. XPortal is also ready to deal with any feature requests that you might have. If you are interested in XPortal's code, you are welcome to visit the project's [GitHub page](https://github.com/SpikeHimself/XPortal)!
-
-
 # Changelogs
+
+* **v1.2.6** (2023-03-05)
+
+	* XPortal is now marked as incompatible with [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/): if you have AnyPortal installed, XPortal will not work
+	
+	* Config option added: DisplayPortalColour. Enabling this will display a coloured tag in portal list (integration with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/) by Randy Knapp)
+	
+	* Documentation overhaul (readmes are now fully modular -- if you're a mod author, check this out on GitHub!)
+	
+	* Improved logging
+
+<details>
+<summary>Click to view previous versions</summary>
 
 * **v1.2.5** (2023-02-15)
 
-	* Hide the Ping Map button when the "[nomap](https://valheim.fandom.com/wiki/Global_Keys)" global key is set (you can do this by typing "nomap" in the console).
+	* Hide the Ping Map button when the `[nomap](https://valheim.fandom.com/wiki/Global_Keys)` global key is set (you can do this by typing `nomap` in the console).
 
 	* The `PingMapDisabled` config option is now enforced by the server. If the server has this set to `true`, the Ping Map button will be hidden, regardless of your own settings.
 
 	* Add sync support for the stone portal object. This fixes a compatibility issue with the mod [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/).
-
-<details>
-<summary>Click to view previous versions</summary>
 
 * **v1.2.4** (2023-02-13)
 
@@ -198,12 +189,13 @@ Here are the most prominent changes:
 * hanawa07 for translating to Korean
 
 
-
 # I did more too!
 
 Please have a look at my other mod too! [XStorage](https://valheim.thunderstore.io/package/SpikeHimself/XStorage/) lets you open multiple chests at once, rename them, and move items/stacks to the most suitable chest.
 
+
 # Support me
+
 My mods are free and will remain free, for everyone to use, edit or learn from. I lovingly poured many hours of hard work into these projects. If you enjoy my mods and want to support my work, don't forget to click the Like button, and please consider buying me a coffee :)
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40" align="right" />](https://www.buymeacoffee.com/SpikeHimself)

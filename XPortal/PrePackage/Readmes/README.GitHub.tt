@@ -1,12 +1,5 @@
-﻿<#@ template debug="true" hostspecific="false" language="C#" #>
-<#@ assembly name="System.Core" #>
-<#@ assembly name="$(TargetPath)" #>
-<#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" #>
-<#@ import namespace="XPortal.PrePackage.Readmes" #>
-<#@ import namespace="ManyFormats" #>
-<#@ import namespace="ManyFormats.Formats" #>
-<#@ output extension=".md" #>
-<#@ include file="__T4Header.t4" once="true" #>
+﻿<#@ include file="__T4Header.t4" once="true" #>
+<#@ output extension=".md" encoding="utf-8" #>
 <# 
 	var mf = new Markdown();
 	var Target = Targets.GitHub; 

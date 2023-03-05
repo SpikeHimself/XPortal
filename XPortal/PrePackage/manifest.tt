@@ -1,14 +1,15 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="$(TargetPath)" #>
+<#@ import namespace="XPortal" #>
 <#@ output extension=".json" #>
 {
-  "name": "<#= XPortal.XPortal.PluginName #>",
-  "description": "<#= XPortal.XPortal.PluginDescription #>",
-  "version_number": "<#= XPortal.XPortal.PluginVersion #>",
-  "website_url": "<#= XPortal.XPortal.PluginWebsiteUrl #>",
+  "name": "<#= XPortal.PluginName #>",
+  "description": "<#= XPortal.PluginDescription #>",
+  "version_number": "<#= XPortal.PluginVersion #>",
+  "website_url": "<#= XPortal.PluginWebsiteUrl #>",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.1901",
-    "ValheimModding-Jotunn-<#= XPortal.XPortal.PluginJotunnVersion #>"
+    "ValheimModding-Jotunn-<#= XPortal.PluginJotunnVersion #>"
   ]
 }

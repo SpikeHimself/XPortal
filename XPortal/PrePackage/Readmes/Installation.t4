@@ -4,31 +4,15 @@
 	: mf.Heading("Installation instructions") 
 #>
 
-XPortal is a <#= linkBepInEx #> plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this. If you use Vortex, you can't even get rid of BepInEx - it forces you to use it. I recommend using Vortex for many reasons and this is one of them.
+<#= thisModName #> is a <#= linkBepInEx #> plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
 
-XPortal makes use of the <#= linkJotunn #> library, so you must install that before installing XPortal. If you do not install Jötunn, XPortal will simply not be loaded by your game and it will not work.
+<#= thisModName #> makes use of the <#= linkJotunn #> library, so you must install that before installing <#= thisModName #>. If you do not install Jötunn, <#= thisModName #> will simply not be loaded by your game and it will not work.
 
-<#= mf.Bold("If you are new to modding or you're just not sure what the best approach is") #>, I <#= mf.Italic("very strongly advise") #> that you install a mod manager such as <#= linkVortex #> or <#= linkR2modman #>. They will take care of everything for you and you don't have to worry about which files go where.
-
-Let me emphasise this point just a little more. If you just want to mess around with the files and download manually because you're learning things, you are probably at a level where <#= mf.Italic("you don't need installation instructions") #>. The fact you are here and reading this indicates that <#= mf.Italic("you are better off not installing manually, but should instead use one of the mod managers mentioned above") #>.
-
-With that out of the way, if for whatever unearthly reason you still want to proceed and install manually (<#= mf.Bold("I really don't recommend this, in case that wasn't clear yet") #>), here is how to do it:
-
+I very strongly recommend using a mod manager such as <#= linkVortex #> or <#= linkR2modman #>. They will take care of everything for you and you don't have to worry about which files go where. I recommend against manual installation.
 <#=
 mf.List(ListBullets.Number, items: new string[] {
-	$"Install {linkBepInEx}. Instructions for manual installation can be found {mf.Link("here", "https://docs.bepinex.dev/articles/user_guide/installation/index.html")}.",
-	$"Install {linkJotunn}. Instructions can be found {mf.Link("here", "https://valheim-modding.github.io/Jotunn/guides/installation.html")}.",
-	$"Download XPortal from {mf.Link("Nexus Mods", urlThisModNexus)}, {mf.Link("Thunderstore", urlThisModThunderstore)} or {mf.Link("GitHub", urlThisModGitHubReleases)}.",
-	$"Directly inside of the XPortal .zip file you will come across some files related to thunderstore publication. {mf.Italic("You do not need these files")}. You will also find a directory called {mf.Code("plugins")}. You do need the contents of that directory in the following steps.",
-	$"Locate your BepInEx plugins directory. It should be inside the Valheim installation directory. If you run Steam, you will find it here: {mf.Code("[..]\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins")}.",
-	$"Extract {mf.Italic("all")} contents of XPortal's {mf.Code("plugins")} directory to that same {mf.Code("plugins")} directory in your game directory. When you have done this successfully, you should have:"
-})
-+
-mf.List(ListBullets.Asterisk, indent: 1, items: new string[] {
-	mf.Code("[..]\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\XPortal\\XPortal.dll"),
-	mf.Code("[..]\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\XPortal\\Translations\\") + " (and its contents)"
+	$"Make sure you have {linkBepInEx} installed.",
+	$"Install {linkJotunn}.",
+	$"On {mf.Link("Nexus Mods", urlThisModNexus)} click 'Mod manager download', or on {mf.Link("Thunderstore", urlThisModThunderstore)} click 'Install with Mod Manager'."
 })
 #>
-Just as a side note, do not skip the Translations directory. The English translations inside of it are also required for XPortal to function correctly.
-
-Once again, you do not have to take *any* of these steps if you used a mod manager.
