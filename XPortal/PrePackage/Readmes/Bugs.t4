@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("Bugs, Feature Requests and Translations") #>
+<#= mf.Heading("Bugs, Feature Requests and Translations") #>
 
 First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by <#= thisModName #>. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable <#= thisModName #>, and see if that makes the problem go away. If you discover that <#= thisModName #> is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
 

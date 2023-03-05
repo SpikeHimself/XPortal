@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("Features") #>
+<#= mf.Heading("Features") #>
 
 <#= mf.Heading("Select a destination", size: HeadingSize.Small) #>
 

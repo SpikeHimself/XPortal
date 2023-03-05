@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("XPortal") #>
+<#= mf.Heading("XPortal") #>
 
 XPortal is a Valheim mod that lets you select a portal's destination from a list. 
 

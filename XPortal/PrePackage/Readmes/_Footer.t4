@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("I did more too!") #>
+<#= mf.Heading("I did more too!") #>
 
 Please have a look at my other mod too! <#= linkXStorage #> lets you open multiple chests at once, rename them, and move items/stacks to the most suitable chest.
 

@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("Credits") #>
+<#= mf.Heading("Credits") #>
 
 <#= 
 mf.List(ListBullets.Asterisk, items: new string[] {

@@ -1,4 +1,4 @@
-﻿using ManyFormats;
+using ManyFormats;
 
 namespace XPortal.PrePackage.Readmes
 {

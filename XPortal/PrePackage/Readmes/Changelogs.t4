@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("Changelogs") #>
+<#= mf.Heading("Changelogs") #>
 
 * **v1.2.6** (2023-03-05)
 

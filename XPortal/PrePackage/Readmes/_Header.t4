@@ -1,4 +1,4 @@
-﻿<#= mf.Heading("XPortal") #>
+<#= mf.Heading("XPortal") #>
 
 An <#= linkAnyPortal #> revamp.
 

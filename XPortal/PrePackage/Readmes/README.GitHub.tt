@@ -1,4 +1,4 @@
-﻿<#@ include file="__T4Header.t4" once="true" #>
+<#@ include file="__T4Header.t4" once="true" #>
 <#@ output extension=".md" encoding="utf-8" #>
 <# 
 	var mf = new Markdown();

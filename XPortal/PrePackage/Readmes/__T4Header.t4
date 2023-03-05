@@ -1,4 +1,4 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
+<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
 <#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="false" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="$(TargetPath)" #>

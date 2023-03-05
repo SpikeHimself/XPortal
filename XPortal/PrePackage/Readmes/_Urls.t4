@@ -1,4 +1,4 @@
-﻿<#
+<#
 	string CreateUrl(int nexusId, string package)
 	{
 		return (Target != Targets.Thunderstore) 
