@@ -17,7 +17,6 @@ namespace XPortal
             var zdo = ZDOMan.instance.GetZDO(portalId);
             var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
             var colour = GetColour(prefab);
-            Jotunn.Logger.LogDebug($"Portal {portalId} with prefab {prefab.name} has colour {colour}");
             return colour;
         }
 
