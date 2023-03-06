@@ -13,7 +13,7 @@ XPortal completely removes the character length restriction on portal names, so 
 
 Forgot where you put your portal? You don't need to teleport to it to find out. Just click the Ping button next to the list, and XPortal will show the selected portal on your map, while also pinging its location to all players on the server.
 
-If you prefer play without a map, this button can be hidden, either by using the <#= mf.Code("nomap") #> global key, or by setting <#= mf.Code("PingMapDisabled") #> to <#= mf.Code("True") #>.
+If you prefer to play without a map, this button can be hidden, either by using the <#= mf.Code("nomap") #> global key, or by setting <#= mf.Code("PingMapDisabled") #> to <#= mf.Code("True") #>.
 
 <#= mf.Heading("Multiplayer", size: HeadingSize.Small) #>
 
