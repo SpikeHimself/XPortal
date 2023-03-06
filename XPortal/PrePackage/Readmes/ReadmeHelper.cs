@@ -21,7 +21,7 @@ namespace XPortal.PrePackage.Readmes
         public override string Code(string text, CodeMode mode = CodeMode.Inline)
         {
             return (mode == CodeMode.Inline)
-                ? Bold("\"" + text + "\"")
+                ? Font(Bold("'" + text + "'"),  "Courier New")
                 : base.Code(text, mode);
         }
     }
