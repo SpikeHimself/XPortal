@@ -41,14 +41,14 @@ namespace XPortal
         /// <summary>
         /// Load the config file, and track the settings inside it
         /// </summary>
-        /// <param name="config"></param>
-        public void LoadConfigFile(ConfigFile config)
+        /// <param name="configFile">The config file being loaded</param>
+        public void LoadLocalConfig(ConfigFile configFile)
         {
-            configFile = config;
+            this.configFile = configFile;
             ReloadLocalConfig();
 
-            configFile.ConfigReloaded += LocalConfigChanged;
-            configFile.SettingChanged += LocalConfigChanged;
+            this.configFile.ConfigReloaded += LocalConfigChanged;
+            this.configFile.SettingChanged += LocalConfigChanged;
 
             if (XPortal.IsServer())
             {

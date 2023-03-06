@@ -47,6 +47,7 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.10.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HarmonyX.2.10.1\lib\net45\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Jotunn, Version=2.10.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JotunnLib.2.10.4\lib\net462\Jotunn.dll</HintPath>
@@ -59,24 +60,31 @@
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MonoMod, Version=22.7.31.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoMod.22.7.31.1\lib\net452\MonoMod.exe</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MonoMod.RuntimeDetour, Version=22.7.31.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoMod.RuntimeDetour.22.7.31.1\lib\net452\MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MonoMod.Utils, Version=22.7.31.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoMod.Utils.22.7.31.1\lib\net452\MonoMod.Utils.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

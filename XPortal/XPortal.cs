@@ -64,7 +64,7 @@ namespace XPortal
             Jotunn.Logger.LogDebug("I HAVE ARRIVED!");
 
             // Load config
-            XPortalConfig.Instance.LoadConfigFile(Config);
+            XPortalConfig.Instance.LoadLocalConfig(Config);
 
             if (!IsHeadless())
             {

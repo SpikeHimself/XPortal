@@ -12,7 +12,7 @@
 	var thisModNexusId = XPortal.PluginNexusId;
 	var thisModPackageName = $"{XPortal.PluginAuthor}/{XPortal.PluginName}";
 	var thisModGitHubRepo = XPortal.PluginGitHubRepo;
-	
+
 	var urlThisModNexus = $"https://www.nexusmods.com/valheim/mods/{thisModNexusId}";
 	var urlThisModThunderstore = $"https://valheim.thunderstore.io/package/{thisModPackageName}/";
 	var urlThisModGitHub = $"https://github.com/{thisModGitHubRepo}";
