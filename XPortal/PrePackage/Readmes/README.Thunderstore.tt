@@ -11,9 +11,9 @@
 
 <#@ include file="Modules\30Installation.t4" once="true" #>
 
-<#@ include file="Modules\50Changelogs.t4" once="true" #>
-
 <#@ include file="Modules\40Bugs.t4" once="true" #>
+
+<#@ include file="Modules\50Changelogs.t4" once="true" #>
 
 <#@ include file="Modules\60Credits.t4" once="true" #>
 

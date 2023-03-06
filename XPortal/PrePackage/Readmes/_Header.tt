@@ -1,5 +1,5 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="false" #>
+﻿<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
+<#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="true" #>
 <#@ output extension=".t4" #>
 <#
 
@@ -7,7 +7,7 @@
 
 #>
 \<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" \#>
-\<#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="false" \#>
+\<#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="true" \#>
 \<#@ assembly name="System.Core" \#>
 \<#@ assembly name="$(TargetPath)" \#>
 \<#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" \#>

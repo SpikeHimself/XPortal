@@ -165,25 +165,25 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PrePackage\Readmes\README.GitHub.tt">
+    <None Include="PrePackage\Readmes\README.GitHub.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.GitHub.md</LastGenOutput>
-    </Content>
-    <Content Include="PrePackage\Readmes\README.Thunderstore.tt">
+    </None>
+    <None Include="PrePackage\Readmes\README.Thunderstore.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.Thunderstore.md</LastGenOutput>
-    </Content>
-    <Content Include="PrePackage\Readmes\_Header.tt">
+    </None>
+    <None Include="PrePackage\Readmes\_Header.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>_Header.t4</LastGenOutput>
-    </Content>
+    </None>
     <None Include="PrePackage\Readmes\Modules\40Bugs.t4" />
     <None Include="PrePackage\Readmes\Modules\20Features.t4" />
     <None Include="PrePackage\Readmes\Modules\00Urls.t4" />
-    <Content Include="PrePackage\Readmes\README.Nexus.tt">
+    <None Include="PrePackage\Readmes\README.Nexus.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>README.Nexus.bbcode</LastGenOutput>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="JotunnPostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'">
