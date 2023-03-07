@@ -1,5 +1,5 @@
 <#=
-(Target == Targets.GitHub) 
+(target == Targets.GitHub) 
 	? mf.Heading("Download and installation instructions (for players)") 
 	: mf.Heading("Installation instructions") 
 #>

@@ -1,7 +1,7 @@
 <#
 	string CreateUrl(int nexusId, string package)
 	{
-		return (Target != Targets.Thunderstore) 
+		return (target != Targets.Thunderstore) 
 			? $"https://www.nexusmods.com/valheim/mods/{nexusId}" 
 			: $"https://valheim.thunderstore.io/package/{package}/";
 	}

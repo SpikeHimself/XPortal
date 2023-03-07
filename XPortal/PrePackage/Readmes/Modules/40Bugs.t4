@@ -5,7 +5,7 @@ First of all, before you report a bug, please make sure that the problem you are
 It is important to me that I can make <#= thisModName #> as bug free as possible, but <#= mf.Bold($"please bear in mind that without your {mf.Code("LogOutput.log")}, I will not be able to debug your issue at all") #>. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
 
 <#
-if (Target == Targets.NexusMods)
+if (target == Targets.NexusMods)
 {
 	WriteLine( mf.Size(mf.Bold($"If you have issues or feedback, please use {thisModName}'s {mf.Link("GitHub page", urlThisModGitHub)}."), FontSize.Four) );
 	WriteLine("");

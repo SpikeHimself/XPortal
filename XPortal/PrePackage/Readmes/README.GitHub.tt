@@ -1,8 +1,8 @@
 <#@ include file="_Header.t4" once="true" #>
 <#@ output extension=".md" #>
 <# 
-	var mf = new Markdown();
-	var Target = Targets.GitHub; 
+	mf = new Markdown();
+	target = Targets.GitHub; 
 #>
 <#@ include file="Modules\00Urls.t4" once="true" #>
 <#@ include file="Modules\11HeaderGitHub.t4" once="true" #>

@@ -7,9 +7,9 @@ Please have a look at my other mod too! <#= linkXStorage #> lets you open multip
 
 <# 
 var endorseButton = "Endorse";
-if (Target == Targets.Thunderstore) endorseButton = "Like";
+if (target == Targets.Thunderstore) endorseButton = "Like";
 var endorseMe = $" don't forget to click the {endorseButton} button, and";
-if (Target == Targets.GitHub) endorseMe = "";
+if (target == Targets.GitHub) endorseMe = "";
 #>
 My mods are free and will remain free, for everyone to use, edit or learn from. I lovingly poured many hours of hard work into these projects. If you enjoy my mods and want to support my work,<#= endorseMe #> please consider buying me a coffee :)
 

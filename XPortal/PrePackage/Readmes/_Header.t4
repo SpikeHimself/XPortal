@@ -1,6 +1,5 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
 <#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="true" #>
-<#@ assembly name="System.Core" #>
 <#@ assembly name="$(TargetPath)" #>
 <#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" #>
 <#@ import namespace="XPortal" #>
@@ -20,4 +19,7 @@
 	var urlThisModGitHubReleases = $"{urlThisModGitHub}/releases";
 	var urlThisModGitHubIssues = $"{urlThisModGitHub}/issues";
 	var urlThisModGitHubNewIssue = $"{urlThisModGitHub}/issues/new/choose";
+
+	Targets target;
+	Format mf;
 #>
