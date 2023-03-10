@@ -14,7 +14,7 @@ namespace XPortal
         private ConfigFile configFile;
 
         /// <summary>
-        /// Container class for *all* of XPortal's grand total of ONE config setting(s) :)
+        /// Container class for all of XPortal's config settings
         /// </summary>
         public class ConfigSettings
         {
