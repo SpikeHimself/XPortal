@@ -30,7 +30,8 @@ namespace XPortal
             Name = pkg.ReadString();
             Location = pkg.ReadVector3();
             Target = pkg.ReadZDOID();
-            Colour = pkg.ReadString();
+            //Colour = pkg.ReadString();
+            Colour = GetPortalColour(Id);
         }
 
         public string GetFriendlyName()
@@ -73,7 +74,7 @@ namespace XPortal
             pkg.Write(Name);
             pkg.Write(Location);
             pkg.Write(Target);
-            pkg.Write(Colour);
+            //pkg.Write(Colour);
             return pkg;
         }
 
