@@ -4,28 +4,6 @@ namespace XPortal
 {
     public class KnownPortal
     {
-
-        public static readonly string DefaultColour = GetColour(Game.instance.m_portalPrefab);
-
-        public static string GetPortalColour(ZDOID portalId)
-        {
-            if (portalId == ZDOID.None)
-            {
-                return DefaultColour;
-            }
-
-            var zdo = ZDOMan.instance.GetZDO(portalId);
-            var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
-            var colour = GetColour(prefab);
-            return colour;
-        }
-
-        private static string GetColour(GameObject prefab)
-        {
-            var colour = prefab.transform.Find("_target_found_red/Point light").GetComponent<Light>().color;
-            return "#" + ColorUtility.ToHtmlStringRGB(colour);
-        }
-
         public ZDOID Id { get; set; }
         public string Name { get; set; }
         public ZDOID Target { get; set; }
@@ -108,5 +86,41 @@ namespace XPortal
         {
             return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{GetFriendlyTargetName()}`, Colour: `{Colour}` }}";
         }
+        
+        #region Colour
+        private const string DefaultColour = "#FF6400";
+        private static string GetPortalColour(ZDOID portalId)
+        {
+            if (!XPortalConfig.Instance.Local.DisplayPortalColour || portalId == ZDOID.None)
+            {
+                return DefaultColour;
+            }
+
+            var zdo = ZDOMan.instance.GetZDO(portalId);
+            var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
+            var colour = GetColour(prefab);
+            return colour;
+        }
+
+        private static string GetColour(GameObject prefab)
+        {
+            var pointLight = prefab.transform.Find("_target_found_red/Point light");
+            if(!pointLight)
+            {
+                Jotunn.Logger.LogDebug($"Portal prefab `{prefab.name}` does not have a Point light");
+                return DefaultColour;
+            }
+
+            var light = pointLight.GetComponent<Light>();
+            if (!light)
+            {
+                Jotunn.Logger.LogDebug($"Portal prefab `{prefab.name}` does not have a Light component");
+                return DefaultColour;
+            }
+
+            var colour = light.color;
+            return "#" + ColorUtility.ToHtmlStringRGB(colour);
+        }
+        #endregion
     }
 }
