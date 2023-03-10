@@ -92,19 +92,19 @@ namespace XPortal
         private const string DefaultColour = "#FF6400";
         private static string GetPortalColour(ZDOID portalId)
         {
-            if (!XPortalConfig.Instance.Local.DisplayPortalColour || portalId == ZDOID.None)
+            if (portalId == ZDOID.None) // || !XPortalConfig.Instance.Local.DisplayPortalColour)
             {
                 return DefaultColour;
             }
 
             var zdo = ZDOMan.instance.GetZDO(portalId);
             var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
-            var colour = GetColour(prefab);
-            return colour;
-        }
+            if (!prefab)
+            {
+                Jotunn.Logger.LogDebug($"Could not find prefab `{zdo.m_prefab}`");
+                return DefaultColour;
+            }
 
-        private static string GetColour(GameObject prefab)
-        {
             var pointLight = prefab.transform.Find("_target_found_red/Point light");
             if(!pointLight)
             {
