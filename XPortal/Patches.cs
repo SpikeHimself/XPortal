@@ -118,7 +118,7 @@ namespace XPortal
             /// </summary>
             static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
             {
-                if (___m_piece.m_name.Equals("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
+                if (___m_piece.m_name.Contains("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
                 {
                     var portalZDO = ___m_nview.GetZDO();
                     if (portalZDO == null)
@@ -157,7 +157,7 @@ namespace XPortal
                     return;
                 }
 
-                if (piece.m_name.Equals("$piece_portal") && piece.CanBeRemoved())
+                if (piece.m_name.Contains("$piece_portal") && piece.CanBeRemoved())
                 {
                     var portalZDO = nview.GetZDO();
                     if (portalZDO == null)
