@@ -1,6 +1,6 @@
 using ManyFormats;
 
-namespace XPortal.PrePackage.Readmes
+namespace Docs
 {
     public enum Targets
     {

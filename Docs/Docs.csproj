@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{842B266E-B79F-4BC0-92E4-6322B0CA5642}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Docs</RootNamespace>
+    <AssemblyName>Docs</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ManyFormats">
+      <HintPath>..\libraries\ManyFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadmeHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="manifest.json">
+      <DependentUpon>manifest.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </None>
+    <None Include="Modules\00Urls.t4" />
+    <None Include="Modules\10Header.t4" />
+    <None Include="Modules\11HeaderGitHub.t4" />
+    <None Include="Modules\20Features.t4" />
+    <None Include="Modules\30Installation.t4" />
+    <None Include="Modules\40Bugs.t4" />
+    <None Include="Modules\50Changelogs.t4" />
+    <None Include="Modules\60Credits.t4" />
+    <None Include="Modules\90InstallationDev.t4" />
+    <None Include="Modules\99Footer.t4" />
+    <None Include="_Header.t4" />
+    <None Include="README.GitHub.md">
+      <DependentUpon>README.GitHub.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </None>
+    <None Include="README.Nexus.bbcode">
+      <DependentUpon>README.Nexus.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </None>
+    <None Include="README.Thunderstore.md">
+      <DependentUpon>README.Thunderstore.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.GitHub.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.GitHub.md</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.Nexus.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.Nexus.bbcode</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.Thunderstore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>README.Thunderstore.md</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="manifest.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>manifest.json</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XPortal\XPortal.csproj">
+      <Project>{deaf4438-8089-40ed-8175-398e1261d45b}</Project>
+      <Name>XPortal</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

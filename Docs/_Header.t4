@@ -1,17 +1,17 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" visibility="internal" #>
+﻿<#@ template debug="true" hostspecific="false" language="C#" visibility="internal" #>
 <#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="true" #>
 <#@ assembly name="$(TargetPath)" #>
+<#@ assembly name="$(TargetDir)$(SolutionName).dll" #>
 <#@ assembly name="$(SolutionDir)\libraries\ManyFormats.dll" #>
-<#@ import namespace="XPortal" #>
-<#@ import namespace="XPortal.PrePackage.Readmes" #>
+<#@ import namespace="Docs" #>
 <#@ import namespace="ManyFormats" #>
 <#@ import namespace="ManyFormats.Formats" #>
 <#
-	var thisModName = XPortal.PluginName;
-	var thisModNexusId = XPortal.PluginNexusId;
-	var thisModPackageName = $"{XPortal.PluginAuthor}/{XPortal.PluginName}";
-	var thisModGitHubRepo = XPortal.PluginGitHubRepo;
-
+	var thisModName = Mod.Info.Name;
+	var thisModNexusId = Mod.Info.NexusId;
+	var thisModPackageName = $"{Mod.Info.Author}/{Mod.Info.Name}";
+	var thisModGitHubRepo = Mod.Info.GitHubRepo;
+	
 	var urlThisModNexus = $"https://www.nexusmods.com/valheim/mods/{thisModNexusId}";
 	var urlThisModThunderstore = $"https://valheim.thunderstore.io/package/{thisModPackageName}/";
 	var urlThisModGitHub = $"https://github.com/{thisModGitHubRepo}";

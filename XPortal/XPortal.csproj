@@ -97,7 +97,6 @@
   <ItemGroup>
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="ModInfo.cs" />
-    <Compile Include="PrePackage\Readmes\ReadmeHelper.cs" />
     <Compile Include="RPC.cs" />
     <Compile Include="XPortalConfig.cs" />
     <Compile Include="XPortalUI.cs" />
@@ -114,39 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="PrePackage\manifest.json">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>manifest.tt</DependentUpon>
-    </None>
     <None Include="packages.config" />
-    <None Include="PrePackage\Readmes\README.GitHub.md">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>README.GitHub.tt</DependentUpon>
-    </None>
-    <None Include="PrePackage\Readmes\README.Nexus.bbcode">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>README.Nexus.tt</DependentUpon>
-    </None>
-    <None Include="PrePackage\Readmes\README.Thunderstore.md">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>README.Thunderstore.tt</DependentUpon>
-    </None>
-    <None Include="PrePackage\Readmes\Modules\50Changelogs.t4" />
-    <None Include="PrePackage\Readmes\Modules\60Credits.t4" />
-    <None Include="PrePackage\Readmes\Modules\90InstallationDev.t4" />
-    <None Include="PrePackage\Readmes\Modules\99Footer.t4" />
-    <None Include="PrePackage\Readmes\Modules\10Header.t4" />
-    <None Include="PrePackage\Readmes\Modules\30Installation.t4" />
-    <None Include="PrePackage\Readmes\Modules\11HeaderGitHub.t4" />
-    <None Include="PrePackage\Readmes\_Header.t4">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>_Header.tt</DependentUpon>
-    </None>
     <None Include="PrePackage\Translations\English\xportal-translations-english.json" />
     <None Include="PrePackage\Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="PrePackage\Translations\French\xportal-translations-french.json" />
@@ -158,12 +125,6 @@
     <None Include="PrePackage\Translations\Spanish\xportal-translations-spanish.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PrePackage\manifest.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>manifest.json</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -172,27 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PrePackage\Readmes\README.GitHub.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.GitHub.md</LastGenOutput>
-    </None>
-    <None Include="PrePackage\Readmes\README.Thunderstore.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.Thunderstore.md</LastGenOutput>
-    </None>
-    <None Include="PrePackage\Readmes\_Header.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>_Header.t4</LastGenOutput>
-    </None>
-    <None Include="PrePackage\Readmes\Modules\40Bugs.t4" />
-    <None Include="PrePackage\Readmes\Modules\20Features.t4" />
-    <None Include="PrePackage\Readmes\Modules\00Urls.t4" />
-    <None Include="PrePackage\Readmes\README.Nexus.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.Nexus.bbcode</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="JotunnPostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'">
