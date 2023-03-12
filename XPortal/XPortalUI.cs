@@ -106,7 +106,7 @@ namespace XPortal
                 RepeatDelay = 1000f,
                 BlockOtherInputs = true,
             };
-            InputManager.Instance.AddButton(XPortal.PluginGUID, newButtonConfig);
+            InputManager.Instance.AddButton(Mod.Info.GUID, newButtonConfig);
             return newButtonConfig;
         }
 

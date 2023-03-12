@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KnownPortalsManager.cs" />
+    <Compile Include="ModInfo.cs" />
     <Compile Include="PrePackage\Readmes\ReadmeHelper.cs" />
     <Compile Include="RPC.cs" />
     <Compile Include="XPortalConfig.cs" />

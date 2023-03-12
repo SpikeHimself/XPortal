@@ -6,26 +6,12 @@ using UnityEngine;
 
 namespace XPortal
 {
-    [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    [BepInPlugin(Mod.Info.GUID, Mod.Info.Name, Mod.Info.Version)]
     [BepInIncompatibility("com.sweetgiorni.anyportal")]
     [BepInDependency(Jotunn.Main.ModGuid)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     public class XPortal : BaseUnityPlugin
     {
-        #region Plugin info
-        // This is *the* place to edit plugin details. Everywhere else will be generated based on this info.
-        public const string PluginGUID = "yay.spikehimself.xportal";
-        public const string PluginAuthor = "SpikeHimself";
-        public const string PluginName = "XPortal";
-        public const string PluginGitHubRepo = "SpikeHimself/XPortal";
-        public const string PluginVersion = "1.2.6";
-        public const string PluginDescription = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
-        public const string PluginWebsiteUrl = "https://github.com/" + PluginGitHubRepo;
-        public const int PluginNexusId = 2239;
-        //public const string PluginBepinVersion = ??
-        public const string PluginJotunnVersion = Jotunn.Main.Version;
-        #endregion
-
         public const string StonePortalPrefabName = "portal";
 
         /// <summary>

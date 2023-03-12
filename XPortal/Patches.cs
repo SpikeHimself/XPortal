@@ -8,7 +8,7 @@ namespace XPortal
 
         static Patches()
         {
-            patcher = new Harmony(XPortal.PluginGUID + ".harmony");
+            patcher = new Harmony(Mod.Info.HarmonyGUID);
         }
 
         public static void Patch()
