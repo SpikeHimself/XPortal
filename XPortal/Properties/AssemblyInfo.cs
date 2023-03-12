@@ -8,4 +8,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct(Mod.Info.Name)]
 [assembly: AssemblyVersion(Mod.Info.Version)]
 [assembly: AssemblyFileVersion(Mod.Info.Version)]
-    

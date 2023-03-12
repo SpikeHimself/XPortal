@@ -87,7 +87,7 @@ namespace XPortal
         {
             return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{GetFriendlyTargetName()}`, Colour: `{Colour}` }}";
         }
-        
+
         #region Colour
         private const string DefaultColour = "#FF6400";
         private static string GetPortalColour(ZDOID portalId)
@@ -106,7 +106,7 @@ namespace XPortal
             }
 
             var pointLight = prefab.transform.Find("_target_found_red/Point light");
-            if(!pointLight)
+            if (!pointLight)
             {
                 Jotunn.Logger.LogDebug($"Portal prefab `{prefab.name}` does not have a Point light");
                 return DefaultColour;
