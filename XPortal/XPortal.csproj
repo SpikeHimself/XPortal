@@ -53,11 +53,6 @@
       <HintPath>..\packages\JotunnLib.2.10.4\lib\net462\Jotunn.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ManyFormats, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libraries\ManyFormats.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
