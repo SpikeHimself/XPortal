@@ -63,7 +63,7 @@ namespace XPortal
             MinimapManager.OnVanillaMapDataLoaded += MinimapManager_OnVanillaMapDataLoaded;
 
             // Apply the Harmony patches
-            Patches.Patch();
+            Patches.Patcher.Patch();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.OnDestroy occurs when a Scene or game ends.")]
         private void OnDestroy()
         {
-            Patches.Unpatch();
+            Patches.Patcher.Unpatch();
             if (!IsHeadless())
             {
                 XPortalUI.Instance?.Dispose();

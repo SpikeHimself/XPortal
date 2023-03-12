@@ -92,10 +92,14 @@
   <ItemGroup>
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="ModInfo.cs" />
+    <Compile Include="Patches\Game.cs" />
+    <Compile Include="Patches\TeleportWorld.cs" />
+    <Compile Include="Patches\TextInput.cs" />
+    <Compile Include="Patches\WearNTear.cs" />
     <Compile Include="RPC.cs" />
     <Compile Include="XPortalConfig.cs" />
     <Compile Include="XPortalUI.cs" />
-    <Compile Include="Patches.cs" />
+    <Compile Include="Patches\Patcher.cs" />
     <Compile Include="KnownPortal.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="XPortal.cs" />
