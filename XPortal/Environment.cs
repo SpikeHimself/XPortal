@@ -29,7 +29,7 @@ namespace XPortal
         }
 
         /// <summary>
-        /// Has the Game shutting started? Set via a patch on Game.Start
+        /// Has the Game started? Set via a patch on Game.Start
         /// </summary>
         internal static bool GameStarted { get; set; } = false;
 
