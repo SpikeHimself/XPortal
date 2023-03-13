@@ -22,7 +22,7 @@ namespace XPortal.Patches
         /// </summary>
         static void Postfix()
         {
-            XPortal.OnGameStart();
+            XPortal.GameStarted();
         }
     }
 

@@ -15,11 +15,6 @@ namespace XPortal
     {
         public const string StonePortalPrefabName = "portal";
 
-        /// <summary>
-        /// Set to true via a patch on Game.Start()
-        /// </summary>
-        private static bool gameStarted = false;
-
         #region Unity Events
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
@@ -53,7 +48,7 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Update is called every frame, if the MonoBehaviour is enabled.")]
         private void Update()
         {
-            if (Environment.IsHeadless || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
+            if (Environment.IsHeadless || !Environment.GameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
             {
                 return;
             }
@@ -94,13 +89,14 @@ namespace XPortal
 
         #region Patch Events
         /// <summary>
-        /// OnGameStart will be called by a patch on Game.Start.
+        /// Called by a patch on Game.Start.
         /// At this point the world is beginning to load. The portals don't exist yet.
         /// </summary>
-        internal static void OnGameStart()
+        internal static void GameStarted()
         {
+            Environment.GameStarted = true;
+            KnownPortalsManager.Instance.Reset();
             RPCManager.Register();
-            gameStarted = true;
         }
 
         /// <summary>

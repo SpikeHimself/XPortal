@@ -174,6 +174,11 @@ namespace XPortal
             Jotunn.Logger.LogInfo($"Known portals updated. Current total: {Count}");
         }
 
+        public void Reset()
+        {
+            knownPortals.Clear();
+        }
+
         public void Dispose()
         {
             knownPortals?.Clear();

@@ -29,6 +29,11 @@ namespace XPortal
         }
 
         /// <summary>
+        /// Has the Game shutting started? Set via a patch on Game.Start
+        /// </summary>
+        internal static bool GameStarted { get; set; } = false;
+
+        /// <summary>
         /// Is the Game shutting down? This happens on logout and on quit.
         /// </summary>
         internal static bool ShuttingDown
