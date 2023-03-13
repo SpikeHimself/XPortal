@@ -20,7 +20,7 @@
         /// <param name="pkg">A ZPackage containing the packed KnownPortal</param>
         internal static void RPC_AddOrUpdateRequest(long sender, ZPackage pkg)
         {
-            if (!XPortal.IsServer())
+            if (!Environment.IsServer)
             {
                 Jotunn.Logger.LogDebug($"[RPC_AddOrUpdateRequest] `{sender}` wants a portal to be added or updated, but I am not the server.");
                 return;
@@ -50,7 +50,7 @@
         /// <param name="portalId">The ZDOID of the portal that should be removed</param>
         internal static void RPC_RemoveRequest(long sender, ZDOID portalId)
         {
-            if (!XPortal.IsServer())
+            if (!Environment.IsServer)
             {
                 Jotunn.Logger.LogDebug($"[RPC_RemoveRequest] {sender} wants `{portalId}` to be removed, but I am not the server.");
                 return;
@@ -87,7 +87,7 @@
         /// <param name="sender">The id of the sender</param>
         internal static void RPC_ConfigRequest(long sender)
         {
-            if (!XPortal.IsServer())
+            if (!Environment.IsServer)
             {
                 Jotunn.Logger.LogDebug($"[RPC_ConfigRequest] {sender} wants to receive the config, but I am not the server.");
                 return;

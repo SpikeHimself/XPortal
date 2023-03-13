@@ -10,7 +10,7 @@
         /// <param name="reason">The reason that was given for the Resync Request</param>
         internal static void RPC_Resync(long sender, ZPackage pkg, string reason)
         {
-            if (XPortal.IsServer())
+            if (Environment.IsServer)
             {
                 return;
             }
@@ -26,7 +26,7 @@
         /// <param name="pkg">A ZPackage containing the KnownPortal that was added or updated</param>
         internal static void RPC_SyncPortal(long sender, ZPackage pkg)
         {
-            if (XPortal.IsServer())
+            if (Environment.IsServer)
             {
                 return;
             }

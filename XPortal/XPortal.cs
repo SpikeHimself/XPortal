@@ -20,26 +20,6 @@ namespace XPortal
         /// </summary>
         private static bool gameStarted = false;
 
-        #region Determine Environment
-        /// <summary>
-        /// Are we the Server?
-        /// </summary>
-        /// <returns>True if ZNet says we are a server</returns>
-        public static bool IsServer()
-        {
-            return ZNet.instance != null && ZNet.instance.IsServer();
-        }
-
-        /// <summary>
-        /// Are we Headless? (dedicated server)
-        /// </summary>
-        /// <returns>True if SystemInfo.graphicsDeviceType is not set</returns>
-        public static bool IsHeadless()
-        {
-            return GUIManager.IsHeadless();
-        }
-        #endregion
-
         #region Unity Events
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
@@ -53,7 +33,7 @@ namespace XPortal
             // Load config
             XPortalConfig.Instance.LoadLocalConfig(Config);
 
-            if (!IsHeadless())
+            if (!Environment.IsHeadless)
             {
                 // Add buttons
                 XPortalUI.Instance.AddInputs();
@@ -73,7 +53,7 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Update is called every frame, if the MonoBehaviour is enabled.")]
         private void Update()
         {
-            if (IsHeadless() || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
+            if (Environment.IsHeadless || !gameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
             {
                 return;
             }
@@ -88,7 +68,7 @@ namespace XPortal
         private void OnDestroy()
         {
             Patches.Patcher.Unpatch();
-            if (!IsHeadless())
+            if (!Environment.IsHeadless)
             {
                 XPortalUI.Instance?.Dispose();
             }
@@ -249,7 +229,7 @@ namespace XPortal
         {
             KnownPortalsManager.Instance.UpdateFromZDOList(allPortals);
 
-            if (!IsServer())
+            if (!Environment.IsServer)
             {
                 Jotunn.Logger.LogDebug("[ForceLocalPortalUpdate] Send Sync Request");
                 SendToServer.SyncRequest("Local portal list was updated");
