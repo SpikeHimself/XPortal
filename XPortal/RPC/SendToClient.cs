@@ -56,7 +56,7 @@ namespace XPortal.RPC
         public static void PingMap(Vector3 location, string text)
         {
             Jotunn.Logger.LogDebug($"[RPC.SendPingMapToEverybody] `{text}` at `{location}`");
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, 3, text, string.Empty, PrivilegeManager.GetNetworkUserId());
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, Talker.Type.Ping, text, string.Empty, PrivilegeManager.GetNetworkUserId());
         }
     }
 }
