@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using System;
+using XPortal.RPC;
 
 namespace XPortal
 {
@@ -82,7 +83,7 @@ namespace XPortal
             if (XPortal.IsServer())
             {
                 Jotunn.Logger.LogDebug("The config was changed, propagating to clients..");
-                RPC.SendConfigToClients(PackLocalConfig());
+                SendToClient.Config(PackLocalConfig());
             }
         }
 
@@ -106,6 +107,5 @@ namespace XPortal
             Server.PingMapDisabled = pkg.ReadBool();
             Jotunn.Logger.LogDebug($"[ReceiveFromServer] PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
         }
-
     }
 }

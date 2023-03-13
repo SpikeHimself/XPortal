@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XPortal.RPC;
 
 namespace XPortal
 {
@@ -166,7 +167,7 @@ namespace XPortal
             foreach (var portal in targetingInvalidPortals)
             {
                 portal.Target = ZDOID.None;
-                RPC.SendAddOrUpdateRequestToServer(portal);
+                SendToServer.AddOrUpdateRequest(portal);
             }
 
             Jotunn.Logger.LogInfo($"Known portals updated. Current total: {Count}");

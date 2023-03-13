@@ -90,13 +90,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment.cs" />
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="ModInfo.cs" />
     <Compile Include="Patches\Game.cs" />
     <Compile Include="Patches\TeleportWorld.cs" />
     <Compile Include="Patches\TextInput.cs" />
     <Compile Include="Patches\WearNTear.cs" />
-    <Compile Include="RPC.cs" />
+    <Compile Include="RPC\ClientEvents.cs" />
+    <Compile Include="RPC\SendToServer.cs" />
+    <Compile Include="RPC\RPCManager.cs" />
+    <Compile Include="RPC\ServerEvents.cs" />
+    <Compile Include="RPC\SendToClient.cs" />
     <Compile Include="XPortalConfig.cs" />
     <Compile Include="XPortalUI.cs" />
     <Compile Include="Patches\Patcher.cs" />

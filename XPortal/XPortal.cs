@@ -3,6 +3,7 @@ using Jotunn.Managers;
 using Jotunn.Utils;
 using System.Collections.Generic;
 using UnityEngine;
+using XPortal.RPC;
 
 namespace XPortal
 {
@@ -104,10 +105,10 @@ namespace XPortal
             // Ask the server to send us the portals
             var myId = ZDOMan.instance.GetMyID();
             var myName = Game.instance.GetPlayerProfile().GetName();
-            RPC.SendSyncRequestToServer($"{myName} ({myId}) has joined the game");
+            SendToServer.SyncRequest($"{myName} ({myId}) has joined the game");
 
             // Ask the server to send us the config
-            RPC.SendConfigRequestToServer();
+            SendToServer.ConfigRequest();
         }
         #endregion
 
@@ -118,7 +119,7 @@ namespace XPortal
         /// </summary>
         internal static void OnGameStart()
         {
-            RPC.RegisterRPCs();
+            RPCManager.Register();
             gameStarted = true;
         }
 
@@ -154,7 +155,7 @@ namespace XPortal
                 if (!KnownPortalsManager.Instance.ContainsId(targetId))
                 {
                     Jotunn.Logger.LogError($"[OnPrePortalHover] Target portal {targetId} appears to be invalid");
-                    RPC.SendSyncRequestToServer($"Hovering over portal `{outputPortalName}` which has invalid target `{targetId}`");
+                    SendToServer.SyncRequest($"Hovering over portal `{outputPortalName}` which has invalid target `{targetId}`");
                     result = "Fetching portal info...";
                     return;
                 }
@@ -195,7 +196,7 @@ namespace XPortal
             Jotunn.Logger.LogDebug($"[OnPortalPlaced] Portal `{portalId}` was placed");
 
             var portal = new KnownPortal(portalId, location);
-            RPC.SendAddOrUpdateRequestToServer(portal);
+            SendToServer.AddOrUpdateRequest(portal);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace XPortal
         {
             var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
             Jotunn.Logger.LogDebug($"[OnPortalDestroyed] Portal `{portalName}` is being destroyed");
-            RPC.SendRemoveRequestToServer(portalId);
+            SendToServer.RemoveRequest(portalId);
         }
         #endregion
 
@@ -223,7 +224,7 @@ namespace XPortal
 
             ForceLocalPortalUpdate(allPortalZDOs);
 
-            RPC.SendResyncToClients(KnownPortalsManager.Instance.Pack(), reason);
+            SendToClient.Resync(KnownPortalsManager.Instance.Pack(), reason);
 
             return allPortalZDOs;
         }
@@ -251,7 +252,7 @@ namespace XPortal
             if (!IsServer())
             {
                 Jotunn.Logger.LogDebug("[ForceLocalPortalUpdate] Send Sync Request");
-                RPC.SendSyncRequestToServer("Local portal list was updated");
+                SendToServer.SyncRequest("Local portal list was updated");
             }
         }
         #endregion
@@ -272,7 +273,7 @@ namespace XPortal
 
                 // Ask the server to update the portal
                 Jotunn.Logger.LogDebug($"[OnPortalInfoSubmitted] Updating portal `{portal.Name}`");
-                RPC.SendAddOrUpdateRequestToServer(portal);
+                SendToServer.AddOrUpdateRequest(portal);
             }
         }
 
@@ -296,7 +297,7 @@ namespace XPortal
             Vector3 location = portal.Location;
 
             // Send ping to all players
-            RPC.SendPingMapToEverybody(location, name);
+            SendToClient.PingMap(location, name);
 
             // Show location on the map
             Minimap.instance.ShowPointOnMap(location);
