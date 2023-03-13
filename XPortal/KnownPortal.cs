@@ -92,7 +92,7 @@ namespace XPortal
         private const string DefaultColour = "#FF6400";
         private static string GetPortalColour(ZDOID portalId)
         {
-            if (portalId == ZDOID.None) // || !XPortalConfig.Instance.Local.DisplayPortalColour)
+            if (portalId == ZDOID.None || !XPortalConfig.Instance.Local.DisplayPortalColour)
             {
                 return DefaultColour;
             }
