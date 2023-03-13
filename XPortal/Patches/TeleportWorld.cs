@@ -10,20 +10,29 @@ namespace XPortal.Patches
         /// </summary>
         static bool Prefix(ZNetView ___m_nview, ref string __result)
         {
-            if (!___m_nview || !___m_nview.IsValid())
+            if (Environment.ShuttingDown)
+            {
+                Jotunn.Logger.LogDebug("Shutting down, ignoring hover");
+
+                // Don't run the original method
+                return false;
+            }
+
+            if (!___m_nview || ___m_nview.GetZDO() == null)
             {
                 Jotunn.Logger.LogError("TeleportWorldGetHoverTextPatch: This portal does not exist. Odin strokes his beard in confusion..");
                 __result = "This portal doesn't actually appear to exist. Heimdallr sees you...";
-            }
-            else
-            {
-                ZDO portalZDO = ___m_nview.GetZDO();
-                var portalId = portalZDO.m_uid;
-                var location = portalZDO.GetPosition();
-                XPortal.OnPrePortalHover(out __result, portalId, location);
+
+                // Don't run the original method
+                return false;
             }
 
-            // Don't run the original method at all
+            ZDO portalZDO = ___m_nview.GetZDO();
+            var portalId = portalZDO.m_uid;
+            var location = portalZDO.GetPosition();
+            XPortal.OnPrePortalHover(out __result, portalId, location);
+
+            // Don't run the original method
             return false;
         }
     }
