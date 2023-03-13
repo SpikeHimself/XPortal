@@ -22,6 +22,7 @@ namespace XPortal.Patches
         /// </summary>
         static void Postfix()
         {
+            Environment.GameStarted = true;
             XPortal.GameStarted();
         }
     }

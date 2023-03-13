@@ -94,7 +94,6 @@ namespace XPortal
         /// </summary>
         internal static void GameStarted()
         {
-            Environment.GameStarted = true;
             KnownPortalsManager.Instance.Reset();
             RPCManager.Register();
         }
