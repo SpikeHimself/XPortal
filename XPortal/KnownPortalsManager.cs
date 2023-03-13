@@ -5,7 +5,7 @@ using XPortal.RPC;
 
 namespace XPortal
 {
-    internal class KnownPortalsManager : IDisposable
+    internal sealed class KnownPortalsManager : IDisposable
     {
         ////////////////////////////
         //// Singleton instance ////
@@ -18,6 +18,7 @@ namespace XPortal
         /// Each value is a KnownPortal, which holds the ZDOID, Name, Location and the portal's target ZDOID.
         /// </summary>
         private readonly Dictionary<ZDOID, KnownPortal> knownPortals = new Dictionary<ZDOID, KnownPortal>();
+
         public int Count
         {
             get

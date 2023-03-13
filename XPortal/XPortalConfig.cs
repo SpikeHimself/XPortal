@@ -4,7 +4,7 @@ using XPortal.RPC;
 
 namespace XPortal
 {
-    public sealed class XPortalConfig
+    internal sealed class XPortalConfig
     {
         ////////////////////////////
         //// Singleton instance ////
@@ -51,7 +51,7 @@ namespace XPortal
             this.configFile.ConfigReloaded += LocalConfigChanged;
             this.configFile.SettingChanged += LocalConfigChanged;
 
-            if (XPortal.IsServer())
+            if (Environment.IsServer)
             {
                 Server = Local;
             }
@@ -80,7 +80,7 @@ namespace XPortal
         {
             ReloadLocalConfig();
 
-            if (XPortal.IsServer())
+            if (Environment.IsServer)
             {
                 Jotunn.Logger.LogDebug("The config was changed, propagating to clients..");
                 SendToClient.Config(PackLocalConfig());

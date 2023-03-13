@@ -4,7 +4,6 @@ namespace XPortal.RPC
 {
     internal static class RPCManager
     {
-
         #region RPC Names
         // Server RPCs
         internal const string RPC_SYNCPORTAL = Mod.Info.Name + "_SyncPortal";

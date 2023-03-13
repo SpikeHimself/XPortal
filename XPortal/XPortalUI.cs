@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace XPortal
 {
-    public sealed class XPortalUI : IDisposable
+    internal sealed class XPortalUI : IDisposable
     {
         ////////////////////////////
         //// Singleton instance ////
