@@ -87,6 +87,19 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 
 # Changelogs
 
+* **v1.2.7** (2023-03-14)
+
+	* Dependency updates: BepInEx 5.4.21, Jotunn 2.11.0
+
+	* Some fixes towards further [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/) compatibility
+ 
+	* Fix a HarmonyX warning that occurs when loading XPortal
+
+	* Fix error that sometimes appears when logging out or quitting the game
+
+<details>
+<summary>Click to view previous versions</summary>
+
 * **v1.2.6** (2023-03-05)
 
 	* XPortal is now marked as incompatible with [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/): if you have AnyPortal installed, XPortal will not work
@@ -96,9 +109,6 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 	* Documentation overhaul (readmes are now fully modular -- if you're a mod author, check this out on GitHub!)
 	
 	* Improved logging
-
-<details>
-<summary>Click to view previous versions</summary>
 
 * **v1.2.5** (2023-02-15)
 
