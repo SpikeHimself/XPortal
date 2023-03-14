@@ -8,7 +8,7 @@
   "version_number": "<#= Mod.Info.Version #>",
   "website_url": "<#= Mod.Info.WebsiteUrl #>",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.1901",
+    "denikson-BepInExPack_Valheim-<#= Mod.Info.BepInExPackVersion #>",
     "ValheimModding-Jotunn-<#= Mod.Info.JotunnVersion #>"
   ]
 }
