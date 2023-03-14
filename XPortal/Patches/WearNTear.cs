@@ -10,8 +10,6 @@ namespace XPortal.Patches
         /// </summary>
         static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
         {
-            Jotunn.Logger.LogDebug($"Piece placed: {___m_piece.m_name}");
-
             if (___m_piece.m_name.Contains("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
             {
                 var portalZDO = ___m_nview.GetZDO();
