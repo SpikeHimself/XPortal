@@ -553,10 +553,6 @@ namespace XPortal
 
         private void ApplyDropdownStyle(Dropdown dropdown)
         {
-            // Fix the dropdown's UI layer
-            dropdown.gameObject.layer = GUIManager.UILayer;
-            dropdown.template.gameObject.layer = GUIManager.UILayer;
-
             // Make the expanded list larger
             dropdown.template.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 400f);
 
