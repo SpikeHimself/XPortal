@@ -1,4 +1,4 @@
-﻿<#@ template debug="true" hostspecific="false" language="C#" visibility="internal" #>
+<#@ template debug="true" hostspecific="false" language="C#" visibility="internal" #>
 <#@ CleanupBehavior processor="T4VSHost" CleanupAfterProcessingtemplate="true" #>
 <#@ assembly name="$(TargetPath)" #>
 <#@ assembly name="$(TargetDir)$(SolutionName).dll" #>
@@ -8,6 +8,7 @@
 <#@ import namespace="ManyFormats.Formats" #>
 <#
 	var thisModName = Mod.Info.Name;
+	var thisModVersion = Mod.Info.Version;
 	var thisModNexusId = Mod.Info.NexusId;
 	var thisModPackageName = $"{Mod.Info.Author}/{Mod.Info.Name}";
 	var thisModGitHubRepo = Mod.Info.GitHubRepo;
@@ -19,6 +20,8 @@
 	var urlThisModGitHubReleases = $"{urlThisModGitHub}/releases";
 	var urlThisModGitHubIssues = $"{urlThisModGitHub}/issues";
 	var urlThisModGitHubNewIssue = $"{urlThisModGitHub}/issues/new/choose";
+
+	var today = DateTime.Now.ToString("yyy-MM-dd");
 
 	Targets target;
 	Format mf;

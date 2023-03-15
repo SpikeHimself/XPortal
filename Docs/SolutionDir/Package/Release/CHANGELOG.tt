@@ -1,0 +1,8 @@
+<#@ include file="$(ProjectDir)\_Header.t4" once="true" #>
+<#@ output extension=".md" #>
+<#
+	mf = new Markdown();
+	target = Targets.Thunderstore;
+#>
+<#@ include file="$(ProjectDir)\Modules\00Urls.t4" once="true" #>
+<#@ include file="$(ProjectDir)\Modules\50Changelogs.t4" once="true" #>

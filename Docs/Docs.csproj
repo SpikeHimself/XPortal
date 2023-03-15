@@ -48,7 +48,30 @@
     <Compile Include="ReadmeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="manifest.json">
+    <None Include="GitHub.Release.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GitHub.Release.tt</DependentUpon>
+    </None>
+    <None Include="Modules\51Changelog-current.t4" />
+    <None Include="Modules\52Changelogs-previous.t4" />
+    <None Include="SolutionDir\.github\ISSUE_TEMPLATE\bug_report.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>bug_report.tt</DependentUpon>
+    </None>
+    <None Include="SolutionDir\.github\ISSUE_TEMPLATE\feature_request.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>feature_request.tt</DependentUpon>
+    </None>
+    <None Include="SolutionDir\.github\ISSUE_TEMPLATE\translation.md" />
+    <None Include="SolutionDir\Package\Release\CHANGELOG.md">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CHANGELOG.tt</DependentUpon>
+    </None>
+    <None Include="SolutionDir\Package\Release\manifest.json">
       <DependentUpon>manifest.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -64,8 +87,8 @@
     <None Include="Modules\90InstallationDev.t4" />
     <None Include="Modules\99Footer.t4" />
     <None Include="_Header.t4" />
-    <None Include="README.GitHub.md">
-      <DependentUpon>README.GitHub.tt</DependentUpon>
+    <None Include="SolutionDir\README.md">
+      <DependentUpon>README.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </None>
@@ -74,16 +97,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </None>
-    <None Include="README.Thunderstore.md">
-      <DependentUpon>README.Thunderstore.tt</DependentUpon>
+    <None Include="SolutionDir\Package\Release\README.md">
+      <DependentUpon>README.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.GitHub.tt">
+    <None Include="SolutionDir\README.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.GitHub.md</LastGenOutput>
+      <LastGenOutput>README.md</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -93,13 +116,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.Thunderstore.tt">
+    <None Include="SolutionDir\Package\Release\README.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>README.Thunderstore.md</LastGenOutput>
+      <LastGenOutput>README.md</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="manifest.tt">
+    <None Include="SolutionDir\Package\Release\manifest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>manifest.json</LastGenOutput>
     </None>
@@ -112,6 +135,24 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GitHub.Release.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GitHub.Release.md</LastGenOutput>
+    </Content>
+    <Content Include="SolutionDir\.github\ISSUE_TEMPLATE\bug_report.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>bug_report.md</LastGenOutput>
+    </Content>
+    <Content Include="SolutionDir\.github\ISSUE_TEMPLATE\feature_request.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>feature_request.md</LastGenOutput>
+    </Content>
+    <Content Include="SolutionDir\Package\Release\CHANGELOG.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CHANGELOG.md</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

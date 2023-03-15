@@ -1,18 +1,16 @@
 <#@ include file="$(ProjectDir)\_Header.t4" once="true" #>
-<#@ output extension=".bbcode" #>
-<# 
-	mf = new NexusBbcode();
-	target = Targets.NexusMods; 
+<#@ output extension=".md" #>
+<#
+	mf = new Markdown();
+	target = Targets.GitHub; 
 #>
 <#@ include file="$(ProjectDir)\Modules\00Urls.t4" once="true" #>
-<#@ include file="$(ProjectDir)\Modules\10Header.t4" once="true" #>
-
-<#@ include file="$(ProjectDir)\Modules\20Features.t4" once="true" #>
+<#@ include file="$(ProjectDir)\Modules\11HeaderGitHub.t4" once="true" #>
 
 <#@ include file="$(ProjectDir)\Modules\30Installation.t4" once="true" #>
 
 <#@ include file="$(ProjectDir)\Modules\40Bugs.t4" once="true" #>
 
-<#@ include file="$(ProjectDir)\Modules\60Credits.t4" once="true" #>
+<#@ include file="$(ProjectDir)\Modules\90InstallationDev.t4" once="true" #>
 
 <#@ include file="$(ProjectDir)\Modules\99Footer.t4" once="true" #>

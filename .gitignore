@@ -365,10 +365,14 @@ FodyWeavers.xsd
 *.csproj.user
 
 # automated build output
-XPortal/[Pp]ackage
+[Pp]ackage
+[Rr]elease
 
-# not the libraries folder
+# Keep the libraries folder
 !libraries/*
 
 # the valheim paths config
 [Ee]nvironment.props
+
+# Don't ignore the Docs/SolutionDir contents
+!**Docs/[Ss]olution[Dd]ir/**
