@@ -137,22 +137,22 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GitHub.Release.tt">
+    <None Include="GitHub.Release.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GitHub.Release.md</LastGenOutput>
-    </Content>
-    <Content Include="SolutionDir\.github\ISSUE_TEMPLATE\bug_report.tt">
+    </None>
+    <None Include="SolutionDir\.github\ISSUE_TEMPLATE\bug_report.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>bug_report.md</LastGenOutput>
-    </Content>
-    <Content Include="SolutionDir\.github\ISSUE_TEMPLATE\feature_request.tt">
+    </None>
+    <None Include="SolutionDir\.github\ISSUE_TEMPLATE\feature_request.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>feature_request.md</LastGenOutput>
-    </Content>
-    <Content Include="SolutionDir\Package\Release\CHANGELOG.tt">
+    </None>
+    <None Include="SolutionDir\Package\Release\CHANGELOG.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CHANGELOG.md</LastGenOutput>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
