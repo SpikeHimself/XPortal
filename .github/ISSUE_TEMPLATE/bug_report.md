@@ -13,7 +13,7 @@ Write a clear and concise description of what's going wrong.
 **To Reproduce**
 Explain the steps needed to reproduce the behaviour.
 
-**Expected behavior**
+**Expected behaviour**
 Describe what you expected to happen (if it's not obvious).
 
 **LogOutput file(s)**
