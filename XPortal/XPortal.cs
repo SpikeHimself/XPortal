@@ -2,6 +2,7 @@ using BepInEx;
 using Jotunn.Managers;
 using Jotunn.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using XPortal.RPC;
 
@@ -14,6 +15,9 @@ namespace XPortal
     public class XPortal : BaseUnityPlugin
     {
         public const string StonePortalPrefabName = "portal";
+
+        private static bool portalRecipeAltered = false;
+        private static Dictionary<string, int> portalRecipeOriginal;
 
         #region Unity Events
         /// <summary>
@@ -28,6 +32,10 @@ namespace XPortal
             // Load config
             XPortalConfig.Instance.LoadLocalConfig(Config);
 
+            // Subscribe to config events
+            XPortalConfig.Instance.OnLocalConfigChanged += OnLocalConfigChanged;
+            XPortalConfig.Instance.OnServerConfigChanged += OnServerConfigChanged;
+
             if (!Environment.IsHeadless)
             {
                 // Add buttons
@@ -41,6 +49,7 @@ namespace XPortal
             // Apply the Harmony patches
             Patches.Patcher.Patch();
         }
+
 
         /// <summary>
         /// https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -73,17 +82,97 @@ namespace XPortal
 
         #region Jotunn Events
         /// <summary>
+        /// Event that gets fired once data for a specific Map for a world has been loaded.
         /// https://valheim-modding.github.io/Jotunn/tutorials/events.html
         /// </summary>
-        private void MinimapManager_OnVanillaMapDataLoaded()
+        private static void MinimapManager_OnVanillaMapDataLoaded()
         {
+            // Ask the server to send us the config
+            SendToServer.ConfigRequest();
+
             // Ask the server to send us the portals
             var myId = ZDOMan.instance.GetMyID();
             var myName = Game.instance.GetPlayerProfile().GetName();
             SendToServer.SyncRequest($"{myName} ({myId}) has joined the game");
+        }
+        #endregion
 
-            // Ask the server to send us the config
-            SendToServer.ConfigRequest();
+        #region Portal Recipe
+        /// <summary>
+        /// Update the portal recipe based on the DoublePortalCosts config setting on the server
+        /// </summary>
+        private static void UpdatePortalRecipe()
+        {
+            if (!ObjectDB.instance)
+            {
+                Jotunn.Logger.LogError("ObjectDB not instantiated");
+                return;
+            }
+
+            ItemDrop hammer = ObjectDB.instance.GetItemPrefab("Hammer")?.GetComponent<ItemDrop>();
+            if (!hammer)
+            {
+                Jotunn.Logger.LogError("Could not find Hammer prefab");
+                return;
+            }
+
+            var portalPiece = hammer.m_itemData.m_shared.m_buildPieces.m_pieces
+                .Where(go => go.name.Equals("portal_wood"))
+                .Select(go => go.GetComponent<Piece>())
+                .FirstOrDefault();
+
+            BackUpPortalRecipe(portalPiece.m_resources);
+
+            foreach (var req in portalPiece.m_resources)
+            {
+                var itemName = req.m_resItem.name;
+                var originalAmount = portalRecipeOriginal[itemName];
+
+                var newAmount = originalAmount;
+                if (XPortalConfig.Instance.Server.DoublePortalCosts)
+                {
+                    newAmount = 2 * originalAmount;
+                    Jotunn.Logger.LogDebug($"Doubling amount for requirement {req.m_resItem.name} for item {portalPiece.name} from {originalAmount} to {newAmount}");
+                }
+                else if (portalRecipeAltered)
+                {
+                    Jotunn.Logger.LogDebug($"Resetting amount for requirement {req.m_resItem.name} for item {portalPiece.name} to {newAmount}");
+                }
+                req.m_amount = newAmount;
+            }
+
+            portalRecipeAltered = XPortalConfig.Instance.Server.DoublePortalCosts;
+        }
+
+        /// <summary>
+        /// Create a backup of the portal recipe so we can restore it later
+        /// </summary>
+        /// <param name="requirements">The Requirement to make a backup of</param>
+        private static void BackUpPortalRecipe(Piece.Requirement[] requirements)
+        {
+            if (portalRecipeOriginal != null && portalRecipeOriginal.Count > 0)
+            {
+                return;
+            }
+
+            Jotunn.Logger.LogDebug($"Copying original requirements for portal recipe");
+            portalRecipeOriginal = new Dictionary<string, int>();
+            foreach (var req in requirements)
+            {
+                portalRecipeOriginal.Add(req.m_resItem.name, req.m_amount);
+            }
+        }
+        #endregion
+
+        #region Config events
+        internal static void OnLocalConfigChanged()
+        {
+            // Honestly, nobody cares
+        }
+
+        internal static void OnServerConfigChanged()
+        {
+            UpdatePortalRecipe();
         }
         #endregion
 
@@ -278,6 +367,5 @@ namespace XPortal
             Minimap.instance.ShowPointOnMap(location);
         }
         #endregion
-
     }
 }

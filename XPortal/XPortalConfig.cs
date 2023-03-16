@@ -12,6 +12,9 @@ namespace XPortal
         public static XPortalConfig Instance { get { return lazy.Value; } }
         ////////////////////////////
 
+        public event Action OnLocalConfigChanged;
+        public event Action OnServerConfigChanged;
+
         private ConfigFile configFile;
 
         /// <summary>
@@ -21,6 +24,7 @@ namespace XPortal
         {
             public bool PingMapDisabled;
             public bool DisplayPortalColour;
+            public bool DoublePortalCosts;
         }
 
         /// <summary>
@@ -63,18 +67,22 @@ namespace XPortal
         private void ReloadLocalConfig()
         {
             // Add Nexus ID to config for Nexus Update Check (https://www.nexusmods.com/valheim/mods/102)
-            configFile.Bind<int>("General", "NexusID", Mod.Info.NexusId, "Nexus mod ID for updates (do not change)");
+            configFile.Bind("General", "NexusID", Mod.Info.NexusId, "Nexus mod ID for updates (do not change)");
 
             // Add PingMapDisabled option which disables the Ping Map button
-            var cfgPingMapDisabled = configFile.Bind<bool>("General", "PingMapDisabled", false, "Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.");
+            var cfgPingMapDisabled = configFile.Bind("General", "PingMapDisabled", false, "Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.");
             Local.PingMapDisabled = cfgPingMapDisabled.Value;
 
-            var cfgDisplayPortalColour = configFile.Bind<bool>("General", "DisplayPortalColour", false, "Show a \">>\" tag in the list of portals that has the same colour as the light that the portal emits (integration with \"Advanced Portals\" by RandyKnapp).");
+            var cfgDisplayPortalColour = configFile.Bind("General", "DisplayPortalColour", false, "Show a \">>\" tag in the list of portals that has the same colour as the light that the portal emits (integration with \"Advanced Portals\" by RandyKnapp).");
             Local.DisplayPortalColour = cfgDisplayPortalColour.Value;
+
+            var cfgDoublePortalCosts = configFile.Bind("General", "DoublePortalCosts", false, "By using XPortal, you effectively only need half the amount of portals. To compensate for that, we can double the costs of portals. This setting is enforced (but not overwritten) by the server.");
+            Local.DoublePortalCosts = cfgDoublePortalCosts.Value;
         }
 
         /// <summary>
-        /// The config file was reloaded on the server. Read settings from it and send them to clients.
+        /// The config file was reloaded or a setting was changed. 
+        /// If we are the server, sync the config to clients.
         /// </summary>
         private void LocalConfigChanged(object sender, EventArgs e)
         {
@@ -85,6 +93,8 @@ namespace XPortal
                 Jotunn.Logger.LogDebug("The config was changed, propagating to clients..");
                 SendToClient.Config(PackLocalConfig());
             }
+
+            OnLocalConfigChanged?.Invoke();
         }
 
         /// <summary>
@@ -95,6 +105,7 @@ namespace XPortal
         {
             var pkg = new ZPackage();
             pkg.Write(Local.PingMapDisabled);
+            pkg.Write(Local.DoublePortalCosts);
             return pkg;
         }
 
@@ -105,7 +116,11 @@ namespace XPortal
         public void ReceiveServerConfig(ZPackage pkg)
         {
             Server.PingMapDisabled = pkg.ReadBool();
-            Jotunn.Logger.LogDebug($"[ReceiveFromServer] PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
+            Server.DoublePortalCosts = pkg.ReadBool();
+            Jotunn.Logger.LogDebug($"[{nameof(ReceiveServerConfig)}] PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
+            Jotunn.Logger.LogDebug($"[{nameof(ReceiveServerConfig)}] DoublePortalCosts {{ Local: {Local.DoublePortalCosts}, Server: {Server.DoublePortalCosts} }}");
+
+            OnServerConfigChanged?.Invoke();
         }
     }
 }
