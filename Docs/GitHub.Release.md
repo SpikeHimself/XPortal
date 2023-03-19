@@ -1,6 +1,6 @@
 ### Changelog
 
-* No changes yet
+* Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled. This setting is enforced (but not overwritten) by the host/server.
 
 ### Debug
 
