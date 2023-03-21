@@ -10,7 +10,7 @@ namespace XPortal.RPC
         /// <param name="portal">The KnownPortal to send to the clients</param>
         public static void SyncPortal(KnownPortal portal)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendSyncPortalToClients] Sending {portal} to everybody");
+            Jotunn.Logger.LogDebug($"[{nameof(SyncPortal)}] Sending {portal} to everybody");
 
             var pkg = portal.Pack();
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_SYNCPORTAL, pkg);
@@ -23,7 +23,7 @@ namespace XPortal.RPC
         /// <param name="reason">The reason that was given for the Resync Request</param>
         public static void Resync(ZPackage pkg, string reason)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendResyncToClients] Sending all portals to everybody, because: {reason}");
+            Jotunn.Logger.LogDebug($"[{nameof(Resync)}] Sending all portals to everybody, because: {reason}");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_RESYNC, pkg, reason);
         }
 
@@ -33,7 +33,7 @@ namespace XPortal.RPC
         /// <param name="pkg">A ZPackage containing all config settings</param>
         public static void Config(ZPackage pkg)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendConfigToClients] Sending config to everyone");
+            Jotunn.Logger.LogDebug($"[{nameof(Config)}] Sending config to everyone");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CONFIG, pkg);
         }
 
@@ -44,7 +44,7 @@ namespace XPortal.RPC
         /// <param name="pkg">A ZPackage containing all config settings</param>
         public static void Config(long clientPeerID, ZPackage pkg)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendConfigToClient] Sending config to {clientPeerID}");
+            Jotunn.Logger.LogDebug($"[{nameof(Config)}] Sending config to {clientPeerID}");
             ZRoutedRpc.instance.InvokeRoutedRPC(clientPeerID, RPCManager.RPC_CONFIG, pkg);
         }
 
@@ -62,7 +62,7 @@ namespace XPortal.RPC
             // ..but XPortal much prefers to show the name of the portal, instead of the name of the player
             localUserInfo.Name = text;
 
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty, PrivilegeManager.GetNetworkUserId());
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, Talker.Type.Ping, localUserInfo, string.Empty, PrivilegeManager.GetNetworkUserId());
         }
     }
 }
