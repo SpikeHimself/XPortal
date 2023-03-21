@@ -4,6 +4,7 @@ using Jotunn.Configs;
 using Jotunn.Managers;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,6 +93,7 @@ namespace XPortal
             uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
             uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
             uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
+
         }
         private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
         {
@@ -205,6 +207,7 @@ namespace XPortal
 
         public void Show()
         {
+            //Localization.instance.Localize(mainPanel.transform);
             SetActive(true);
         }
 
@@ -515,7 +518,7 @@ namespace XPortal
 
                 // Okay button
                 var okayButtonObject = GUIManager.Instance.CreateButton(
-                        text: Localization.instance.Localize("$menu_ok"),
+                        text: Localization.instance.Localize("[$KEY_Use] $menu_ok"),
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(1f, 0f),    // anchor bottom right
                         anchorMax: new Vector2(1f, 0f),
@@ -523,6 +526,11 @@ namespace XPortal
                         width: submitButtonWidth,
                         height: submitButtonHeight);
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
+
+                var okayButtonGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
+                okayButtonGamepadHint.transform.SetParent(okayButtonObject.transform, worldPositionStays: false);
+                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().text = "$KEY_Use";
+                //UnityEngine.Object.Instantiate(okayButtonGamepadHint, okayButtonObject.transform);
 
 
                 // Cancel button
