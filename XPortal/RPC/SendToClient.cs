@@ -55,8 +55,14 @@ namespace XPortal.RPC
         /// <param name="text">The text that should appear on the ping message</param>
         public static void PingMap(Vector3 location, string text)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendPingMapToEverybody] `{text}` at `{location}`");
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, Talker.Type.Ping, text, string.Empty, PrivilegeManager.GetNetworkUserId());
+            Jotunn.Logger.LogDebug($"[{nameof(PingMap)}] `{text}` at `{location}`");
+
+            // Since Valheim patch 0.214.2 (2023-03-13), the ChatMessage RPC requires a UserInfo object instead of the player name string
+            var localUserInfo = UserInfo.GetLocalUser();
+            // ..but XPortal much prefers to show the name of the portal, instead of the name of the player
+            localUserInfo.Name = text;
+
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty, PrivilegeManager.GetNetworkUserId());
         }
     }
 }
