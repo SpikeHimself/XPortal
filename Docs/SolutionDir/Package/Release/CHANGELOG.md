@@ -7,6 +7,7 @@
 * Add server installation instructions to documentation
 
 * Add Configuration section to documentation
+
 <details>
 <summary>Click to view previous versions</summary>
 
