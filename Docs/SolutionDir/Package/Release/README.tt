@@ -9,6 +9,8 @@
 
 <#@ include file="$(ProjectDir)\Modules\20Features.t4" once="true" #>
 
+<#@ include file="$(ProjectDir)\Modules\25Configuration.t4" once="true" #>
+
 <#@ include file="$(ProjectDir)\Modules\30Installation.t4" once="true" #>
 
 <#@ include file="$(ProjectDir)\Modules\40Bugs.t4" once="true" #>

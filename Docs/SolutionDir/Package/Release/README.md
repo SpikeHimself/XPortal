@@ -59,6 +59,27 @@ XPortal is known to be incompatible with:
 * [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) by sweetgiorni
 
 
+# Configuration
+
+XPortal's config file, which can be found at `Valheim\BepInEx\config\yay.spikehimself.xportal.cfg`, contains the following settings:
+
+`NexusID`
+
+This is XPortal's ID on Nexus Mods and is used by [Nexus Update Check](https://valheim.thunderstore.io/package/nexusreupload/aedenthorn_Nexus_Update_Check/).
+
+`PingMapDisabled`
+
+Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.
+
+`DisplayPortalColour`
+
+Show a ">>" tag in the list of portals that has the same colour as the light that the portal emits (integration with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/)).
+
+`DoublePortalCosts`
+
+Double the costs of portals. This setting is enforced (but not overwritten) by the server.
+
+
 # Installation instructions
 
 XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.

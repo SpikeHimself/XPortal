@@ -12,6 +12,7 @@
 	var thisModNexusId = Mod.Info.NexusId;
 	var thisModPackageName = $"{Mod.Info.Author}/{Mod.Info.Name}";
 	var thisModGitHubRepo = Mod.Info.GitHubRepo;
+	var thisModGUID = Mod.Info.GUID;
 	
 	var urlThisModNexus = $"https://www.nexusmods.com/valheim/mods/{thisModNexusId}";
 	var urlThisModThunderstore = $"https://valheim.thunderstore.io/package/{thisModPackageName}/";
