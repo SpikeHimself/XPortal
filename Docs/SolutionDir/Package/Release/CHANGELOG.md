@@ -1,15 +1,19 @@
-#### v1.2.8 (2023-03-22)
+#### v1.2.9 (2023-03-22)
 
-* Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled
-
-* Fix Ping button not working after a recent Valheim update
-
-* Add server installation instructions to documentation
-
-* Add Configuration section to documentation
+* No changes yet
 
 <details>
 <summary>Click to view previous versions</summary>
+
+* **v1.2.8** (2023-03-22)
+
+	* Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled
+
+	* Fix Ping button not working after a recent Valheim update
+
+	* Add server installation instructions to documentation
+
+	* Add Configuration section to documentation
 
 * **v1.2.7** (2023-03-14)
 
