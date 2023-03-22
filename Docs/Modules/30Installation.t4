@@ -16,3 +16,5 @@ mf.List(ListBullets.Number, items: new string[] {
 	$"On {mf.Link("Nexus Mods", urlThisModNexus)} click 'Mod manager download', or on {mf.Link("Thunderstore", urlThisModThunderstore)} click 'Install with Mod Manager'."
 })
 #>
+
+To install <#= thisModName #> on a dedicated server, copy all of the contents of the <#= mf.Code("plugins\\") #> directory found inside the .zip file download to the  <#= mf.Code("Valheim\\BepInEx\\plugins\\") #> directory on your server. 

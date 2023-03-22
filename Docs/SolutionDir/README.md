@@ -17,6 +17,8 @@ I very strongly recommend using a mod manager such as [Vortex](https://www.nexus
 3. On [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) click 'Mod manager download', or on [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) click 'Install with Mod Manager'.
 
 
+To install XPortal on a dedicated server, copy all of the contents of the `plugins\` directory found inside the .zip file download to the  `Valheim\BepInEx\plugins\` directory on your server. 
+
 
 # Bugs, Feature Requests and Translations
 
