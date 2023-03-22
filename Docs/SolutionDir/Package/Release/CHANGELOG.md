@@ -1,4 +1,4 @@
-#### v1.2.8 (2023-03-19)
+#### v1.2.8 (2023-03-22)
 
 * Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled
 
