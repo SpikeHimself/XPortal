@@ -1,6 +1,12 @@
 ### Changelog
 
-* Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled. This setting is enforced (but not overwritten) by the host/server.
+* Add config option `DoublePortalCosts` which doubles the costs of a portal when enabled
+
+* Fix Ping button not working after a recent Valheim update
+
+* Add server installation instructions to documentation
+
+* Add Configuration section to documentation
 
 ### Debug
 

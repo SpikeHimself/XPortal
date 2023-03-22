@@ -53,6 +53,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GitHub.Release.tt</DependentUpon>
     </None>
+    <None Include="Modules\25Configuration.t4" />
     <None Include="Modules\51Changelog-current.t4" />
     <None Include="Modules\52Changelogs-previous.t4" />
     <None Include="SolutionDir\.github\ISSUE_TEMPLATE\bug_report.md">

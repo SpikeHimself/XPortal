@@ -59,6 +59,27 @@ XPortal is known to be incompatible with:
 * [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) by sweetgiorni
 
 
+# Configuration
+
+XPortal's config file, which can be found at `Valheim\BepInEx\config\yay.spikehimself.xportal.cfg`, contains the following settings:
+
+`NexusID`
+
+This is XPortal's ID on Nexus Mods and is used by [Nexus Update Check](https://valheim.thunderstore.io/package/nexusreupload/aedenthorn_Nexus_Update_Check/).
+
+`PingMapDisabled`
+
+Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.
+
+`DisplayPortalColour`
+
+Show a ">>" tag in the list of portals that has the same colour as the light that the portal emits (integration with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/)).
+
+`DoublePortalCosts`
+
+Double the costs of portals. This setting is enforced (but not overwritten) by the server.
+
+
 # Installation instructions
 
 XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
@@ -71,12 +92,14 @@ I very strongly recommend using a mod manager such as [Vortex](https://www.nexus
 3. On [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) click 'Mod manager download', or on [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) click 'Install with Mod Manager'.
 
 
+To install XPortal on a dedicated server, copy all of the contents of the `plugins\` directory found inside the .zip file download to the  `Valheim\BepInEx\plugins\` directory on your server. 
+
 
 # Bugs, Feature Requests and Translations
 
 First of all, before you report a bug, please make sure that the problem you are experiencing is actually caused by XPortal. If you are running other mods, disable those, and see if the problem goes away. Or the other way around: disable XPortal, and see if that makes the problem go away. If you discover that XPortal is incompatible with another mod, please do report that, because I might be able to create work-arounds for that. If you are not sure, or you are struggling with these steps, then just report the problem, and we'll go from there.
 
-It is important to me that I can make XPortal as bug free as possible, but **please bear in mind that without your `LogOutput.log`, I will not be able to debug your issue at all**. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
+It is important to me that I can make XPortal as bug-free as possible, but **please bear in mind that without your `LogOutput.log`, I will not be able to debug your issue at all**. Just showing me a screenshot of an error is not enough for me to discover the cause of that error.
 
 To report a bug, please navigate to the [Issues page](https://github.com/SpikeHimself/XPortal/issues), click [New issue](https://github.com/SpikeHimself/XPortal/issues/new/choose), choose `Bug report`, and fill out the template.
 

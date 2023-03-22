@@ -8,7 +8,7 @@
         /// <param name="reason">The reason for the Resync Request</param>
         public static void SyncRequest(string reason)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendSyncRequestToServer] Sending sync request to server, because: {reason}");
+            Jotunn.Logger.LogDebug($"[{nameof(SyncRequest)}] Sending sync request to server, because: {reason}");
             ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_SYNCREQUEST, reason);
         }
 
@@ -18,7 +18,7 @@
         /// <param name="portal">The KnownPortal that should be added or udpated</param>
         public static void AddOrUpdateRequest(KnownPortal portal)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendAddOrUpdateRequestToServer] {portal.Id}");
+            Jotunn.Logger.LogDebug($"[{nameof(AddOrUpdateRequest)}] {portal.Id}");
 
             var pkg = portal.Pack();
             ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_ADDORUPDATEREQUEST, pkg);
@@ -30,7 +30,7 @@
         /// <param name="id">The ZDOID of the portal that should be removed</param>
         public static void RemoveRequest(ZDOID id)
         {
-            Jotunn.Logger.LogDebug($"[RPC.SendRemoveRequestToServer] {id}");
+            Jotunn.Logger.LogDebug($"[{nameof(RemoveRequest)}] {id}");
             ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_REMOVEREQUEST, id);
         }
 
@@ -39,7 +39,7 @@
         /// </summary>
         public static void ConfigRequest()
         {
-            Jotunn.Logger.LogDebug("[RPC.SendConfigRequestToServer]");
+            Jotunn.Logger.LogDebug($"[{nameof(ConfigRequest)}]");
             ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_CONFIGREQUEST);
         }
 
