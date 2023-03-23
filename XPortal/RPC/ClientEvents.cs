@@ -2,6 +2,8 @@
 {
     internal static class ClientEvents
     {
+        private const string DBG_ISSERVER = "because I am the server";
+
         /// <summary>
         /// The server sent us all of the portals it knows
         /// </summary>
@@ -12,6 +14,7 @@
         {
             if (Environment.IsServer)
             {
+                Log.Debug($"Ignoring resync package {DBG_ISSERVER}");
                 return;
             }
 
@@ -28,6 +31,7 @@
         {
             if (Environment.IsServer)
             {
+                Log.Debug($"Ignoring portal update {DBG_ISSERVER}");
                 return;
             }
 

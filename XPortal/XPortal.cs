@@ -358,7 +358,7 @@ namespace XPortal
             Log.Debug($"Pinging portal: {portal}");
 
             // Get selected portal name and position
-            string name = portal.Name;
+            string name = portal.GetFriendlyName();
             Vector3 location = portal.Location;
 
             // Send ping to all players
