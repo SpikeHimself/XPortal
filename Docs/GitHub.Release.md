@@ -1,6 +1,6 @@
 ### Changelog
 
-* No changes yet
+* Fix Ping button not working (attempt #2)
 
 ### Debug
 
