@@ -101,21 +101,21 @@ namespace XPortal
             var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
             if (!prefab)
             {
-                Jotunn.Logger.LogDebug($"Could not find prefab `{zdo.m_prefab}`");
+                Log.Debug($"Could not find prefab `{zdo.m_prefab}`");
                 return DefaultColour;
             }
 
             var pointLight = prefab.transform.Find("_target_found_red/Point light");
             if (!pointLight)
             {
-                Jotunn.Logger.LogDebug($"Portal prefab `{prefab.name}` does not have a Point light");
+                Log.Debug($"Portal prefab `{prefab.name}` does not have a Point light");
                 return DefaultColour;
             }
 
             var light = pointLight.GetComponent<Light>();
             if (!light)
             {
-                Jotunn.Logger.LogDebug($"Portal prefab `{prefab.name}` does not have a Light component");
+                Log.Debug($"Portal prefab `{prefab.name}` does not have a Light component");
                 return DefaultColour;
             }
 

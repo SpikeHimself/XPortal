@@ -79,12 +79,12 @@ namespace XPortal
         {
             if (!ContainsId(portal.Id))
             {
-                //Jotunn.Logger.LogDebug($"[KnownPortalsManager.Update] Adding {portal}");
+                //Log.Debug($"Adding {portal}");
                 knownPortals.Add(portal.Id, portal);
             }
             else
             {
-                //Jotunn.Logger.LogDebug($"[KnownPortalsManager.Update] Updating {portal}");
+                //Log.Debug($"Updating {portal}");
                 knownPortals[portal.Id] = portal;
             }
 
@@ -126,7 +126,7 @@ namespace XPortal
         {
             var count = pkg.ReadInt();
 
-            Jotunn.Logger.LogDebug($"Received {count} portals from server");
+            Log.Debug($"Received {count} portals from server");
 
             // Unpack all portals 
             var portalsInPackage = new List<KnownPortal>();
@@ -147,7 +147,7 @@ namespace XPortal
         private void UpdateFromList(List<KnownPortal> updatedPortals)
         {
             // First, update the portals we already know, and add new ones
-            Jotunn.Logger.LogDebug($"[KnownPortalsManager.UpdateFromList] Updating {updatedPortals.Count} portals");
+            Log.Debug($"Updating {updatedPortals.Count} portals");
             foreach (var portal in updatedPortals)
             {
                 AddOrUpdate(portal);
@@ -156,7 +156,7 @@ namespace XPortal
             // Second, remove Known Portals that didn't appear in the sync package
             var knownPortals = GetList();
             var deletedPortals = knownPortals.Where(p => !updatedPortals.Contains(p));
-            Jotunn.Logger.LogDebug($"[KnownPortalsManager.UpdateFromList] Removing {deletedPortals.Count()} portals");
+            Log.Debug($"Removing {deletedPortals.Count()} portals");
             foreach (var portal in deletedPortals)
             {
                 Remove(portal);
@@ -164,14 +164,14 @@ namespace XPortal
 
             // Third, check if any portals are targeting portals that no longer exist, and ask the server to fix those
             var targetingInvalidPortals = GetList().Where(p => p.Target != ZDOID.None && !ContainsId(p.Target));
-            Jotunn.Logger.LogDebug($"[KnownPortalsManager.UpdateFromList] Retargeting {targetingInvalidPortals.Count()} portals");
+            Log.Debug($"Retargeting {targetingInvalidPortals.Count()} portals");
             foreach (var portal in targetingInvalidPortals)
             {
                 portal.Target = ZDOID.None;
                 SendToServer.AddOrUpdateRequest(portal);
             }
 
-            Jotunn.Logger.LogInfo($"Known portals updated. Current total: {Count}");
+            Log.Info($"Known portals updated. Current total: {Count}");
         }
 
         public void Reset()

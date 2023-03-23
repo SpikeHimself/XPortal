@@ -15,7 +15,7 @@ namespace XPortal.Patches
                 var portalZDO = ___m_nview.GetZDO();
                 if (portalZDO == null)
                 {
-                    Jotunn.Logger.LogError("A portal was placed but the ZDO is not available");
+                    Log.Error("A portal was placed but the ZDO is not available");
                     return;
                 }
 
@@ -47,7 +47,7 @@ namespace XPortal.Patches
                 return;
             }
 
-            Jotunn.Logger.LogDebug($"Piece destroyed: {piece.m_name}");
+            Log.Debug($"Piece destroyed: {piece.m_name}");
 
             if (piece.m_name.Contains("$piece_portal") && piece.CanBeRemoved())
             {

@@ -90,7 +90,7 @@ namespace XPortal
 
             if (Environment.IsServer)
             {
-                Jotunn.Logger.LogDebug("The config was changed, propagating to clients..");
+                Log.Debug("The config was changed, propagating to clients..");
                 SendToClient.Config(PackLocalConfig());
             }
 
@@ -117,8 +117,8 @@ namespace XPortal
         {
             Server.PingMapDisabled = pkg.ReadBool();
             Server.DoublePortalCosts = pkg.ReadBool();
-            Jotunn.Logger.LogDebug($"[{nameof(ReceiveServerConfig)}] PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
-            Jotunn.Logger.LogDebug($"[{nameof(ReceiveServerConfig)}] DoublePortalCosts {{ Local: {Local.DoublePortalCosts}, Server: {Server.DoublePortalCosts} }}");
+            Log.Debug($"PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
+            Log.Debug($"DoublePortalCosts {{ Local: {Local.DoublePortalCosts}, Server: {Server.DoublePortalCosts} }}");
 
             OnServerConfigChanged?.Invoke();
         }

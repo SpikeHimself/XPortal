@@ -12,7 +12,7 @@ namespace XPortal.Patches
         {
             if (Environment.ShuttingDown)
             {
-                Jotunn.Logger.LogDebug("Shutting down, ignoring hover");
+                Log.Debug("Shutting down, ignoring hover");
 
                 // Don't run the original method
                 return false;
