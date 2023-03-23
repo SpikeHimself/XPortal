@@ -65,9 +65,9 @@ namespace XPortal
         private ZDOID selectedTargetId;
 
         #region Input Button Configs
-        private ButtonConfig uiOkayButton;
-        private ButtonConfig uiCancelButton;
-        private ButtonConfig uiPingMapButton;
+        //private ButtonConfig uiOkayButton;
+        //private ButtonConfig uiCancelButton;
+        //private ButtonConfig uiPingMapButton;
         private ButtonConfig uiToggleDropdownButton;
         private ButtonConfig uiDropdownScrollUpButton;
         private ButtonConfig uiDropdownScrollDownButton;
@@ -77,7 +77,7 @@ namespace XPortal
         private int blockInput = cfgBlockInputFrameCount;
 
         private bool dropdownExpanded = false;
-        private bool inputSubmitRequested = false;
+        //private bool inputSubmitRequested = false;
 
         private XPortalUI()
         {
@@ -87,9 +87,9 @@ namespace XPortal
         #region Input
         internal void AddInputs()
         {
-            uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
-            uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
-            uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
+            //uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
+            //uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
+            //uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
             uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
             uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
             uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
@@ -125,20 +125,20 @@ namespace XPortal
                 return;
             }
 
-            if (ZInput.GetButtonUp(uiCancelButton.Name))
-            {
-                Hide();
-                return;
-            }
+            //if (ZInput.GetButtonUp(uiCancelButton.Name))
+            //{
+            //    Hide();
+            //    return;
+            //}
 
-            if (ZInput.GetButtonUp(uiPingMapButton.Name))
-            {
-                if (pingMapButtonObject.activeSelf)
-                {
-                    OnPingMapButtonClicked();
-                }
-                return;
-            }
+            //if (ZInput.GetButtonUp(uiPingMapButton.Name))
+            //{
+            //    if (pingMapButtonObject.activeSelf)
+            //    {
+            //        OnPingMapButtonClicked();
+            //    }
+            //    return;
+            //}
 
             if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
             {
@@ -158,19 +158,19 @@ namespace XPortal
                 return;
             }
 
-            if (inputSubmitRequested)
-            {
-                Submit();
-                inputSubmitRequested = false;
-                return;
-            }
+            //if (inputSubmitRequested)
+            //{
+            //    Submit();
+            //    inputSubmitRequested = false;
+            //    return;
+            //}
 
-            if (ZInput.GetButtonDown(uiOkayButton.Name))
-            {
-                inputSubmitRequested = true;
-                BlockInputForAWhile();
-                return;
-            }
+            //if (ZInput.GetButtonDown(uiOkayButton.Name))
+            //{
+            //    inputSubmitRequested = true;
+            //    BlockInputForAWhile();
+            //    return;
+            //}
         }
 
         private void BlockInputForAWhile()
@@ -399,16 +399,22 @@ namespace XPortal
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 
+
+                var mainPanelParent = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)");
+
                 // Main "parent" panel
                 mainPanel = GUIManager.Instance.CreateWoodpanel(
-                        parent: GUIManager.CustomGUIFront.transform,
+                        parent: mainPanelParent.transform,
                         anchorMin: new Vector2(0.5f, 0.5f),
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
                         width: mainPanelWidthMin,
                         height: 260f,
                         draggable: false);
+                mainPanel.name = Mod.Info.Name + "_MainPanel";
 
+                var canvasGroup = mainPanel.AddComponent<CanvasGroup>();
+                var groupHandler = mainPanel.AddComponent<UIGroupHandler>();
 
                 // Header text
                 var headerTextObject = GUIManager.Instance.CreateText(
@@ -425,6 +431,7 @@ namespace XPortal
                         width: 250f,
                         height: 50f,
                         addContentSizeFitter: false);
+                headerTextObject.name = Mod.Info.Name + "_HeaderText";
                 headerTextObject.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
                 headerTextObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);    // pivot top middle
                 headerTextObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(20f, -15f);
@@ -446,6 +453,7 @@ namespace XPortal
                         width: labelWidth,
                         height: rowHeight,
                         addContentSizeFitter: false);
+                portalNameLabelObject.name = Mod.Info.Name + "_PortalNameHeader";
                 portalNameLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 Text portalNameLabelText = portalNameLabelObject.GetComponent<Text>();
@@ -464,6 +472,7 @@ namespace XPortal
                         fontSize: 18,
                         width: inputLongWidth,
                         height: rowHeight);
+                portalNameInputObject.name = Mod.Info.Name + "_PortalNameInput";
                 portalNameInputObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
 
@@ -483,6 +492,7 @@ namespace XPortal
                     width: labelWidth,
                     height: rowHeight,
                     addContentSizeFitter: false);
+                targetPortalLabelObject.name = Mod.Info.Name + "_PortalDestinationHeader";
                 targetPortalLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 Text targetPortalLabelText = targetPortalLabelObject.GetComponent<Text>();
@@ -499,6 +509,7 @@ namespace XPortal
                         fontSize: 18,
                         width: inputShortWidth,
                         height: rowHeight);
+                targetPortalDropdownObject.name = Mod.Info.Name + "_PortalDestinationDropdown";
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
                 targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 ApplyDropdownStyle(targetPortalDropdown);
@@ -513,24 +524,42 @@ namespace XPortal
                         position: new Vector2(0 - padding - buttonWidth, secondRowTop),
                         width: buttonWidth,
                         height: rowHeight);
+                pingMapButtonObject.name = Mod.Info.Name + "_PingMapButton";
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
 
                 // Okay button
                 var okayButtonObject = GUIManager.Instance.CreateButton(
-                        text: Localization.instance.Localize("[$KEY_Use] $menu_ok"),
+                        text: Localization.instance.Localize("$menu_ok"),
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(1f, 0f),    // anchor bottom right
                         anchorMax: new Vector2(1f, 0f),
                         position: new Vector2(0 - padding, padding),
                         width: submitButtonWidth,
                         height: submitButtonHeight);
+                okayButtonObject.name = Mod.Info.Name + "_OkayButton";
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
                 var okayButtonGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
                 okayButtonGamepadHint.transform.SetParent(okayButtonObject.transform, worldPositionStays: false);
-                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().text = "$KEY_Use";
+                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().text = "$KEY_JoyButtonA";
+                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().fontSize = 20;
+                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.TopGeoAligned;
+
+                var okayButtonUIInputHint = okayButtonObject.AddComponent<UIInputHint>();
+                okayButtonUIInputHint.m_gamepadHint = okayButtonGamepadHint;
+
+
+                var okayButtonGamepadHintRt = okayButtonGamepadHint.GetComponent<RectTransform>();
+                okayButtonGamepadHintRt.pivot = new Vector2(0.5f, 0.5f); // pivot middle centre
+                okayButtonGamepadHintRt.anchorMin = new Vector2(1f, 1f); // anchor top right
+                okayButtonGamepadHintRt.anchorMax = new Vector2(1f, 1f);
+                okayButtonGamepadHintRt.anchoredPosition = Vector2.zero;
                 //UnityEngine.Object.Instantiate(okayButtonGamepadHint, okayButtonObject.transform);
+
+                var okayButtonUIGamePad = okayButtonObject.AddComponent<UIGamePad>();
+                okayButtonUIGamePad.m_hint = okayButtonGamepadHint;
+                okayButtonUIGamePad.m_zinputKey = "JoyButtonA";
 
 
                 // Cancel button
@@ -542,6 +571,7 @@ namespace XPortal
                         position: new Vector2(0 - padding - submitButtonWidth - padding, padding),
                         width: submitButtonWidth,
                         height: submitButtonHeight);
+                cancelButtonObject.name = Mod.Info.Name + "_CancelButton";
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
 
