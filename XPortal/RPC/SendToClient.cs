@@ -10,6 +10,12 @@ namespace XPortal.RPC
         /// <param name="portal">The KnownPortal to send to the clients</param>
         public static void SyncPortal(KnownPortal portal)
         {
+            if (ZNet.instance.GetConnectedPeers().Count == 0)
+            {
+                Log.Debug("Not sending portal update: nobody is connected");
+                return;
+            }
+
             Log.Debug($"Sending {portal} to everybody");
 
             var pkg = portal.Pack();
@@ -23,6 +29,12 @@ namespace XPortal.RPC
         /// <param name="reason">The reason that was given for the Resync Request</param>
         public static void Resync(ZPackage pkg, string reason)
         {
+            if (ZNet.instance.GetConnectedPeers().Count == 0)
+            {
+                Log.Debug("Not sending resync package: nobody is connected");
+                return;
+            }
+
             Log.Debug($"Sending all portals to everybody, because: {reason}");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_RESYNC, pkg, reason);
         }
