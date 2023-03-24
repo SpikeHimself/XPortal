@@ -18,6 +18,19 @@ param(
     [System.String]$DeployPath
 )
 
+########
+# You need to run the following command as admin, only once.
+# It installs a module that fixes a bug with Compress-Archive using backward slashes as path separators, which should be forward slashes.
+# https://github.com/PowerShell/Microsoft.PowerShell.Archive/issues/48#issuecomment-491968156
+#
+#   Install-Module Microsoft.PowerShell.Archive -MinimumVersion 1.2.3.0 -Repository PSGallery -Force
+########
+
+if ([version]$(Get-Module -ListAvailable Microsoft.PowerShell.Archive | Sort-Object Version -Descending  | Select-Object Version -First 1  | Select-Object @{n='ModuleVersion'; e={$_.Version -as [string]}} | Select-Object ModuleVersion -ExpandProperty ModuleVersion) -le [version]"1.2.3.0")
+{
+    Write-Error -ErrorAction Stop -Message "Microsoft.PowerShell.Archive is not the correct version. Read the comments in publish.ps1 to fix this."
+}
+
 if ($DeployPath.Equals("") -Or $DeployPath.Equals("Build")){
     Write-Host "Fix DeployPath"
     $DeployPath = "$ValheimPath\BepInEx\plugins"
