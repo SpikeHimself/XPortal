@@ -26,7 +26,7 @@ param(
 #   Install-Module Microsoft.PowerShell.Archive -MinimumVersion 1.2.3.0 -Repository PSGallery -Force
 ########
 
-if ([version]$(Get-Module -ListAvailable Microsoft.PowerShell.Archive | Sort-Object Version -Descending  | Select-Object Version -First 1  | Select-Object @{n='ModuleVersion'; e={$_.Version -as [string]}} | Select-Object ModuleVersion -ExpandProperty ModuleVersion) -le [version]"1.2.3.0")
+if ([version]$(Get-Module -ListAvailable Microsoft.PowerShell.Archive | Sort-Object Version -Descending  | Select-Object Version -First 1  | Select-Object @{n='ModuleVersion'; e={$_.Version -as [string]}} | Select-Object ModuleVersion -ExpandProperty ModuleVersion) -lt [version]"1.2.3.0")
 {
     Write-Error -ErrorAction Stop -Message "Microsoft.PowerShell.Archive is not the correct version. Read the comments in publish.ps1 to fix this."
 }
