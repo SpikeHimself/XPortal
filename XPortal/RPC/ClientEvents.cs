@@ -2,6 +2,8 @@
 {
     internal static class ClientEvents
     {
+        private const string DBG_ISSERVER = "because I am the server";
+
         /// <summary>
         /// The server sent us all of the portals it knows
         /// </summary>
@@ -12,10 +14,11 @@
         {
             if (Environment.IsServer)
             {
+                Log.Debug($"Ignoring resync package {DBG_ISSERVER}");
                 return;
             }
 
-            Jotunn.Logger.LogInfo($"Resyncing because: {reason}");
+            Log.Info($"Received resync package from server, because: {reason}");
             KnownPortalsManager.Instance.UpdateFromResyncPackage(pkg);
         }
 
@@ -28,11 +31,12 @@
         {
             if (Environment.IsServer)
             {
+                Log.Debug($"Ignoring portal update {DBG_ISSERVER}");
                 return;
             }
 
             var incomingPortal = new KnownPortal(pkg);
-            Jotunn.Logger.LogDebug($"[RPC_SyncPortal] Received update to portal `{incomingPortal.Name}`");
+            Log.Debug($"Received update to portal `{incomingPortal.GetFriendlyName()}` from server");
             KnownPortalsManager.Instance.AddOrUpdate(incomingPortal);
         }
 
@@ -43,7 +47,7 @@
         /// <param name="pkg">A ZPackage containing all config settings</param>
         internal static void RPC_Config(long sender, ZPackage pkg)
         {
-            Jotunn.Logger.LogInfo($"Received XPortal Config from server");
+            Log.Info("Received XPortal Config from server");
             XPortalConfig.Instance.ReceiveServerConfig(pkg);
         }
     }

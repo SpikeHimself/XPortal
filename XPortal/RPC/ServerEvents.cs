@@ -2,6 +2,8 @@
 {
     internal static class ServerEvents
     {
+        private const string ERR_NOTSERVER = "but I am not the server!";
+
         /// <summary>
         /// A client wishes to receive the portal list
         /// </summary>
@@ -9,7 +11,7 @@
         /// <param name="reason">The reason for the Resync Request</param>
         internal static void RPC_SyncRequest(long sender, string reason)
         {
-            Jotunn.Logger.LogInfo($"Received sync request from `{sender}` because: {reason}");
+            Log.Info($"Received sync request from `{sender}` because: {reason}");
             XPortal.ProcessSyncRequest(reason);
         }
 
@@ -22,19 +24,19 @@
         {
             if (!Environment.IsServer)
             {
-                Jotunn.Logger.LogDebug($"[{nameof(RPC_AddOrUpdateRequest)}] `{sender}` wants a portal to be added or updated, but I am not the server.");
+                Log.Error($"`{sender}` wants a portal to be added or updated, {ERR_NOTSERVER}");
                 return;
             }
 
             var portal = new KnownPortal(pkg);
-            Jotunn.Logger.LogDebug($"[{nameof(RPC_AddOrUpdateRequest)}] {sender} wants `{portal.Id}` to be added or updated");
+            Log.Debug($"{sender} wants `{portal.Id}` to be added or updated");
 
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
             var portalZDO = ZDOMan.instance.GetZDO(updatedPortal.Id);
             if (portalZDO != null)
             {
-                Jotunn.Logger.LogInfo($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
+                Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
                 portalZDO.Set("tag", updatedPortal.Name);
                 portalZDO.Set("target", updatedPortal.Target);
                 ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
@@ -52,26 +54,26 @@
         {
             if (!Environment.IsServer)
             {
-                Jotunn.Logger.LogDebug($"[{nameof(RPC_RemoveRequest)}] {sender} wants `{portalId}` to be removed, but I am not the server.");
+                Log.Error($"{sender} wants `{portalId}` to be removed, {ERR_NOTSERVER}");
                 return;
             }
 
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
-                Jotunn.Logger.LogDebug($"[{nameof(RPC_RemoveRequest)}] {sender} wants `{portalId}` to be removed, but it doesn't exist");
+                Log.Debug($"{sender} wants `{portalId}` to be removed, but it doesn't exist");
                 return;
             }
 
-            Jotunn.Logger.LogDebug($"[{nameof(RPC_RemoveRequest)} ] {sender} wants `{portalId}` to be removed");
+            Log.Debug($"{sender} wants `{portalId}` to be removed");
 
             if (KnownPortalsManager.Instance.Remove(portalId))
             {
-                Jotunn.Logger.LogDebug($"[{nameof(RPC_RemoveRequest)}] `{portalId}` removed, checking other portals' targets..");
+                Log.Debug($"`{portalId}` removed, checking other portals' targets..");
 
                 var portalsWithInvalidTarget = KnownPortalsManager.Instance.GetPortalsWithTarget(portalId);
                 foreach (var portalWithInvalidTarget in portalsWithInvalidTarget)
                 {
-                    Jotunn.Logger.LogDebug($"[{nameof(RPC_RemoveRequest)}] Removing target from `{portalWithInvalidTarget.Name}`");
+                    Log.Debug($"Removing target from `{portalWithInvalidTarget.Name}`");
 
                     portalWithInvalidTarget.Target = ZDOID.None;
                     SendToServer.AddOrUpdateRequest(portalWithInvalidTarget);
@@ -89,11 +91,11 @@
         {
             if (!Environment.IsServer)
             {
-                Jotunn.Logger.LogDebug($"[{nameof(RPC_ConfigRequest)}] {sender} wants to receive the config, but I am not the server.");
+                Log.Error($"{sender} wants to receive the config, {ERR_NOTSERVER}");
                 return;
             }
 
-            Jotunn.Logger.LogDebug($"[{nameof(RPC_ConfigRequest)}] {sender} wants to receive the config");
+            Log.Debug($"{sender} wants to receive the config");
             var pkg = XPortalConfig.Instance.PackLocalConfig();
             SendToClient.Config(sender, pkg);
         }

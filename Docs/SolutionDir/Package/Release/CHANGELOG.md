@@ -1,9 +1,13 @@
-#### v1.2.9 (2023-03-23)
+#### v1.2.10 (2023-03-23)
 
-* Fix Ping button not working (attempt #2)
+* No changes yet
 
 <details>
 <summary>Click to view previous versions</summary>
+
+* **v1.2.9** (2023-03-23)
+
+	* Fix Ping button not working (attempt #2)
 
 * **v1.2.8** (2023-03-22)
 

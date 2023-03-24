@@ -27,7 +27,7 @@ namespace XPortal
         private void Awake()
         {
             // Hello, world!
-            Jotunn.Logger.LogDebug("I HAVE ARRIVED!");
+            Log.Debug("I HAVE ARRIVED!");
 
             // Load config
             XPortalConfig.Instance.LoadLocalConfig(Config);
@@ -132,11 +132,11 @@ namespace XPortal
                 if (XPortalConfig.Instance.Server.DoublePortalCosts)
                 {
                     newAmount = 2 * originalAmount;
-                    Jotunn.Logger.LogDebug($"Doubling amount for requirement {req.m_resItem.name} for item {portalPiece.name} from {originalAmount} to {newAmount}");
+                    Log.Debug($"Doubling amount for requirement {req.m_resItem.name} for item {portalPiece.name} from {originalAmount} to {newAmount}");
                 }
                 else if (portalRecipeAltered)
                 {
-                    Jotunn.Logger.LogDebug($"Resetting amount for requirement {req.m_resItem.name} for item {portalPiece.name} to {newAmount}");
+                    Log.Debug($"Resetting amount for requirement {req.m_resItem.name} for item {portalPiece.name} to {newAmount}");
                 }
                 req.m_amount = newAmount;
             }
@@ -155,7 +155,7 @@ namespace XPortal
                 return;
             }
 
-            Jotunn.Logger.LogDebug($"Copying original requirements for portal recipe");
+            Log.Debug($"Copying original requirements for portal recipe");
             portalRecipeOriginal = new Dictionary<string, int>();
             foreach (var req in requirements)
             {
@@ -197,7 +197,7 @@ namespace XPortal
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
                 // This appears to be a new portal
-                Jotunn.Logger.LogDebug($"[OnPrePortalHover] Hovering over new portal `{portalId}`");
+                Log.Debug($"Hovering over new portal `{portalId}`");
 
                 // Sometimes XPortal does not detect placement of new portals.
                 // Assuming that that is the case here, let's just create a new dummy portal for now.
@@ -246,7 +246,7 @@ namespace XPortal
             }
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
-            Jotunn.Logger.LogDebug($"[OnPortalRequestText] Interacting with: {portal}");
+            Log.Debug($"Interacting with: {portal}");
             XPortalUI.Instance.ConfigurePortal(portal);
         }
 
@@ -257,7 +257,7 @@ namespace XPortal
         /// <param name="location">The location in the world where the portal was placed</param>
         internal static void OnPortalPlaced(ZDOID portalId, Vector3 location)
         {
-            Jotunn.Logger.LogDebug($"[OnPortalPlaced] Portal `{portalId}` was placed");
+            Log.Debug($"Portal `{portalId}` was placed");
 
             var portal = new KnownPortal(portalId, location);
             SendToServer.AddOrUpdateRequest(portal);
@@ -270,7 +270,7 @@ namespace XPortal
         internal static void OnPortalDestroyed(ZDOID portalId)
         {
             var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
-            Jotunn.Logger.LogDebug($"[OnPortalDestroyed] Portal `{portalName}` is being destroyed");
+            Log.Debug($"Portal `{portalName}` is being destroyed");
             SendToServer.RemoveRequest(portalId);
         }
         #endregion
@@ -284,7 +284,7 @@ namespace XPortal
         internal static List<ZDO> ProcessSyncRequest(string reason)
         {
             var allPortalZDOs = GetAllPortalZDOs();
-            Jotunn.Logger.LogDebug($"[ProcessSyncRequest] Fetched {allPortalZDOs.Count} portals");
+            Log.Debug($"Fetched {allPortalZDOs.Count} portals");
 
             ForceLocalPortalUpdate(allPortalZDOs);
 
@@ -315,8 +315,9 @@ namespace XPortal
 
             if (!Environment.IsServer)
             {
-                Jotunn.Logger.LogDebug("[ForceLocalPortalUpdate] Send Sync Request");
-                SendToServer.SyncRequest("Local portal list was updated");
+                var syncRequestReason = "Local portal list was updated";
+                Log.Debug($"Send Sync Request, because: {syncRequestReason}");
+                SendToServer.SyncRequest(syncRequestReason);
             }
         }
         #endregion
@@ -336,7 +337,7 @@ namespace XPortal
                 portal.Target = newTarget;
 
                 // Ask the server to update the portal
-                Jotunn.Logger.LogDebug($"[OnPortalInfoSubmitted] Updating portal `{portal.Name}`");
+                Log.Debug($"Updating portal `{portal.Name}`");
                 SendToServer.AddOrUpdateRequest(portal);
             }
         }
@@ -354,10 +355,10 @@ namespace XPortal
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(targetId);
 
-            Jotunn.Logger.LogDebug($"[OnPingMapButtonClicked] {portal}");
+            Log.Debug($"Pinging portal: {portal}");
 
             // Get selected portal name and position
-            string name = portal.Name;
+            string name = portal.GetFriendlyName();
             Vector3 location = portal.Location;
 
             // Send ping to all players
