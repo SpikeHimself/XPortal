@@ -527,6 +527,8 @@ namespace XPortal
                 pingMapButtonObject.name = Mod.Info.Name + "_PingMapButton";
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
+                AddGamepadHint(pingMapButtonObject, "JoyButtonY");
+
 
                 // Okay button
                 var okayButtonObject = GUIManager.Instance.CreateButton(
@@ -540,26 +542,7 @@ namespace XPortal
                 okayButtonObject.name = Mod.Info.Name + "_OkayButton";
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                var okayButtonGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
-                okayButtonGamepadHint.transform.SetParent(okayButtonObject.transform, worldPositionStays: false);
-                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().text = "$KEY_JoyButtonA";
-                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().fontSize = 20;
-                okayButtonGamepadHint.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.TopGeoAligned;
-
-                var okayButtonUIInputHint = okayButtonObject.AddComponent<UIInputHint>();
-                okayButtonUIInputHint.m_gamepadHint = okayButtonGamepadHint;
-
-
-                var okayButtonGamepadHintRt = okayButtonGamepadHint.GetComponent<RectTransform>();
-                okayButtonGamepadHintRt.pivot = new Vector2(0.5f, 0.5f); // pivot middle centre
-                okayButtonGamepadHintRt.anchorMin = new Vector2(1f, 1f); // anchor top right
-                okayButtonGamepadHintRt.anchorMax = new Vector2(1f, 1f);
-                okayButtonGamepadHintRt.anchoredPosition = Vector2.zero;
-                //UnityEngine.Object.Instantiate(okayButtonGamepadHint, okayButtonObject.transform);
-
-                var okayButtonUIGamePad = okayButtonObject.AddComponent<UIGamePad>();
-                okayButtonUIGamePad.m_hint = okayButtonGamepadHint;
-                okayButtonUIGamePad.m_zinputKey = "JoyButtonA";
+                AddGamepadHint(okayButtonObject, "JoyButtonA");
 
 
                 // Cancel button
@@ -573,6 +556,8 @@ namespace XPortal
                         height: submitButtonHeight);
                 cancelButtonObject.name = Mod.Info.Name + "_CancelButton";
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
+
+                AddGamepadHint(cancelButtonObject, "JoyButtonB");
 
 
                 // Add listeners to button click events
@@ -622,6 +607,39 @@ namespace XPortal
             itemLabelRect.offsetMax = new Vector2(itemLabelRect.offsetMax.x, 0f);
         }
 
+        private void AddGamepadHint(GameObject goButton, string buttonName)
+        {
+            var goGamepadHint = CreateGamepadHint(buttonName);
+            goGamepadHint.transform.SetParent(goButton.transform, worldPositionStays: false);
+
+            var uiGamepad = goButton.AddComponent<UIGamePad>();
+            uiGamepad.m_hint = goGamepadHint;
+            uiGamepad.m_zinputKey = buttonName;
+
+            var uiInputHint = goButton.AddComponent<UIInputHint>();
+            uiInputHint.m_gamepadHint = goGamepadHint;
+        }
+
+        private GameObject CreateGamepadHint(string buttonName)
+        {
+            var goGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
+
+            var textMesh = goGamepadHint.GetComponent<TextMeshProUGUI>();
+            textMesh.text = $"$KEY_{buttonName}";
+            textMesh.fontSize = 24;
+            textMesh.alignment = TextAlignmentOptions.TopGeoAligned;
+            Localization.instance.textMeshStrings.Add(textMesh, textMesh.text);
+
+            var rt = goGamepadHint.GetComponent<RectTransform>();
+            rt.pivot = new Vector2(0.5f, 0.5f); // pivot middle centre
+            rt.anchorMin = new Vector2(1f, 1f); // anchor top right
+            rt.anchorMax = new Vector2(1f, 1f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.anchoredPosition = new Vector2(-5f, 10f);
+
+            return goGamepadHint;
+        }
 
         public void Dispose()
         {
