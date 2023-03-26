@@ -34,7 +34,7 @@ namespace XPortal
         //////////////////////////////////////////
 
         // So apart from the header and footer, we can define locations and offsets for "rows", "columns", "padding", ..
-        static readonly float padding = 20f;
+        static readonly float padding = 24f;
         static readonly float rowHeight = 32f;
         static readonly float labelWidth = 160f;
         static readonly float buttonWidth = 90f;
