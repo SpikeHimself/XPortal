@@ -93,6 +93,7 @@
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ModInfo.cs" />
+    <Compile Include="Patches\Dropdown.cs" />
     <Compile Include="Patches\Game.cs" />
     <Compile Include="Patches\TeleportWorld.cs" />
     <Compile Include="Patches\TextInput.cs" />
