@@ -211,15 +211,8 @@ namespace XPortal
                 targetPortalDropdown.enabled = false;
                 dropdownExpanded = false;
             }
-
-            if (up)
-            {
-                targetPortalDropdown.value--;
-            }
-            else
-            {
-                targetPortalDropdown.value++;
-            }
+            
+            targetPortalDropdown.value += (up ? -1 : 1);
 
             if (dropdownWasExpanded)
             {
