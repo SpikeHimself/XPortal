@@ -527,7 +527,7 @@ namespace XPortal
                 pingMapButtonObject.name = Mod.Info.Name + "_PingMapButton";
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
-                AddGamepadHint(pingMapButtonObject, "JoyButtonY");
+                AddGamepadHint(pingMapButtonObject, "JoyButtonY", KeyCode.None);
 
 
                 // Okay button
@@ -542,7 +542,7 @@ namespace XPortal
                 okayButtonObject.name = Mod.Info.Name + "_OkayButton";
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                AddGamepadHint(okayButtonObject, "JoyButtonA");
+                AddGamepadHint(okayButtonObject, "JoyButtonA", KeyCode.Return);
 
 
                 // Cancel button
@@ -557,7 +557,7 @@ namespace XPortal
                 cancelButtonObject.name = Mod.Info.Name + "_CancelButton";
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                AddGamepadHint(cancelButtonObject, "JoyButtonB");
+                AddGamepadHint(cancelButtonObject, "JoyButtonB", KeyCode.Escape);
 
 
                 // Add listeners to button click events
@@ -607,16 +607,17 @@ namespace XPortal
             itemLabelRect.offsetMax = new Vector2(itemLabelRect.offsetMax.x, 0f);
         }
 
-        private void AddGamepadHint(GameObject goButton, string buttonName)
+        private void AddGamepadHint(GameObject go, string buttonName, KeyCode keyCode)
         {
             var goGamepadHint = CreateGamepadHint(buttonName);
-            goGamepadHint.transform.SetParent(goButton.transform, worldPositionStays: false);
+            goGamepadHint.transform.SetParent(go.transform, worldPositionStays: false);
 
-            var uiGamepad = goButton.AddComponent<UIGamePad>();
+            var uiGamepad = go.AddComponent<UIGamePad>();
             uiGamepad.m_hint = goGamepadHint;
             uiGamepad.m_zinputKey = buttonName;
+            uiGamepad.m_keyCode = keyCode;
 
-            var uiInputHint = goButton.AddComponent<UIInputHint>();
+            var uiInputHint = go.AddComponent<UIInputHint>();
             uiInputHint.m_gamepadHint = goGamepadHint;
         }
 
@@ -626,8 +627,8 @@ namespace XPortal
 
             var textMesh = goGamepadHint.GetComponent<TextMeshProUGUI>();
             textMesh.text = $"$KEY_{buttonName}";
-            textMesh.fontSize = 24;
-            textMesh.alignment = TextAlignmentOptions.TopGeoAligned;
+            textMesh.fontSize = 22;
+            textMesh.alignment = TextAlignmentOptions.Center;
             Localization.instance.textMeshStrings.Add(textMesh, textMesh.text);
 
             var rt = goGamepadHint.GetComponent<RectTransform>();
@@ -636,7 +637,7 @@ namespace XPortal
             rt.anchorMax = new Vector2(1f, 1f);
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
-            rt.anchoredPosition = new Vector2(-5f, 10f);
+            rt.anchoredPosition = Vector2.zero;
 
             return goGamepadHint;
         }
