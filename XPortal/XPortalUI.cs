@@ -68,7 +68,7 @@ namespace XPortal
         //private ButtonConfig uiOkayButton;
         //private ButtonConfig uiCancelButton;
         //private ButtonConfig uiPingMapButton;
-        private ButtonConfig uiToggleDropdownButton;
+        //private ButtonConfig uiToggleDropdownButton;
         private ButtonConfig uiDropdownScrollUpButton;
         private ButtonConfig uiDropdownScrollDownButton;
         #endregion
@@ -90,7 +90,7 @@ namespace XPortal
             //uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
             //uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
             //uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
-            uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
+            //uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
             uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
             uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
 
@@ -131,20 +131,11 @@ namespace XPortal
             //    return;
             //}
 
-            //if (ZInput.GetButtonUp(uiPingMapButton.Name))
+            //if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
             //{
-            //    if (pingMapButtonObject.activeSelf)
-            //    {
-            //        OnPingMapButtonClicked();
-            //    }
+            //    ToggleDropdownExpanded();
             //    return;
             //}
-
-            if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
-            {
-                ToggleDropdownExpanded();
-                return;
-            }
 
             if (ZInput.GetButtonUp(uiDropdownScrollDownButton.Name))
             {
@@ -513,6 +504,8 @@ namespace XPortal
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
                 targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 ApplyDropdownStyle(targetPortalDropdown);
+
+                AddGamepadHint(targetPortalDropdownObject, "JoyButtonX", KeyCode.None);
 
 
                 // Ping on Map button
