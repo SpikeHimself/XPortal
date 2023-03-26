@@ -1,9 +1,4 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.UI;
 
 namespace XPortal.Patches
@@ -27,7 +22,7 @@ namespace XPortal.Patches
                 m_DropdownExpanded = !m_DropdownExpanded;
                 return false;
             }
-            
+
             return true;
         }
     }

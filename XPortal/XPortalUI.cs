@@ -211,7 +211,7 @@ namespace XPortal
                 targetPortalDropdown.enabled = false;
                 dropdownExpanded = false;
             }
-            
+
             targetPortalDropdown.value += (up ? -1 : 1);
 
             if (dropdownWasExpanded)
@@ -359,17 +359,17 @@ namespace XPortal
                 return;
             }
 
-            if (!mainPanel || !mainPanel.IsValid())
+            if (!mainPanel)
             {
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 
 
-                var mainPanelParent = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)");
+                var pixielFixGui = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)");
 
                 // Main "parent" panel
                 mainPanel = GUIManager.Instance.CreateWoodpanel(
-                        parent: mainPanelParent.transform,
+                        parent: pixielFixGui.transform,
                         anchorMin: new Vector2(0.5f, 0.5f),
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
@@ -377,9 +377,8 @@ namespace XPortal
                         height: 260f,
                         draggable: false);
                 mainPanel.name = Mod.Info.Name + "_MainPanel";
-
-                var canvasGroup = mainPanel.AddComponent<CanvasGroup>();
-                var groupHandler = mainPanel.AddComponent<UIGroupHandler>();
+                mainPanel.AddComponent<CanvasGroup>();
+                mainPanel.AddComponent<UIGroupHandler>();
 
                 // Header text
                 var headerTextObject = GUIManager.Instance.CreateText(
