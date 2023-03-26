@@ -73,11 +73,8 @@ namespace XPortal
         private ButtonConfig uiDropdownScrollDownButton;
         #endregion
 
-        private const int cfgBlockInputFrameCount = 1;
-        private int blockInput = cfgBlockInputFrameCount;
-
         private bool dropdownExpanded = false;
-        //private bool inputSubmitRequested = false;
+        private int hideDelay = -1;
 
         private XPortalUI()
         {
@@ -119,17 +116,16 @@ namespace XPortal
                 return;
             }
 
-            if (blockInput > 0)
+            if (hideDelay == 0)
             {
-                blockInput--;
+                Hide(delayed: false);
                 return;
             }
 
-            //if (ZInput.GetButtonUp(uiCancelButton.Name))
-            //{
-            //    Hide();
-            //    return;
-            //}
+            if (hideDelay > 0)
+            {
+                hideDelay--;
+            }
 
             //if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
             //{
@@ -148,27 +144,6 @@ namespace XPortal
                 ScrollDropdownItem(up: true);
                 return;
             }
-
-            //if (inputSubmitRequested)
-            //{
-            //    Submit();
-            //    inputSubmitRequested = false;
-            //    return;
-            //}
-
-            //if (ZInput.GetButtonDown(uiOkayButton.Name))
-            //{
-            //    inputSubmitRequested = true;
-            //    BlockInputForAWhile();
-            //    return;
-            //}
-        }
-
-        private void BlockInputForAWhile()
-        {
-            // After anything happens in the UI, just ignore everything else for a few frames
-            // .....because working with Unity's input system is above my pay grade
-            blockInput += cfgBlockInputFrameCount;
         }
         #endregion
 
@@ -180,7 +155,7 @@ namespace XPortal
 
         public void SetActive(bool active)
         {
-            BlockInputForAWhile();
+            //BlockInputForAWhile();
 
             if (!mainPanel || !mainPanel.IsValid())
             {
@@ -202,8 +177,14 @@ namespace XPortal
             SetActive(true);
         }
 
-        public void Hide()
+        public void Hide(bool delayed = true)
         {
+            if (delayed && ZInput.IsGamepadActive())
+            {
+                hideDelay = 2;
+                return;
+            }
+            hideDelay = -1;
             SetActive(false);
             dropdownExpanded = false;
         }
@@ -361,8 +342,8 @@ namespace XPortal
 
         private void OnOkayButtonClicked()
         {
-            Hide();
             XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId);
+            Hide();
         }
 
         private void OnCancelButtonClicked()
@@ -372,8 +353,8 @@ namespace XPortal
 
         private void OnPingMapButtonClicked()
         {
-            Hide();
             XPortal.PingMapButtonClicked(selectedTargetId);
+            Hide();
         }
         #endregion
 
