@@ -18,6 +18,17 @@ namespace XPortal
         public static XPortalUI Instance { get { return lazy.Value; } }
         ////////////////////////////
 
+        internal const string GO_MAINPANEL = Mod.Info.Name + "_MainPanel";
+        internal const string GO_HEADERTEXT = Mod.Info.Name + "_PanelHeader";
+        internal const string GO_NAMELABEL= Mod.Info.Name + "_NameHeader";
+        internal const string GO_NAMEINPUT= Mod.Info.Name + "_NameInput";
+        internal const string GO_DESTINATIONLABEL= Mod.Info.Name + "_DestinationHeader";
+        internal const string GO_DESTINATIONDROPDOWN = Mod.Info.Name + "_DestinationDropdown";
+        internal const string GO_PINGMAPBUTTON= Mod.Info.Name + "_PingMapButton";
+        internal const string GO_OKAYBUTTON= Mod.Info.Name + "_OkayButton";
+        internal const string GO_CANCELBUTTON = Mod.Info.Name + "_CancelButton";
+
+
         #region Pain
         // Creating the UI was incredibly painful. I will never change the layout again. Ever.
         // ...but we can use some variables to tweak widths, heights, offsets, and such
@@ -376,7 +387,7 @@ namespace XPortal
                         width: mainPanelWidthMin,
                         height: 260f,
                         draggable: false);
-                mainPanel.name = Mod.Info.Name + "_MainPanel";
+                mainPanel.name = GO_MAINPANEL;
                 mainPanel.AddComponent<CanvasGroup>();
                 mainPanel.AddComponent<UIGroupHandler>();
 
@@ -395,7 +406,7 @@ namespace XPortal
                         width: 250f,
                         height: 50f,
                         addContentSizeFitter: false);
-                headerTextObject.name = Mod.Info.Name + "_HeaderText";
+                headerTextObject.name = GO_HEADERTEXT;
                 headerTextObject.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
                 headerTextObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);    // pivot top middle
                 headerTextObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(20f, -15f);
@@ -417,7 +428,7 @@ namespace XPortal
                         width: labelWidth,
                         height: rowHeight,
                         addContentSizeFitter: false);
-                portalNameLabelObject.name = Mod.Info.Name + "_PortalNameHeader";
+                portalNameLabelObject.name = GO_NAMELABEL;
                 portalNameLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 Text portalNameLabelText = portalNameLabelObject.GetComponent<Text>();
@@ -436,7 +447,7 @@ namespace XPortal
                         fontSize: 18,
                         width: inputLongWidth,
                         height: rowHeight);
-                portalNameInputObject.name = Mod.Info.Name + "_PortalNameInput";
+                portalNameInputObject.name = GO_NAMEINPUT;
                 portalNameInputObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
 
@@ -456,7 +467,7 @@ namespace XPortal
                     width: labelWidth,
                     height: rowHeight,
                     addContentSizeFitter: false);
-                targetPortalLabelObject.name = Mod.Info.Name + "_PortalDestinationHeader";
+                targetPortalLabelObject.name = GO_DESTINATIONLABEL;
                 targetPortalLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 Text targetPortalLabelText = targetPortalLabelObject.GetComponent<Text>();
@@ -473,7 +484,7 @@ namespace XPortal
                         fontSize: 18,
                         width: inputShortWidth,
                         height: rowHeight);
-                targetPortalDropdownObject.name = Mod.Info.Name + "_PortalDestinationDropdown";
+                targetPortalDropdownObject.name = GO_DESTINATIONDROPDOWN;
                 targetPortalDropdown = targetPortalDropdownObject.GetComponent<Dropdown>();
                 targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 ApplyDropdownStyle(targetPortalDropdown);
@@ -490,7 +501,7 @@ namespace XPortal
                         position: new Vector2(0 - padding - buttonWidth, secondRowTop),
                         width: buttonWidth,
                         height: rowHeight);
-                pingMapButtonObject.name = Mod.Info.Name + "_PingMapButton";
+                pingMapButtonObject.name = GO_PINGMAPBUTTON;
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 AddGamepadHint(pingMapButtonObject, "JoyButtonY", KeyCode.None);
@@ -505,7 +516,7 @@ namespace XPortal
                         position: new Vector2(0 - padding, padding),
                         width: submitButtonWidth,
                         height: submitButtonHeight);
-                okayButtonObject.name = Mod.Info.Name + "_OkayButton";
+                okayButtonObject.name = GO_OKAYBUTTON;
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
                 AddGamepadHint(okayButtonObject, "JoyButtonA", KeyCode.Return);
@@ -520,7 +531,7 @@ namespace XPortal
                         position: new Vector2(0 - padding - submitButtonWidth - padding, padding),
                         width: submitButtonWidth,
                         height: submitButtonHeight);
-                cancelButtonObject.name = Mod.Info.Name + "_CancelButton";
+                cancelButtonObject.name = GO_CANCELBUTTON;
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
                 AddGamepadHint(cancelButtonObject, "JoyButtonB", KeyCode.Escape);

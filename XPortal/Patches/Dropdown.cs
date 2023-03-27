@@ -9,7 +9,7 @@ namespace XPortal.Patches
         static bool m_DropdownExpanded;
         static bool Prefix(Dropdown __instance)
         {
-            if (__instance.name.Equals(Mod.Info.Name + "_PortalDestinationDropdown"))
+            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
             {
                 if (m_DropdownExpanded)
                 {
