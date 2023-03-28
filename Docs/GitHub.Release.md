@@ -1,6 +1,6 @@
 ### Changelog
 
-* Jotunn update 2.11.1
+* Jotunn update 2.11.2
 
 * Some portal sync optimisations
 
