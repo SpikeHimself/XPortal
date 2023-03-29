@@ -1,6 +1,6 @@
-#### v1.2.10 (2023-03-27)
+#### v1.2.10 (2023-03-28)
 
-* Jotunn update 2.11.1
+* Jotunn update 2.11.2
 
 * Some portal sync optimisations
 
