@@ -103,6 +103,7 @@
     <Compile Include="RPC\RPCManager.cs" />
     <Compile Include="RPC\ServerEvents.cs" />
     <Compile Include="RPC\SendToClient.cs" />
+    <Compile Include="UI\QueuedAction.cs" />
     <Compile Include="XPortalConfig.cs" />
     <Compile Include="XPortalUI.cs" />
     <Compile Include="Patches\Patcher.cs" />

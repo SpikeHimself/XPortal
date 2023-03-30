@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XPortal.UI;
 
 namespace XPortal
 {
@@ -20,14 +21,14 @@ namespace XPortal
 
         internal const string GO_MAINPANEL = Mod.Info.Name + "_MainPanel";
         internal const string GO_HEADERTEXT = Mod.Info.Name + "_PanelHeader";
-        internal const string GO_NAMELABEL= Mod.Info.Name + "_NameHeader";
-        internal const string GO_NAMEINPUT= Mod.Info.Name + "_NameInput";
-        internal const string GO_DESTINATIONLABEL= Mod.Info.Name + "_DestinationHeader";
+        internal const string GO_NAMELABEL = Mod.Info.Name + "_NameHeader";
+        internal const string GO_NAMEINPUT = Mod.Info.Name + "_NameInput";
+        internal const string GO_DESTINATIONLABEL = Mod.Info.Name + "_DestinationHeader";
         internal const string GO_DESTINATIONDROPDOWN = Mod.Info.Name + "_DestinationDropdown";
-        internal const string GO_PINGMAPBUTTON= Mod.Info.Name + "_PingMapButton";
-        internal const string GO_OKAYBUTTON= Mod.Info.Name + "_OkayButton";
+        internal const string GO_DESTINATIONGAMEPADHINT = Mod.Info.Name + "_DestinationGamepadHint";
+        internal const string GO_PINGMAPBUTTON = Mod.Info.Name + "_PingMapButton";
+        internal const string GO_OKAYBUTTON = Mod.Info.Name + "_OkayButton";
         internal const string GO_CANCELBUTTON = Mod.Info.Name + "_CancelButton";
-
 
         #region Pain
         // Creating the UI was incredibly painful. I will never change the layout again. Ever.
@@ -64,6 +65,7 @@ namespace XPortal
         private GameObject pingMapButtonObject;
         private GameObject targetPortalDropdownObject;
         private Dropdown targetPortalDropdown;
+        private GameObject targetPortalDropdownUpDownKeyhint;
         private InputField portalNameInputField;
 
         // A look-up list to find the portal ZDOID by dropdown list index
@@ -85,7 +87,6 @@ namespace XPortal
         #endregion
 
         private bool dropdownExpanded = false;
-        private int hideDelay = -1;
 
         private XPortalUI()
         {
@@ -122,20 +123,17 @@ namespace XPortal
 
         public void HandleInput()
         {
-            if (ZInput.instance == null)
+            QueuedAction.Update();
+
+            if (targetPortalDropdownUpDownKeyhint)
             {
-                return;
+                targetPortalDropdownUpDownKeyhint.SetActive(ZInput.IsGamepadActive());
             }
 
-            if (hideDelay == 0)
+            if (ZInput.GetButtonUp(uiDropdownScrollUpButton.Name))
             {
-                Hide(delayed: false);
+                ScrollDropdownItem(up: true);
                 return;
-            }
-
-            if (hideDelay > 0)
-            {
-                hideDelay--;
             }
 
             //if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
@@ -190,12 +188,12 @@ namespace XPortal
 
         public void Hide(bool delayed = true)
         {
-            if (delayed && ZInput.IsGamepadActive())
+            if (delayed)
             {
-                hideDelay = 2;
+                QueuedAction.Queue(Hide);
                 return;
             }
-            hideDelay = -1;
+
             SetActive(false);
             dropdownExpanded = false;
         }
@@ -490,6 +488,20 @@ namespace XPortal
                 ApplyDropdownStyle(targetPortalDropdown);
 
                 AddGamepadHint(targetPortalDropdownObject, "JoyButtonX", KeyCode.None);
+
+
+                // Target portal dropdown up/down keyhint image
+                // This is shown on the *left* side of the dropdown
+                targetPortalDropdownUpDownKeyhint = new GameObject(GO_DESTINATIONGAMEPADHINT, typeof(RectTransform), typeof(Image));
+                targetPortalDropdownUpDownKeyhint.transform.SetParent(targetPortalDropdownObject.transform, worldPositionStays: false);
+                var rt = targetPortalDropdownUpDownKeyhint.GetComponent<RectTransform>();
+                rt.pivot = new Vector2(1, 0.5f); // pivot middle right
+                rt.anchorMin = new Vector2(0, 0.5f); // anchor middle left
+                rt.anchorMax = new Vector2(0, 0.5f);
+                rt.sizeDelta = new Vector2(36, 36);
+                rt.anchoredPosition = new Vector2(10, 0);
+                var img = targetPortalDropdownUpDownKeyhint.GetComponent<Image>();
+                img.sprite = GUIManager.Instance.GetSprite("dpad_updown");
 
 
                 // Ping on Map button
