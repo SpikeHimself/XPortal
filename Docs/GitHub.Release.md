@@ -1,6 +1,8 @@
 ### Changelog
 
-* Jotunn update 2.11.2
+* Full gamepad support: the XPortal configuration panel now shows gamepad keyhints!!
+
+* Jotunn update 2.11.2, BepInEx update 5.4.2101
 
 * Some portal sync optimisations
 

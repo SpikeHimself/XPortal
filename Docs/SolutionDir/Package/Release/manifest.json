@@ -4,7 +4,7 @@
   "version_number": "1.2.10",
   "website_url": "https://github.com/SpikeHimself/XPortal",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2100",
+    "denikson-BepInExPack_Valheim-5.4.2101",
     "ValheimModding-Jotunn-2.11.2"
   ]
 }
