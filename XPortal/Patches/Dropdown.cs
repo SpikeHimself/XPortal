@@ -6,7 +6,7 @@ namespace XPortal.Patches
     [HarmonyPatch(typeof(Dropdown), nameof(Dropdown.OnSubmit))]
     static class Dropdown_OnSubmit
     {
-        static bool m_DropdownExpanded;
+        public static bool m_DropdownExpanded;
         static bool Prefix(Dropdown __instance)
         {
             if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
@@ -19,11 +19,34 @@ namespace XPortal.Patches
                 {
                     __instance.Show();
                 }
-                m_DropdownExpanded = !m_DropdownExpanded;
                 return false;
             }
 
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Dropdown), nameof(Dropdown.Show))]
+    static class Dropdown_Show
+    {
+        static void Postfix(Dropdown __instance)
+        {
+            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
+            {
+                Dropdown_OnSubmit.m_DropdownExpanded = true;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Dropdown), nameof(Dropdown.Hide))]
+    static class Dropdown_Hide
+    {
+        static void Postfix(Dropdown __instance)
+        {
+            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
+            {
+                Dropdown_OnSubmit.m_DropdownExpanded = false;
+            }
         }
     }
 }
