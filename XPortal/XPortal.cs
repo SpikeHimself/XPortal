@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using XPortal.RPC;
+using XPortal.UI;
 
 namespace XPortal
 {
@@ -39,7 +40,7 @@ namespace XPortal
             if (!Environment.IsHeadless)
             {
                 // Add buttons
-                XPortalUI.Instance.AddInputs();
+                PortalConfigurationPanel.Instance.AddInputs();
             }
 
             // Subscribe to Jotunn's OnVanillaMapDataLoaded event. This is the earliest point where we can update the known portals.
@@ -57,12 +58,12 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Update is called every frame, if the MonoBehaviour is enabled.")]
         private void Update()
         {
-            if (Environment.IsHeadless || !Environment.GameStarted || ZInput.instance == null || !XPortalUI.Instance.IsActive())
+            if (Environment.IsHeadless || !Environment.GameStarted || ZInput.instance == null || !PortalConfigurationPanel.Instance.IsActive())
             {
                 return;
             }
 
-            XPortalUI.Instance.HandleInput();
+            PortalConfigurationPanel.Instance.HandleInput();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace XPortal
             Patches.Patcher.Unpatch();
             if (!Environment.IsHeadless)
             {
-                XPortalUI.Instance?.Dispose();
+                PortalConfigurationPanel.Instance?.Dispose();
             }
             KnownPortalsManager.Instance?.Dispose();
         }
@@ -247,7 +248,7 @@ namespace XPortal
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
             Log.Debug($"Interacting with: {portal}");
-            XPortalUI.Instance.ConfigurePortal(portal);
+            PortalConfigurationPanel.Instance.ConfigurePortal(portal);
         }
 
         /// <summary>

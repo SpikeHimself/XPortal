@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using UnityEngine.UI;
+using XPortal.UI;
 
 namespace XPortal.Patches
 {
@@ -9,7 +10,7 @@ namespace XPortal.Patches
         public static bool m_DropdownExpanded;
         static bool Prefix(Dropdown __instance)
         {
-            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
+            if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
                 if (m_DropdownExpanded)
                 {
@@ -31,7 +32,7 @@ namespace XPortal.Patches
     {
         static void Postfix(Dropdown __instance)
         {
-            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
+            if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
                 Dropdown_OnSubmit.m_DropdownExpanded = true;
             }
@@ -43,7 +44,7 @@ namespace XPortal.Patches
     {
         static void Postfix(Dropdown __instance)
         {
-            if (__instance.name.Equals(XPortalUI.GO_DESTINATIONDROPDOWN))
+            if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
                 Dropdown_OnSubmit.m_DropdownExpanded = false;
             }

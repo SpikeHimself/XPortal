@@ -6,16 +6,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XPortal.UI;
 
-namespace XPortal
+namespace XPortal.UI
 {
-    internal sealed class XPortalUI : IDisposable
+    internal sealed class PortalConfigurationPanel : IDisposable
     {
         ////////////////////////////
         //// Singleton instance ////
-        private static readonly Lazy<XPortalUI> lazy = new Lazy<XPortalUI>(() => new XPortalUI());
-        public static XPortalUI Instance { get { return lazy.Value; } }
+        private static readonly Lazy<PortalConfigurationPanel> lazy = new Lazy<PortalConfigurationPanel>(() => new PortalConfigurationPanel());
+        public static PortalConfigurationPanel Instance { get { return lazy.Value; } }
         ////////////////////////////
 
         internal const string GO_MAINPANEL = Mod.Info.Name + "_MainPanel";
@@ -83,7 +82,7 @@ namespace XPortal
 
         private bool dropdownExpanded = false;
 
-        private XPortalUI()
+        private PortalConfigurationPanel()
         {
             dropdownIndexToZDOIDMapping = new Dictionary<int, ZDOID>();
         }
