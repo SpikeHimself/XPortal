@@ -175,14 +175,23 @@ namespace XPortal
             mainPanel.SetActive(active);
             if (active)
             {
-                portalNameInputField.ActivateInputField();
-                portalNameInputField.Select();
+                ActivateInputField();
             }
+        }
+
+        private void ActivateInputField(bool delayed = true)
+        {
+            if (delayed)
+            {
+                QueuedAction.Queue(ActivateInputField);
+                return;
+            }
+
+            portalNameInputField.ActivateInputField();
         }
 
         public void Show()
         {
-            //Localization.instance.Localize(mainPanel.transform);
             SetActive(true);
         }
 
