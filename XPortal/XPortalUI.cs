@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using Jotunn;
+﻿using Jotunn;
 using Jotunn.Configs;
 using Jotunn.Managers;
 using System;
@@ -78,10 +77,6 @@ namespace XPortal
         private ZDOID selectedTargetId;
 
         #region Input Button Configs
-        //private ButtonConfig uiOkayButton;
-        //private ButtonConfig uiCancelButton;
-        //private ButtonConfig uiPingMapButton;
-        //private ButtonConfig uiToggleDropdownButton;
         private ButtonConfig uiDropdownScrollUpButton;
         private ButtonConfig uiDropdownScrollDownButton;
         #endregion
@@ -96,14 +91,10 @@ namespace XPortal
         #region Input
         internal void AddInputs()
         {
-            //uiOkayButton = AddInput("XPortal_Okay", "Okay", InputManager.GamepadButton.ButtonSouth, KeyCode.Return);
-            //uiCancelButton = AddInput("XPortal_Cancel", "Cancel", InputManager.GamepadButton.ButtonEast, KeyCode.Escape);
-            //uiPingMapButton = AddInput("XPortal_PingMap", "Ping map", InputManager.GamepadButton.ButtonNorth, KeyCode.JoystickButton3);
-            //uiToggleDropdownButton = AddInput("XPortal_ToggleDropdown", "Toggle dropdown", InputManager.GamepadButton.ButtonWest, KeyCode.JoystickButton2);
             uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
             uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
-
         }
+
         private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
         {
             var newButtonConfig = new ButtonConfig
@@ -136,21 +127,9 @@ namespace XPortal
                 return;
             }
 
-            //if (ZInput.GetButtonUp(uiToggleDropdownButton.Name))
-            //{
-            //    ToggleDropdownExpanded();
-            //    return;
-            //}
-
             if (ZInput.GetButtonUp(uiDropdownScrollDownButton.Name))
             {
                 ScrollDropdownItem(up: false);
-                return;
-            }
-
-            if (ZInput.GetButtonUp(uiDropdownScrollUpButton.Name))
-            {
-                ScrollDropdownItem(up: true);
                 return;
             }
         }
@@ -164,8 +143,6 @@ namespace XPortal
 
         public void SetActive(bool active)
         {
-            //BlockInputForAWhile();
-
             if (!mainPanel || !mainPanel.IsValid())
             {
                 InitialiseUI();
@@ -203,21 +180,8 @@ namespace XPortal
                 return;
             }
 
-            SetActive(false);
             dropdownExpanded = false;
-        }
-
-        public void ToggleDropdownExpanded()
-        {
-            if (dropdownExpanded)
-            {
-                targetPortalDropdown.Hide();
-            }
-            else
-            {
-                targetPortalDropdown.Show();
-            }
-            dropdownExpanded = !dropdownExpanded;
+            SetActive(false);
         }
 
         private void ScrollDropdownItem(bool up)
@@ -251,7 +215,7 @@ namespace XPortal
             pingMapButtonObject.SetActive(active);
 
             var mainPanelRT = mainPanel.GetComponent<RectTransform>();
-            float dropdownWidth = (active ? inputShortWidth : inputLongWidth) - mainPanelRT.sizeDelta.x;
+            float dropdownWidth = (active ? inputShortWidth : inputLongWidth) - mainPanelRT.rect.width;
             targetPortalDropdownObject.GetComponent<RectTransform>().sizeDelta = new Vector2(dropdownWidth, rowHeight);
         }
         #endregion
@@ -340,11 +304,6 @@ namespace XPortal
         #endregion
 
         #region UI Events
-        public void Submit()
-        {
-            OnOkayButtonClicked();
-        }
-
         private void OnDropdownValueChanged(Dropdown change)
         {
             selectedTargetId = dropdownIndexToZDOIDMapping[change.value];
@@ -381,7 +340,6 @@ namespace XPortal
             {
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
-
 
                 var pixielFixGui = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)");
 
@@ -438,7 +396,7 @@ namespace XPortal
                 portalNameLabelObject.name = GO_NAMELABEL;
                 portalNameLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
-                Text portalNameLabelText = portalNameLabelObject.GetComponent<Text>();
+                var portalNameLabelText = portalNameLabelObject.GetComponent<Text>();
                 portalNameLabelText.alignment = TextAnchor.MiddleLeft;
                 portalNameLabelText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
@@ -477,7 +435,7 @@ namespace XPortal
                 targetPortalLabelObject.name = GO_DESTINATIONLABEL;
                 targetPortalLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
-                Text targetPortalLabelText = targetPortalLabelObject.GetComponent<Text>();
+                var targetPortalLabelText = targetPortalLabelObject.GetComponent<Text>();
                 targetPortalLabelText.alignment = TextAnchor.MiddleLeft;
                 targetPortalLabelText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
@@ -567,6 +525,7 @@ namespace XPortal
                 // This property name is backwards? Should select on activate? Either way: Yes.
                 portalNameInputField.shouldActivateOnSelect = true;
 
+
                 // Disable the Main Panel, for now
                 mainPanel.SetActive(false);
             }
@@ -625,7 +584,7 @@ namespace XPortal
 
             var textMesh = goGamepadHint.GetComponent<TextMeshProUGUI>();
             textMesh.text = $"$KEY_{buttonName}";
-            textMesh.fontSize = 22;
+            textMesh.fontSize = 18;
             textMesh.alignment = TextAlignmentOptions.Center;
             Localization.instance.textMeshStrings.Add(textMesh, textMesh.text);
 
