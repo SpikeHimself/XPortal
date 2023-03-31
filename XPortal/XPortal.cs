@@ -210,8 +210,9 @@ namespace XPortal
 
             // Get information about the portal being hovered over
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
-            string outputPortalName = portal.GetFriendlyName();
-            string outputPortalDestination = portal.GetFriendlyTargetName();
+            var outputPortalName = portal.GetFriendlyName();
+            var outputPortalDestination = portal.GetFriendlyTargetName();
+            var colourTag = string.Empty;
 
             if (portal.HasTarget())
             {
@@ -224,11 +225,17 @@ namespace XPortal
                     result = "Fetching portal info...";
                     return;
                 }
+
+                if (XPortalConfig.Instance.Local.DisplayPortalColour)
+                {
+                    var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(portal.Target);
+                    colourTag = $"<color={targetPortal.Colour}>>> </color>";
+                }
             }
 
             result = Localization.instance.Localize(
                          $"$piece_portal_tag: {outputPortalName}\n"                         // "Name: {name}"
-                       + $"$piece_portal_target: {outputPortalDestination}\n"               // "Destination: {name}"
+                       + $"$piece_portal_target: {colourTag}{outputPortalDestination}\n"    // "Destination: {name}"
                        + $"[<color=yellow><b>$KEY_Use</b></color>] $piece_portal_settag"    // "[E] Configure"
                      );
         }
