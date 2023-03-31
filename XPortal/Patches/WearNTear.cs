@@ -8,7 +8,7 @@ namespace XPortal.Patches
         /// <summary>
         /// After placing a piece, check if it's a portal, and if so, call OnPortalPlaced
         /// </summary>
-        static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
+        static void Prefix(Piece ___m_piece, ZNetView ___m_nview)
         {
             if (___m_piece.m_name.Contains("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
             {
