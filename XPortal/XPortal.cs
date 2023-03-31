@@ -270,6 +270,11 @@ namespace XPortal
         /// <param name="portalId">The ZDOID of the portal being destroyed</param>
         internal static void OnPortalDestroyed(ZDOID portalId)
         {
+            if (!KnownPortalsManager.Instance.ContainsId(portalId))
+            {
+                Log.Error($"Portal `{portalId}` is being destroyed, but XPortal does not know it");
+                return;
+            }
             var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
             Log.Debug($"Portal `{portalName}` is being destroyed");
             SendToServer.RemoveRequest(portalId);
