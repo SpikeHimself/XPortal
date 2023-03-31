@@ -16,7 +16,7 @@ namespace XPortal
             Name = string.Empty;
             Location = Vector3.zero;
             Target = ZDOID.None;
-            Colour = GetPortalColour(id);
+            Colour = PortalColour.GetPortalColour(id);
         }
 
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
@@ -31,7 +31,6 @@ namespace XPortal
             Location = pkg.ReadVector3();
             Target = pkg.ReadZDOID();
             Colour = pkg.ReadString();
-            //Colour = GetPortalColour(Id);
         }
 
         public string GetFriendlyName()
@@ -87,41 +86,5 @@ namespace XPortal
         {
             return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{GetFriendlyTargetName()}`, Colour: `{Colour}` }}";
         }
-
-        #region Colour
-        private const string DefaultColour = "#FF6400";
-        private static string GetPortalColour(ZDOID portalId)
-        {
-            if (portalId == ZDOID.None || !XPortalConfig.Instance.Local.DisplayPortalColour)
-            {
-                return DefaultColour;
-            }
-
-            var zdo = ZDOMan.instance.GetZDO(portalId);
-            var prefab = ZNetScene.instance.GetPrefab(zdo.m_prefab);
-            if (!prefab)
-            {
-                Log.Debug($"Could not find prefab `{zdo.m_prefab}`");
-                return DefaultColour;
-            }
-
-            var pointLight = prefab.transform.Find("_target_found_red/Point light");
-            if (!pointLight)
-            {
-                Log.Debug($"Portal prefab `{prefab.name}` does not have a Point light");
-                return DefaultColour;
-            }
-
-            var light = pointLight.GetComponent<Light>();
-            if (!light)
-            {
-                Log.Debug($"Portal prefab `{prefab.name}` does not have a Light component");
-                return DefaultColour;
-            }
-
-            var colour = light.color;
-            return "#" + ColorUtility.ToHtmlStringRGB(colour);
-        }
-        #endregion
     }
 }

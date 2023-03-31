@@ -98,6 +98,7 @@
     <Compile Include="Patches\TeleportWorld.cs" />
     <Compile Include="Patches\TextInput.cs" />
     <Compile Include="Patches\WearNTear.cs" />
+    <Compile Include="PortalColour.cs" />
     <Compile Include="RPC\ClientEvents.cs" />
     <Compile Include="RPC\SendToServer.cs" />
     <Compile Include="RPC\RPCManager.cs" />
