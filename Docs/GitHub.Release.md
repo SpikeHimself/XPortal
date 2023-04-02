@@ -1,20 +1,6 @@
 ### Changelog
 
-* Improved gamepad support: the XPortal configuration panel now shows gamepad keyhints!
-
-* Give Stone Portals their own colour (thanks bonesbro!)
-
-* Fix path separators in XPortal release archive
-
-* Show portal colour tag on hover
-
-* Fix crash when destroying a portal that XPortal doesn't know of
-
-* Jotunn update 2.11.2, BepInEx update 5.4.2102
-
-* Some portal sync optimisations
-
-* Improved logging
+* No changes yet
 
 ### Debug
 
