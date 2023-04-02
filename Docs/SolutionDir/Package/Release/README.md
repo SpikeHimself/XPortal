@@ -35,27 +35,42 @@ XPortal has been built with multiplayer support at its core. All players must ru
 
 #### Gamepad support
 
-The XPortal UI will respond to gamepad input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively:
-* `A` / `Cross` - Submit (i.e. press the Okay button)
+The XPortal UI will respond to gamepad input when configuring your portal. As of v1.2.10 it even shows you the gamepad keyhints!
+
+<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/ui-keyhints-small.png" />
+
+The controls are as follows:
+
+* `A` / `Cross` - Submit (i.e. press the OK button)
 * `B`/ `Circle` - Cancel
 * `Y` / `Triangle` - Ping the selected portal
-* `X` / `Square` - Show the contents of the dropdown
+* `X` / `Square` - Show/hide the contents of the dropdown
 * `D-Pad Up` / `D-Pad Down` - Select the previous / next item in the dropdown
 
 
 #### Mod compatibility and integration
 
 XPortal has been made fully compatible with the following mods:
+
 * [Nexus Update Check](https://valheim.thunderstore.io/package/nexusreupload/aedenthorn_Nexus_Update_Check/) by aedenthorn
 * [VHVR - Valheim VR](https://valheim.thunderstore.io/package/Maynard/VHVR/) by Flatscreen to VR Modders
 * [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/) by Jere Kuusela
 * [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/) by Randy Knapp
 
-Furthermore, XPortal has a configuration option to fully integrate with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/). If you set `DisplayPortalColour` to `True`, each portal in XPortal's dropdown list will be prepended by a ">>" tag that has the same colour as the light that the portal emits:
+Furthermore, XPortal has a configuration option to fully integrate with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/). If you set `DisplayPortalColour` to `True`, each portal in XPortal's dropdown list will be prepended by a ">>" tag that has the same colour as the light that the portal emits. As of v1.2.10, Stone Portals also get their own colour!
 
-<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/advancedportals.png" height="280" />
+<img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/advancedportals-small.png" />
 
-XPortal is known to be incompatible with:
+XPortal has a very minor known issue related to item placement. When another mod applies a specific patch, XPortal's portal placement detection no longer works. The mods that trigger this behaviour include:
+
+* Valheim Plus
+* Mass Farming
+
+
+I am working hard to resolve this issue. In the mean time, rest assured that XPortal will still function 99% correctly. You will not face any problems at all if you interact with a portal immediately after building it.
+
+XPortal is known to be fully incompatible with:
+
 * [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) by sweetgiorni
 
 
@@ -63,21 +78,17 @@ XPortal is known to be incompatible with:
 
 XPortal's config file, which can be found at `Valheim\BepInEx\config\yay.spikehimself.xportal.cfg`, contains the following settings:
 
-`NexusID`
-
-This is XPortal's ID on Nexus Mods and is used by [Nexus Update Check](https://valheim.thunderstore.io/package/nexusreupload/aedenthorn_Nexus_Update_Check/).
-
 `PingMapDisabled`
 
 Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.
 
 `DisplayPortalColour`
 
-Show a ">>" tag in the list of portals that has the same colour as the light that the portal emits (integration with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/)).
+Show a coloured ">>" tag in the list of portals to indicate the portal type (integration with [Advanced Portals](https://valheim.thunderstore.io/package/RandyKnapp/AdvancedPortals/) and [Stone Portal](https://valheim.thunderstore.io/package/JereKuusela/Stone_Portal/)).
 
 `DoublePortalCosts`
 
-Double the costs of portals. This setting is enforced (but not overwritten) by the server.
+Since XPortal is essentially a cheat, in that you only need half the amount of portals now, this setting allows you to compensate for that by doubling portal costs. This setting is enforced (but not overwritten) by the server.
 
 
 # Installation instructions
@@ -116,6 +127,7 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 * Smok3y97 for translating to German
 * MexExe for translating to Polish, Russian
 * hanawa07 for translating to Korean
+* bonesbro for adding a colour for Stone Portals (#39)
 
 
 # I did more too!

@@ -2,18 +2,14 @@
 
 <#= thisModName #>'s config file, which can be found at <#= mf.Code($"Valheim\\BepInEx\\config\\{thisModGUID}.cfg") #>, contains the following settings:
 
-<#= mf.Code("NexusID") #>
-
-This is <#= thisModName #>'s ID on Nexus Mods and is used by <#= linkNexusUpdateCheck #>.
-
 <#= mf.Code("PingMapDisabled") #>
 
 Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.
 
 <#= mf.Code("DisplayPortalColour") #>
 
-Show a ">>" tag in the list of portals that has the same colour as the light that the portal emits (integration with <#= linkAdvancedPortals #>).
+Show a coloured ">>" tag in the list of portals to indicate the portal type (integration with <#= linkAdvancedPortals #> and <#= linkStonePortal #>).
 
 <#= mf.Code("DoublePortalCosts") #>
 
-Double the costs of portals. This setting is enforced (but not overwritten) by the server.
+Since XPortal is essentially a cheat, in that you only need half the amount of portals now, this setting allows you to compensate for that by doubling portal costs. This setting is enforced (but not overwritten) by the server.

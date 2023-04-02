@@ -35,29 +35,45 @@ XPortal has been built with multiplayer support at its core. All players must ru
 
 [size=3][b][color=#FFA03C]Gamepad support[/color][/b][/size]
 
-The XPortal UI will respond to gamepad input when configuring your portal. It's not as neat as the rest of the Valheim UI - it won't show you the keyhints on the screen - but it does work somewhat intuitively:
+The XPortal UI will respond to gamepad input when configuring your portal. As of v1.2.10 it even shows you the gamepad keyhints!
+
+[img]https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/ui-keyhints-small.png[/img]
+
+The controls are as follows:
+
 [list]
-[*][font=Courier New][b]'A'[/b][/font] / [font=Courier New][b]'Cross'[/b][/font] - Submit (i.e. press the Okay button)
+[*][font=Courier New][b]'A'[/b][/font] / [font=Courier New][b]'Cross'[/b][/font] - Submit (i.e. press the OK button)
 [*][font=Courier New][b]'B'[/b][/font]/ [font=Courier New][b]'Circle'[/b][/font] - Cancel
 [*][font=Courier New][b]'Y'[/b][/font] / [font=Courier New][b]'Triangle'[/b][/font] - Ping the selected portal
-[*][font=Courier New][b]'X'[/b][/font] / [font=Courier New][b]'Square'[/b][/font] - Show the contents of the dropdown
+[*][font=Courier New][b]'X'[/b][/font] / [font=Courier New][b]'Square'[/b][/font] - Show/hide the contents of the dropdown
 [*][font=Courier New][b]'D-Pad Up'[/b][/font] / [font=Courier New][b]'D-Pad Down'[/b][/font] - Select the previous / next item in the dropdown
 [/list]
 
 [size=3][b][color=#FFA03C]Mod compatibility and integration[/color][/b][/size]
 
 XPortal has been made fully compatible with the following mods:
+
 [list]
 [*][url=https://www.nexusmods.com/valheim/mods/102]Nexus Update Check[/url] by aedenthorn
 [*][url=https://www.nexusmods.com/valheim/mods/847]VHVR - Valheim VR[/url] by Flatscreen to VR Modders
 [*][url=https://www.nexusmods.com/valheim/mods/2007]Stone Portal[/url] by Jere Kuusela
 [*][url=https://www.nexusmods.com/valheim/mods/2187]Advanced Portals[/url] by Randy Knapp
 [/list]
-Furthermore, XPortal has a configuration option to fully integrate with [url=https://www.nexusmods.com/valheim/mods/2187]Advanced Portals[/url]. If you set [font=Courier New][b]'DisplayPortalColour'[/b][/font] to [font=Courier New][b]'True'[/b][/font], each portal in XPortal's dropdown list will be prepended by a ">>" tag that has the same colour as the light that the portal emits:
+Furthermore, XPortal has a configuration option to fully integrate with [url=https://www.nexusmods.com/valheim/mods/2187]Advanced Portals[/url]. If you set [font=Courier New][b]'DisplayPortalColour'[/b][/font] to [font=Courier New][b]'True'[/b][/font], each portal in XPortal's dropdown list will be prepended by a ">>" tag that has the same colour as the light that the portal emits. As of v1.2.10, Stone Portals also get their own colour!
 
-[img]https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/advancedportals.png[/img]
+[img]https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/advancedportals-small.png[/img]
 
-XPortal is known to be incompatible with:
+XPortal has a very minor known issue related to item placement. When another mod applies a specific patch, XPortal's portal placement detection no longer works. The mods that trigger this behaviour include:
+
+[list]
+[*]Valheim Plus
+[*]Mass Farming
+[/list]
+
+I am working hard to resolve this issue. In the mean time, rest assured that XPortal will still function 99% correctly. You will not face any problems at all if you interact with a portal immediately after building it.
+
+XPortal is known to be fully incompatible with:
+
 [list]
 [*][url=https://www.nexusmods.com/valheim/mods/170]AnyPortal[/url] by sweetgiorni
 [/list]
@@ -66,21 +82,17 @@ XPortal is known to be incompatible with:
 
 XPortal's config file, which can be found at [font=Courier New][b]'Valheim\BepInEx\config\yay.spikehimself.xportal.cfg'[/b][/font], contains the following settings:
 
-[font=Courier New][b]'NexusID'[/b][/font]
-
-This is XPortal's ID on Nexus Mods and is used by [url=https://www.nexusmods.com/valheim/mods/102]Nexus Update Check[/url].
-
 [font=Courier New][b]'PingMapDisabled'[/b][/font]
 
 Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.
 
 [font=Courier New][b]'DisplayPortalColour'[/b][/font]
 
-Show a ">>" tag in the list of portals that has the same colour as the light that the portal emits (integration with [url=https://www.nexusmods.com/valheim/mods/2187]Advanced Portals[/url]).
+Show a coloured ">>" tag in the list of portals to indicate the portal type (integration with [url=https://www.nexusmods.com/valheim/mods/2187]Advanced Portals[/url] and [url=https://www.nexusmods.com/valheim/mods/2007]Stone Portal[/url]).
 
 [font=Courier New][b]'DoublePortalCosts'[/b][/font]
 
-Double the costs of portals. This setting is enforced (but not overwritten) by the server.
+Since XPortal is essentially a cheat, in that you only need half the amount of portals now, this setting allows you to compensate for that by doubling portal costs. This setting is enforced (but not overwritten) by the server.
 
 
 [size=6][b][color=#FFA03C]Installation instructions[/color][/b][/size]
@@ -123,6 +135,7 @@ To add a translation to XPortal, choose [font=Courier New][b]'Translation'[/b][/
 [*]Smok3y97 for translating to German
 [*]MexExe for translating to Polish, Russian
 [*]hanawa07 for translating to Korean
+[*]bonesbro for adding a colour for Stone Portals (#39)
 [/list]
 
 [size=6][b][color=#FFA03C]I did more too![/color][/b][/size]
