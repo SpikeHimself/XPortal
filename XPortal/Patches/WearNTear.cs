@@ -12,7 +12,7 @@ namespace XPortal.Patches
         /// </summary>
         static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
         {
-            if (___m_piece.m_name.Contains("$piece_portal") && ___m_piece.CanBeRemoved() && ___m_nview)
+            if (___m_piece.m_name.Contains("$piece_portal") && ___m_nview)
             {
                 var portalZDO = ___m_nview.GetZDO();
                 if (portalZDO == null)
@@ -25,7 +25,6 @@ namespace XPortal.Patches
                 var location = portalZDO.GetPosition();
                 XPortal.OnPortalPlaced(portalId, location);
             }
-
         }
     }
 
@@ -49,13 +48,12 @@ namespace XPortal.Patches
                 return;
             }
 
-            Log.Debug($"Piece destroyed: {piece.m_name}");
-
             if (piece.m_name.Contains("$piece_portal") && piece.CanBeRemoved())
             {
                 var portalZDO = nview.GetZDO();
                 if (portalZDO == null)
                 {
+                    Log.Error("A portal was destroyed but the ZDO is not available");
                     return;
                 }
 
