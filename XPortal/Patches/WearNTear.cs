@@ -7,6 +7,8 @@ namespace XPortal.Patches
     {
         /// <summary>
         /// After placing a piece, check if it's a portal, and if so, call OnPortalPlaced
+        /// Known issue: This patch magically stops working if a patch on Player.PlacePiece exists (here or in another mod)
+        /// See: SpikeHimself/XPortal#36 and BepInEx/HarmonyX#71
         /// </summary>
         static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
         {
