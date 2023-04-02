@@ -5,6 +5,7 @@ namespace XPortal
     internal static class PortalColour
     {
         private const string DefaultColour = "#FF6400";
+        private const string DefaultStoneColour = "#33C7FF";
 
         public static string GetPortalColour(ZDOID portalId)
         {
@@ -19,6 +20,11 @@ namespace XPortal
             {
                 Log.Debug($"Could not find prefab `{zdo.m_prefab}`");
                 return DefaultColour;
+            }
+
+            if (string.Equals(prefab.name, XPortal.StonePortalPrefabName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return DefaultStoneColour;
             }
 
             var pointLight = prefab.transform.Find("_target_found_red/Point light");
