@@ -58,6 +58,10 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.Update is called every frame, if the MonoBehaviour is enabled.")]
         private void Update()
         {
+            // QueuedAction allows us to delay things by a certain amount of frames
+            // This is used in XPortal's UI to block input, but also in the portal detection patch, see Patches\Piece.cs
+            QueuedAction.Update();
+
             if (Environment.IsHeadless || !Environment.GameStarted || ZInput.instance == null || !PortalConfigurationPanel.Instance.IsActive())
             {
                 return;

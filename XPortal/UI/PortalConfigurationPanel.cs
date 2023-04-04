@@ -113,7 +113,7 @@ namespace XPortal.UI
 
         public void HandleInput()
         {
-            QueuedAction.Update();
+
 
             if (targetPortalDropdownUpDownKeyhint)
             {
