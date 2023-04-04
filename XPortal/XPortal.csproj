@@ -95,6 +95,7 @@
     <Compile Include="ModInfo.cs" />
     <Compile Include="Patches\Dropdown.cs" />
     <Compile Include="Patches\Game.cs" />
+    <Compile Include="Patches\Piece.cs" />
     <Compile Include="Patches\TeleportWorld.cs" />
     <Compile Include="Patches\TextInput.cs" />
     <Compile Include="Patches\WearNTear.cs" />

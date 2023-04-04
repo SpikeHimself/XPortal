@@ -10,11 +10,13 @@ namespace XPortal.Patches
         /// Known issue: This patch magically stops working if a patch on Player.PlacePiece exists (here or in another mod)
         /// See: SpikeHimself/XPortal#36 and BepInEx/HarmonyX#71
         /// </summary>
-        static void Postfix(Piece ___m_piece, ZNetView ___m_nview)
+        internal static void Postfix(WearNTear __instance)
         {
-            if (___m_piece.m_name.Contains("$piece_portal") && ___m_nview)
+            var piece = __instance.GetComponent<Piece>();
+            var nview = __instance.GetComponent<ZNetView>();
+            if (piece.m_name.Contains("$piece_portal") && nview)
             {
-                var portalZDO = ___m_nview.GetZDO();
+                var portalZDO = nview.GetZDO();
                 if (portalZDO == null)
                 {
                     Log.Error("A portal was placed but the ZDO is not available");
