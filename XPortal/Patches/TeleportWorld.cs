@@ -20,7 +20,7 @@ namespace XPortal.Patches
 
             if (!___m_nview || ___m_nview.GetZDO() == null)
             {
-                Jotunn.Logger.LogError("TeleportWorldGetHoverTextPatch: This portal does not exist. Odin strokes his beard in confusion..");
+                Log.Error("TeleportWorldGetHoverTextPatch: This portal does not exist. Odin strokes his beard in confusion..");
                 __result = "This portal doesn't actually appear to exist. Heimdallr sees you...";
 
                 // Don't run the original method

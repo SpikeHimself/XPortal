@@ -106,14 +106,14 @@ namespace XPortal
         {
             if (!ObjectDB.instance)
             {
-                Jotunn.Logger.LogError("ObjectDB not instantiated");
+                Log.Error("ObjectDB not instantiated");
                 return;
             }
 
             ItemDrop hammer = ObjectDB.instance.GetItemPrefab("Hammer")?.GetComponent<ItemDrop>();
             if (!hammer)
             {
-                Jotunn.Logger.LogError("Could not find Hammer prefab");
+                Log.Error("Could not find Hammer prefab");
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace XPortal
                 var targetId = portal.Target;
                 if (!KnownPortalsManager.Instance.ContainsId(targetId))
                 {
-                    Jotunn.Logger.LogError($"[OnPrePortalHover] Target portal {targetId} appears to be invalid");
+                    Log.Error($"Target portal {targetId} appears to be invalid");
                     SendToServer.SyncRequest($"Hovering over portal `{outputPortalName}` which has invalid target `{targetId}`");
                     result = "Fetching portal info...";
                     return;
@@ -249,7 +249,7 @@ namespace XPortal
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
                 // TODO: show a friendly message on the screen
-                Jotunn.Logger.LogError("Interacting with an unknown portal");
+                Log.Error("Interacting with an unknown portal");
                 return;
             }
 
