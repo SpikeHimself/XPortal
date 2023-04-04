@@ -7,12 +7,11 @@ namespace XPortal.Patches
     [HarmonyPatch(typeof(Dropdown), nameof(Dropdown.OnSubmit))]
     static class Dropdown_OnSubmit
     {
-        public static bool m_DropdownExpanded;
         static bool Prefix(Dropdown __instance)
         {
-            if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
+            if (PortalConfigurationPanel.Instance != null && __instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
-                if (m_DropdownExpanded)
+                if (PortalConfigurationPanel.Instance.DropdownExpanded)
                 {
                     __instance.Hide();
                 }
@@ -34,7 +33,7 @@ namespace XPortal.Patches
         {
             if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
-                Dropdown_OnSubmit.m_DropdownExpanded = true;
+                PortalConfigurationPanel.Instance.DropdownExpanded = true;
             }
         }
     }
@@ -46,7 +45,7 @@ namespace XPortal.Patches
         {
             if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
-                Dropdown_OnSubmit.m_DropdownExpanded = false;
+                PortalConfigurationPanel.Instance.DropdownExpanded = false;
             }
         }
     }

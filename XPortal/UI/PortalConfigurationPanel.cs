@@ -80,7 +80,7 @@ namespace XPortal.UI
         private ButtonConfig uiDropdownScrollDownButton;
         #endregion
 
-        private bool dropdownExpanded = false;
+        public bool DropdownExpanded = false;
 
         private PortalConfigurationPanel()
         {
@@ -179,18 +179,17 @@ namespace XPortal.UI
                 return;
             }
 
-            dropdownExpanded = false;
             SetActive(false);
         }
 
         private void ScrollDropdownItem(bool up)
         {
-            var dropdownWasExpanded = dropdownExpanded;
+            var dropdownWasExpanded = DropdownExpanded;
 
-            if (dropdownExpanded)
+            if (DropdownExpanded)
             {
                 targetPortalDropdown.enabled = false;
-                dropdownExpanded = false;
+                DropdownExpanded = false;
             }
 
             targetPortalDropdown.value += (up ? -1 : 1);
@@ -199,7 +198,14 @@ namespace XPortal.UI
             {
                 targetPortalDropdown.enabled = true;
                 targetPortalDropdown.Show();
-                dropdownExpanded = true;
+                DropdownExpanded = true;
+
+                var dropdownScrollrect = targetPortalDropdown.GetComponentInChildren<ScrollRect>();
+                var itemIndex = targetPortalDropdown.value + 1;
+                var childCount = (float)dropdownScrollrect.content.transform.childCount;
+                var scrolltarget = 1 - (itemIndex / childCount);
+                dropdownScrollrect.verticalScrollbar.value = scrolltarget;
+                Log.Debug($"value {targetPortalDropdown.value}, itemindex {itemIndex}, childcount {childCount}, scrolltarget {scrolltarget}");
             }
         }
 
