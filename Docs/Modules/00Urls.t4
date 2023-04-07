@@ -26,6 +26,12 @@
 	var linkXStorage = mf.Link("XStorage", urlXStorage);
 
 	
+	// My resources
+	var urlBuyMeACoffeeImage = "https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/buy-me-a-coffee-small.png";
+	var imgBuyMeACoffee = mf.Image(urlBuyMeACoffeeImage, align: Alignment.Right);
+	var linkBuyMeACoffee = mf.Link(imgBuyMeACoffee, "https://www.buymeacoffee.com/SpikeHimself");
+
+	
 	// External mods
 	var linkNexusUpdateCheck = CreateLink("Nexus Update Check", 102, "nexusreupload/aedenthorn_Nexus_Update_Check");
 	var linkAnyPortal = CreateLink("AnyPortal", 170, "sweetgiorni/AnyPortal");
