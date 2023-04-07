@@ -5,13 +5,18 @@ XPortal is a Valheim mod that lets you select a portal's destination from a list
 <img src="https://raw.githubusercontent.com/SpikeHimself/XPortal/main/images/controller.gif" height="180" />
 
 # Where to download
+(click the image!)
 
-<center>
+<div align="center">
 
-[![Nexus Mods](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/nexus-logo-small.png)](https://www.nexusmods.com/valheim/mods/2239)
-[![Thunderstore](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/thunderstore-logo-small.png)](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/)
+&nbsp;
 
-</center>
+[![Nexus Mods](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/nexus-logo-small.png)](https://www.nexusmods.com/valheim/mods/2239) &nbsp;&nbsp;&nbsp; [![Thunderstore](https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/thunderstore-logo-small.png)](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/)
+
+&nbsp;
+
+</div>
+
 
 # Download and installation instructions (for players)
 
