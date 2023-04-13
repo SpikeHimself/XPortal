@@ -12,7 +12,7 @@
         public const string Description = "Select portal destination from a list of existing portals. No more tag pairing, and no more portal hubs! XPortal is a complete rewrite of the popular mod AnyPortal.";
         public const string WebsiteUrl = "https://github.com/" + GitHubRepo;
         public const int NexusId = 2239;
-        public const string BepInExPackVersion = "5.4.2102";
+        public const string BepInExPackVersion = "5.4.2105";
         public const string JotunnVersion = Jotunn.Main.Version;
     }
 }
