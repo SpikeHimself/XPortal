@@ -17,20 +17,13 @@ XPortal is a Valheim mod that lets you select a portal's destination from a list
 
 </div>
 
+# Help wanted
 
-# Download and installation instructions (for players)
+At any given point, there might be open issues that I need help with. For example, there could be compatibility issues with mods that I do not use myself. 
 
-XPortal is a [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) plugin. As such, you must have BepInEx installed. Most other Valheim mods are also BepInEx plugins, so chances are you already have this.
+If you would like to help, look at the [Issues page](https://github.com/SpikeHimself/XPortal/issues), or click the link below to find all issues tagged https://github.com/SpikeHimself/XPortal/labels/help%20wanted or https://github.com/SpikeHimself/XPortal/labels/incomplete.
 
-XPortal makes use of the [Jotunn](https://www.nexusmods.com/valheim/mods/1138) library, so you must install that before installing XPortal. If you do not install Jotunn, XPortal will simply not be loaded by your game and it will not work.
-
-I very strongly recommend using a mod manager such as [Vortex](https://www.nexusmods.com/site/mods/1) or [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/). They will take care of everything for you and you don't have to worry about which files go where. I recommend against manual installation.
-1. Make sure you have [BepInEx](https://valheim.thunderstore.io/package/denikson/BepInExPack_Valheim/) installed.
-2. Install [Jotunn](https://www.nexusmods.com/valheim/mods/1138).
-3. On [Nexus Mods](https://www.nexusmods.com/valheim/mods/2239) click 'Mod manager download', or on [Thunderstore](https://valheim.thunderstore.io/package/SpikeHimself/XPortal/) click 'Install with Mod Manager'.
-
-
-To install XPortal on a dedicated server, copy all of the contents of the `plugins\` directory found inside the .zip file download to the  `Valheim\BepInEx\plugins\` directory on your server. 
+https://github.com/SpikeHimself/XPortal/issues?q=label%3Aincomplete%2C%22help+wanted%22+is%3Aopen
 
 
 # Bugs, Feature Requests and Translations
