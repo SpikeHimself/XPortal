@@ -7,8 +7,6 @@
 <#@ include file="$(ProjectDir)\Modules\00Urls.t4" once="true" #>
 <#@ include file="$(ProjectDir)\Modules\11HeaderGitHub.t4" once="true" #>
 
-<#@ include file="$(ProjectDir)\Modules\30Installation.t4" once="true" #>
-
 <#@ include file="$(ProjectDir)\Modules\40Bugs.t4" once="true" #>
 
 <#@ include file="$(ProjectDir)\Modules\90InstallationDev.t4" once="true" #>
