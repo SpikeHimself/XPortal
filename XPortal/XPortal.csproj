@@ -126,6 +126,7 @@
     <None Include="Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="Translations\French\xportal-translations-french.json" />
     <None Include="Translations\German\xportal-translations-german.json" />
+    <None Include="Translations\Italian\xportal-translations-italian.json" />
     <None Include="Translations\Korean\xportal-translations-korean.json" />
     <None Include="Translations\Polish\xportal-translations-polish.json" />
     <None Include="Translations\Portuguese_Brazilian\xportal-translations-portuguese_brazillian.json" />
