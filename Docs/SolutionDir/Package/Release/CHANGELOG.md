@@ -1,8 +1,11 @@
 #### v1.2.11 (2023-06-13)
 
 * Add translation to Italian
+
 * Update Jotun 2.12.0, BepInEx 5.4.2105
+
 * Fix portals not connecting after game update 0.216.9
+
 <details>
 <summary>Click to view previous versions</summary>
 
