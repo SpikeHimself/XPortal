@@ -49,6 +49,7 @@
     <Compile Include="ReadmeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="GitHub.Release.md">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
