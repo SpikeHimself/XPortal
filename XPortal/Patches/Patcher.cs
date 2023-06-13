@@ -14,11 +14,10 @@ namespace XPortal.Patches
             patcher.PatchAll(typeof(Game_Awake));
             patcher.PatchAll(typeof(Game_Start));
             patcher.PatchAll(typeof(Game_ConnectPortals));
-            //patcher.PatchAll(typeof(Piece_SetCreator));
             patcher.PatchAll(typeof(TeleportWorld_GetHoverText));
             patcher.PatchAll(typeof(TextInput_RequestText));
-            //patcher.PatchAll(typeof(WearNTear_OnPlaced));
             patcher.PatchAll(typeof(WearNTear_Destroy));
+
 
             var playerPlacePiecePatched =
                 Harmony.GetAllPatchedMethods().Where(m => m.DeclaringType.Name.Equals("Player") && m.Name.Equals("PlacePiece")).Any();
