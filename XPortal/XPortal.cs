@@ -96,7 +96,7 @@ namespace XPortal
             SendToServer.ConfigRequest();
 
             // Ask the server to send us the portals
-            var myId = ZDOMan.instance.GetMyID();
+            var myId = ZDOMan.GetSessionID();
             var myName = Game.instance.GetPlayerProfile().GetName();
             SendToServer.SyncRequest($"{myName} ({myId}) has joined the game");
         }
@@ -316,10 +316,7 @@ namespace XPortal
         /// <returns>A list of portal ZDOs</returns>
         private static List<ZDO> GetAllPortalZDOs()
         {
-            var allPortalZDOs = new List<ZDO>();
-            ZDOMan.instance.GetAllZDOsWithPrefab(Game.instance.m_portalPrefab.name, allPortalZDOs);
-            ZDOMan.instance.GetAllZDOsWithPrefab(StonePortalPrefabName, allPortalZDOs);
-            return allPortalZDOs;
+            return ZDOMan.instance.GetPortals();
         }
 
         /// <summary>
