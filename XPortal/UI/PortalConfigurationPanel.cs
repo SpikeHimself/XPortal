@@ -199,13 +199,6 @@ namespace XPortal.UI
                 targetPortalDropdown.enabled = true;
                 targetPortalDropdown.Show();
                 DropdownExpanded = true;
-
-                var dropdownScrollrect = targetPortalDropdown.GetComponentInChildren<ScrollRect>();
-                var itemIndex = targetPortalDropdown.value + 1;
-                var childCount = (float)dropdownScrollrect.content.transform.childCount;
-                var scrolltarget = 1 - (itemIndex / childCount);
-                dropdownScrollrect.verticalScrollbar.value = scrolltarget;
-                Log.Debug($"value {targetPortalDropdown.value}, itemindex {itemIndex}, childcount {childCount}, scrolltarget {scrolltarget}");
             }
         }
 
