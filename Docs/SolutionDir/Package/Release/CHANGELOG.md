@@ -1,4 +1,4 @@
-#### v1.2.11 (2023-06-17)
+#### v1.2.12 (2023-06-17)
 
 * Remember portal connections between sessions
 
