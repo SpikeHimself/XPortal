@@ -36,4 +36,14 @@ namespace XPortal.Patches
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(Game), nameof(Game.ConnectPortalsCoroutine))]
+    static class Game_ConnectPortalsCoroutine
+    {
+        static bool Prefix()
+        {
+            // Do not run this method.
+            return false;
+        }
+    }
 }

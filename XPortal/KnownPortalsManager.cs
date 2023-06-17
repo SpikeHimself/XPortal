@@ -112,6 +112,8 @@ namespace XPortal
                 {
                     Name = portalZDO.GetString("tag"),
                     Location = portalZDO.GetPosition(),
+
+                    // TODO: Update target detection
                     Target = portalZDO.GetZDOID("target"),
                 };
 

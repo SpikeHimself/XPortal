@@ -92,9 +92,11 @@
     <Compile Include="Patches\Dropdown.cs" />
     <Compile Include="Patches\Game.cs" />
     <Compile Include="Patches\Piece.cs" />
+    <Compile Include="Patches\Player.cs" />
     <Compile Include="Patches\TeleportWorld.cs" />
     <Compile Include="Patches\TextInput.cs" />
     <Compile Include="Patches\WearNTear.cs" />
+    <Compile Include="Patches\ZDOMan.cs" />
     <Compile Include="PortalColour.cs" />
     <Compile Include="RPC\ClientEvents.cs" />
     <Compile Include="RPC\SendToServer.cs" />

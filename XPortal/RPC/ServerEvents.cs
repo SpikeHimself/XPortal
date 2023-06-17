@@ -39,7 +39,10 @@
                 Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
                 portalZDO.Set("tag", updatedPortal.Name);
                 portalZDO.SetOwner(ZDOMan.GetSessionID());
+
+                // TODO: Remove this and update target detection
                 portalZDO.Set("target", updatedPortal.Target); // backwards compatibility (pre 0.216.9)
+
                 portalZDO.SetConnection(ZDOExtraData.ConnectionType.Portal, updatedPortal.Target);
                 ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
             }
