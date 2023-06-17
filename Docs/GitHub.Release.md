@@ -1,10 +1,14 @@
 ### Changelog
 
-* Remember portal connections between sessions
+* v1.2.13 is a hotfix to v1.2.12
 
-* Fix a crash related to placing items or using the hoe
+* Remember portal connections between sessions (v1.2.12)
 
-* Jotunn update 2.12.1
+* Fix a crash related to placing items or using the hoe (v1.2.12)
+
+* Jotunn update 2.12.1 (v1.2.12)
+
+* Revert MonoMod dependencies (hotfixed in v1.2.13)
 
 ### Debug
 
