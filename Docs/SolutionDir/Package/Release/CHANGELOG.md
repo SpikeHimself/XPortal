@@ -1,13 +1,21 @@
-#### v1.2.11 (2023-06-13)
+#### v1.2.11 (2023-06-17)
 
-* Add translation to Italian
+* Remember portal connections between sessions
 
-* Update Jotun 2.12.0, BepInEx 5.4.2105
+* Fix a crash related to placing items or using the hoe
 
-* Fix portals not connecting after game update 0.216.9
+* Jotunn update 2.12.1
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.11** (2023-06-13)
+
+	* Add translation to Italian
+
+	* Update Jotun 2.12.0, BepInEx 5.4.2105
+
+	* Fix portals not connecting after game update 0.216.9
 
 * **v1.2.10** (2023-04-02)
 

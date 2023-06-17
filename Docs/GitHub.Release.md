@@ -1,10 +1,10 @@
 ### Changelog
 
-* Add translation to Italian
+* Remember portal connections between sessions
 
-* Update Jotun 2.12.0, BepInEx 5.4.2105
+* Fix a crash related to placing items or using the hoe
 
-* Fix portals not connecting after game update 0.216.9
+* Jotunn update 2.12.1
 
 ### Debug
 
