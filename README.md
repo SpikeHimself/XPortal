@@ -47,10 +47,3 @@ I will soon write a guide to get XPortal working in your development environment
 # I did more too!
 
 Please have a look at my other mod too! [XStorage](https://www.nexusmods.com/valheim/mods/2290) lets you open multiple chests at once, rename them, and move items/stacks to the most suitable chest.
-
-
-# Support me
-
-My mods are free and will remain free, for everyone to use, edit or learn from. I lovingly poured many hours of hard work into these projects. If you enjoy my mods and want to support my work, please consider buying me a coffee :)
-
-[<img src="https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/buy-me-a-coffee-small.png" align="right" />](https://www.buymeacoffee.com/SpikeHimself)
