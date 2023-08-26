@@ -1,17 +1,21 @@
-#### v1.2.13 (2023-06-17)
+#### v1.2.14 (2023-08-26)
 
-* v1.2.13 is a hotfix to v1.2.12
-
-* Remember portal connections between sessions (v1.2.12)
-
-* Fix a crash related to placing items or using the hoe (v1.2.12)
-
-* Jotunn update 2.12.1 (v1.2.12)
-
-* Revert MonoMod dependencies (hotfixed in v1.2.13)
-
+* Update Jotun 2.12.6
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.13** (2023-06-17)
+
+	* v1.2.13 is a hotfix to v1.2.12
+
+	* Remember portal connections between sessions (v1.2.12)
+
+	* Fix a crash related to placing items or using the hoe (v1.2.12)
+
+	* Jotunn update 2.12.1 (v1.2.12)
+
+	* Revert MonoMod dependencies (hotfixed in v1.2.13)
+
 	
 * **v1.2.11** (2023-06-13)
 
