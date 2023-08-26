@@ -1,6 +1,7 @@
 #### v1.2.14 (2023-08-26)
 
 * Update Jotun 2.12.6
+
 <details>
 <summary>Click to view previous versions</summary>
 	
