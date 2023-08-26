@@ -126,10 +126,3 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 # I did more too!
 
 Please have a look at my other mod too! [XStorage](https://valheim.thunderstore.io/package/SpikeHimself/XStorage/) lets you open multiple chests at once, rename them, and move items/stacks to the most suitable chest.
-
-
-# Support me
-
-My mods are free and will remain free, for everyone to use, edit or learn from. I lovingly poured many hours of hard work into these projects. If you enjoy my mods and want to support my work, don't forget to click the Like button, and please consider buying me a coffee :)
-
-[<img src="https://raw.githubusercontent.com/SpikeHimself/resources/main/images/thirdparty/buy-me-a-coffee-small.png" align="right" />](https://www.buymeacoffee.com/SpikeHimself)
