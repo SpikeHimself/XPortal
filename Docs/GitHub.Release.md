@@ -1,6 +1,10 @@
 ### Changelog
 
-* Update Jotun 2.12.6
+* Block game input when configuring portal
+
+* Restore portal connections between sessions (for real this time)
+
+* Update Jotun 2.12.7
 
 ### Debug
 

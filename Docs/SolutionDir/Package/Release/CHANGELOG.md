@@ -1,9 +1,17 @@
-#### v1.2.14 (2023-08-26)
+#### v1.2.15 (2023-09-01)
 
-* Update Jotun 2.12.6
+* Block game input when configuring portal
+
+* Restore portal connections between sessions (for real this time)
+
+* Update Jotun 2.12.7
 
 <details>
 <summary>Click to view previous versions</summary>
+
+* **v1.2.14** (2023-08-26)
+	
+	* Update Jotun 2.12.6
 	
 * **v1.2.13** (2023-06-17)
 
