@@ -15,6 +15,9 @@ namespace XPortal
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     public class XPortal : BaseUnityPlugin
     {
+        public const string Key_TargetId = Mod.Info.Name + "_TargetId";
+        public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
+
         public const string StonePortalPrefabName = "portal";
 
         private static bool portalRecipeAltered = false;

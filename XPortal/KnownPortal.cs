@@ -6,6 +6,7 @@ namespace XPortal
     {
         public ZDOID Id { get; set; }
         public string Name { get; set; }
+        public ZDOID PreviousId { get; set; }
         public ZDOID Target { get; set; }
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
@@ -15,6 +16,7 @@ namespace XPortal
             Id = id;
             Name = string.Empty;
             Location = Vector3.zero;
+            PreviousId = ZDOID.None;
             Target = ZDOID.None;
             Colour = PortalColour.GetPortalColour(id);
         }
@@ -29,6 +31,7 @@ namespace XPortal
             Id = pkg.ReadZDOID();
             Name = pkg.ReadString();
             Location = pkg.ReadVector3();
+            PreviousId = pkg.ReadZDOID();
             Target = pkg.ReadZDOID();
             Colour = pkg.ReadString();
         }
@@ -72,6 +75,7 @@ namespace XPortal
             pkg.Write(Id);
             pkg.Write(Name);
             pkg.Write(Location);
+            pkg.Write(PreviousId);
             pkg.Write(Target);
             pkg.Write(Colour);
             return pkg;
