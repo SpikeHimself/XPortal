@@ -346,8 +346,14 @@ namespace XPortal
         /// <param name="portal">The KnownPortal that was being configured</param>
         /// <param name="newName">The new name for the portal</param>
         /// <param name="newTarget">The new target for the portal</param>
-        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget)
+        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget, bool defaultPortal)
         {
+            if (defaultPortal)
+            {
+                Log.Debug($"Setting Default Portal to `{portal.Id}`");
+                XPortalConfig.Instance.Local.DefaultPortal.Value = portal.Location;
+            }
+
             if (!portal.Name.Equals(newName) || !portal.Targets(newTarget))
             {
                 portal.Name = newName;

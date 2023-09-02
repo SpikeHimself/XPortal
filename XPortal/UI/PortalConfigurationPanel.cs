@@ -25,6 +25,8 @@ namespace XPortal.UI
         internal const string GO_DESTINATIONDROPDOWN = Mod.Info.Name + "_DestinationDropdown";
         internal const string GO_DESTINATIONGAMEPADHINT = Mod.Info.Name + "_DestinationGamepadHint";
         internal const string GO_PINGMAPBUTTON = Mod.Info.Name + "_PingMapButton";
+        internal const string GO_DEFAULTPORTALLABEL = Mod.Info.Name + "_DefaultPortalHeader";
+        internal const string GO_DEFAULTPORTALCHECKBOX = Mod.Info.Name + "_DefaultPortalCheckbox";
         internal const string GO_OKAYBUTTON = Mod.Info.Name + "_OkayButton";
         internal const string GO_CANCELBUTTON = Mod.Info.Name + "_CancelButton";
 
@@ -39,6 +41,7 @@ namespace XPortal.UI
         //                                      //
         //  {label}     {i n p u t - l o n g}   //
         //  {label}     {input-short} {button}  //
+        //  {label}     {chk}                   //
         //                                      //
         //                        {cancel} {ok} //
         //////////////////////////////////////////
@@ -54,6 +57,7 @@ namespace XPortal.UI
         static readonly float inputLongWidth = inputShortWidth + padding + buttonWidth;
         static readonly float firstRowTop = -60f - padding;
         static readonly float secondRowTop = firstRowTop - rowHeight - padding;
+        static readonly float thirdRowTop = secondRowTop - rowHeight - padding;
         static readonly float firstColumnLeft = 0f + padding;
         static readonly float secondColumnLeft = firstColumnLeft + labelWidth + padding;
         // Great. Anyway, let's move on now..
@@ -65,6 +69,7 @@ namespace XPortal.UI
         private Dropdown targetPortalDropdown;
         private GameObject targetPortalDropdownUpDownKeyhint;
         private InputField portalNameInputField;
+        private Toggle defaultPortalToggle;
 
         // A look-up list to find the portal ZDOID by dropdown list index
         private readonly Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
@@ -225,6 +230,20 @@ namespace XPortal.UI
             thisPortal = portal;
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
+            
+            defaultPortalToggle.isOn = false;
+            defaultPortalToggle.GetComponent<Behaviour>().enabled = true;
+
+            var isDefaultPortal = thisPortal.Location.Equals(XPortalConfig.Instance.Local.DefaultPortal.Value);
+            if (isDefaultPortal)
+            {
+                Log.Debug($"This (`{thisPortal.Id}`) is the default portal");
+                defaultPortalToggle.isOn = true;
+
+                // We can't unset the default portal - it can only be changed by making another portal the default
+                defaultPortalToggle.GetComponent<Behaviour>().enabled = false;
+            }
+
             PopulateDropdown();
 
             Show();
@@ -310,7 +329,7 @@ namespace XPortal.UI
 
         private void OnOkayButtonClicked()
         {
-            XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId);
+            XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId, defaultPortalToggle.isOn);
             Hide();
         }
 
@@ -348,7 +367,7 @@ namespace XPortal.UI
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
                         width: mainPanelWidthMin,
-                        height: 260f,
+                        height: 320f,
                         draggable: false);
                 mainPanel.name = GO_MAINPANEL;
                 mainPanel.AddComponent<CanvasGroup>();
@@ -459,14 +478,16 @@ namespace XPortal.UI
                 // This is shown on the *left* side of the dropdown
                 targetPortalDropdownUpDownKeyhint = new GameObject(GO_DESTINATIONGAMEPADHINT, typeof(RectTransform), typeof(Image));
                 targetPortalDropdownUpDownKeyhint.transform.SetParent(targetPortalDropdownObject.transform, worldPositionStays: false);
-                var rt = targetPortalDropdownUpDownKeyhint.GetComponent<RectTransform>();
-                rt.pivot = new Vector2(1, 0.5f); // pivot middle right
-                rt.anchorMin = new Vector2(0, 0.5f); // anchor middle left
-                rt.anchorMax = new Vector2(0, 0.5f);
-                rt.sizeDelta = new Vector2(36, 36);
-                rt.anchoredPosition = new Vector2(10, 0);
-                var img = targetPortalDropdownUpDownKeyhint.GetComponent<Image>();
-                img.sprite = GUIManager.Instance.GetSprite("dpad_updown");
+
+                var targetPortalDropdownUpDownKeyhintRt = targetPortalDropdownUpDownKeyhint.GetComponent<RectTransform>();
+                targetPortalDropdownUpDownKeyhintRt.pivot = new Vector2(1, 0.5f); // pivot middle right
+                targetPortalDropdownUpDownKeyhintRt.anchorMin = new Vector2(0, 0.5f); // anchor middle left
+                targetPortalDropdownUpDownKeyhintRt.anchorMax = new Vector2(0, 0.5f);
+                targetPortalDropdownUpDownKeyhintRt.sizeDelta = new Vector2(36, 36);
+                targetPortalDropdownUpDownKeyhintRt.anchoredPosition = new Vector2(10, 0);
+                
+                var targetPortalDropdownUpDownKeyhintImg = targetPortalDropdownUpDownKeyhint.GetComponent<Image>();
+                targetPortalDropdownUpDownKeyhintImg.sprite = GUIManager.Instance.GetSprite("dpad_updown");
 
 
                 // Ping on Map button
@@ -482,6 +503,47 @@ namespace XPortal.UI
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
                 AddGamepadHint(pingMapButtonObject, "JoyButtonY", KeyCode.None);
+
+
+                // Default Portal label
+                var defaultPortalLabelObject = GUIManager.Instance.CreateText(
+                        text: Localization.instance.Localize("$piece_portal_defaultportal"), // "Default Portal"
+                        parent: mainPanel.transform,
+                        anchorMin: new Vector2(0f, 1f),    // anchor top left
+                        anchorMax: new Vector2(0f, 1f),
+                        position: new Vector2(firstColumnLeft, thirdRowTop),
+                        font: GUIManager.Instance.AveriaSerif,
+                        fontSize: 18,
+                        color: GUIManager.Instance.ValheimOrange,
+                        outline: true,
+                        outlineColor: Color.black,
+                        width: labelWidth,
+                        height: rowHeight,
+                        addContentSizeFitter: false);
+                defaultPortalLabelObject.name = GO_DEFAULTPORTALLABEL;
+                defaultPortalLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
+
+                var defaultPortalLabelText = defaultPortalLabelObject.GetComponent<Text>();
+                defaultPortalLabelText.alignment = TextAnchor.MiddleLeft;
+                defaultPortalLabelText.horizontalOverflow = HorizontalWrapMode.Overflow;
+
+
+                // Default Portal checkbox
+                var defaultPortalCheckboxObject = GUIManager.Instance.CreateToggle(
+                    parent: mainPanel.transform,
+                    width: rowHeight,
+                    height: rowHeight);
+                defaultPortalCheckboxObject.name = GO_DEFAULTPORTALCHECKBOX;
+
+                var extraPadding = padding / 3;
+                var defaultPortalCheckboxRt = defaultPortalCheckboxObject.GetComponent<RectTransform>();
+                defaultPortalCheckboxRt.pivot = new Vector2(0f, 1f);        // pivot top left
+                defaultPortalCheckboxRt.anchorMin = new Vector2(0f, 1f);    // anchor top left
+                defaultPortalCheckboxRt.anchorMax = new Vector2(0f, 1f);
+                defaultPortalCheckboxRt.anchoredPosition = new Vector2(secondColumnLeft + extraPadding, thirdRowTop - extraPadding);
+
+                defaultPortalToggle = defaultPortalCheckboxObject.GetComponent<Toggle>();
+                defaultPortalToggle.isOn = false;
 
 
                 // Okay button
@@ -513,7 +575,7 @@ namespace XPortal.UI
 
                 AddGamepadHint(cancelButtonObject, "JoyButtonB", KeyCode.Escape);
 
-
+                
                 // Add listeners to button click events
                 pingMapButtonObject.GetComponent<Button>().onClick.AddListener(OnPingMapButtonClicked);
                 okayButtonObject.GetComponent<Button>().onClick.AddListener(OnOkayButtonClicked);

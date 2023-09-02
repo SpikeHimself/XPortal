@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using System;
+using UnityEngine;
 using XPortal.RPC;
 
 namespace XPortal
@@ -25,6 +26,7 @@ namespace XPortal
             public bool PingMapDisabled;
             public bool DisplayPortalColour;
             public bool DoublePortalCosts;
+            public ConfigEntry<Vector3> DefaultPortal;
         }
 
         /// <summary>
@@ -78,6 +80,8 @@ namespace XPortal
 
             var cfgDoublePortalCosts = configFile.Bind("General", "DoublePortalCosts", false, "By using XPortal, you effectively only need half the amount of portals. To compensate for that, we can double the costs of portals. This setting is enforced (but not overwritten) by the server.");
             Local.DoublePortalCosts = cfgDoublePortalCosts.Value;
+
+            Local.DefaultPortal = configFile.Bind("General", "DefaultPortal", Vector3.zero, "The Portal that newly built Portals immediately connect to.");
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace XPortal
             Name = string.Empty;
             Location = Vector3.zero;
             PreviousId = ZDOID.None;
-            Target = ZDOID.None;
+            Target = KnownPortalsManager.Instance.FindDefaultPortal();
             Colour = PortalColour.GetPortalColour(id);
         }
 

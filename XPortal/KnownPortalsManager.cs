@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using XPortal.RPC;
 
 namespace XPortal
@@ -173,6 +174,24 @@ namespace XPortal
             }
 
             Log.Info($"Known portals updated. Current total: {Count}");
+        }
+
+        public KnownPortal FindByLocation(Vector3 location)
+        {
+            return knownPortals.Values.Where(p => p.Location.Equals(location)).FirstOrDefault();
+        }
+
+        public ZDOID FindDefaultPortal()
+        {
+            Vector3 defaultLocation = XPortalConfig.Instance.Local.DefaultPortal.Value;
+            var defaultPortal = FindByLocation(defaultLocation);
+
+            if (defaultPortal == null)
+            {
+                return ZDOID.None;
+            }
+
+            return defaultPortal.Id;
         }
 
         public void Reset()
