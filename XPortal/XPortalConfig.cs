@@ -16,6 +16,8 @@ namespace XPortal
         public event Action OnLocalConfigChanged;
         public event Action OnServerConfigChanged;
 
+        private const string Desc_EnforcedByServer = " This setting is enforced (but not overwritten) by the server.";
+
         private ConfigFile configFile;
 
         /// <summary>
@@ -27,6 +29,7 @@ namespace XPortal
             public bool DisplayPortalColour;
             public bool DoublePortalCosts;
             public ConfigEntry<Vector3> DefaultPortal;
+            public bool HidePortalDistance;
         }
 
         /// <summary>
@@ -72,16 +75,19 @@ namespace XPortal
             configFile.Bind("General", "NexusID", Mod.Info.NexusId, "Nexus mod ID for updates (do not change)");
 
             // Add PingMapDisabled option which disables the Ping Map button
-            var cfgPingMapDisabled = configFile.Bind("General", "PingMapDisabled", false, "Disable the Ping Map button completely. For players who wish to play without a map. This setting is enforced (but not overwritten) by the server.");
+            var cfgPingMapDisabled = configFile.Bind("General", "PingMapDisabled", false, "Disable the Ping Map button completely. For players who wish to play without a map." + Desc_EnforcedByServer);
             Local.PingMapDisabled = cfgPingMapDisabled.Value;
 
             var cfgDisplayPortalColour = configFile.Bind("General", "DisplayPortalColour", false, "Show a \">>\" tag in the list of portals that has the same colour as the light that the portal emits (integration with \"Advanced Portals\" by RandyKnapp).");
             Local.DisplayPortalColour = cfgDisplayPortalColour.Value;
 
-            var cfgDoublePortalCosts = configFile.Bind("General", "DoublePortalCosts", false, "By using XPortal, you effectively only need half the amount of portals. To compensate for that, we can double the costs of portals. This setting is enforced (but not overwritten) by the server.");
+            var cfgDoublePortalCosts = configFile.Bind("General", "DoublePortalCosts", false, "By using XPortal, you effectively only need half the amount of portals. To compensate for that, we can double the costs of portals." + Desc_EnforcedByServer);
             Local.DoublePortalCosts = cfgDoublePortalCosts.Value;
 
             Local.DefaultPortal = configFile.Bind("General", "DefaultPortal", Vector3.zero, "The Portal that newly built Portals immediately connect to.");
+
+            var cfgHidePortalDistance = configFile.Bind("General", "HidePortalDistance", false, "In the list of portals, do not show how far away other portals are." + Desc_EnforcedByServer);
+            Local.HidePortalDistance = cfgHidePortalDistance.Value;
         }
 
         /// <summary>
@@ -110,6 +116,7 @@ namespace XPortal
             var pkg = new ZPackage();
             pkg.Write(Local.PingMapDisabled);
             pkg.Write(Local.DoublePortalCosts);
+            pkg.Write(Local.HidePortalDistance);
             return pkg;
         }
 
@@ -121,8 +128,11 @@ namespace XPortal
         {
             Server.PingMapDisabled = pkg.ReadBool();
             Server.DoublePortalCosts = pkg.ReadBool();
+            Server.HidePortalDistance = pkg.ReadBool();
+
             Log.Debug($"PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
             Log.Debug($"DoublePortalCosts {{ Local: {Local.DoublePortalCosts}, Server: {Server.DoublePortalCosts} }}");
+            Log.Debug($"HidePortalDistance {{ Local: {Local.HidePortalDistance}, Server: {Server.HidePortalDistance} }}");
 
             OnServerConfigChanged?.Invoke();
         }

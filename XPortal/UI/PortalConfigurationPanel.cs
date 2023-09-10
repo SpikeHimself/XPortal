@@ -287,11 +287,17 @@ namespace XPortal.UI
                 }
 
                 // Calculate portal distance
-                float distance = (int)Vector3.Distance(thisPortal.Location, portal.Location);
-                string strDistance = string.Format("{0} m", distance.ToString());
-                if (distance >= 1000)
+                var distanceTag = string.Empty;
+                if (!XPortalConfig.Instance.Server.HidePortalDistance)
                 {
-                    strDistance = string.Format("{0:0.0} km", distance / 1000);
+                    float distance = (int)Vector3.Distance(thisPortal.Location, portal.Location);
+                    string strDistance = string.Format("{0} m", distance.ToString());
+                    if (distance >= 1000)
+                    {
+                        strDistance = string.Format("{0:0.0} km", distance / 1000);
+                    }
+
+                    distanceTag = $"  ({strDistance})";
                 }
 
                 var colourTag = string.Empty;
@@ -300,7 +306,7 @@ namespace XPortal.UI
                     colourTag = $"<color={portal.Colour}>>> </color>";
                 }
 
-                var option = new Dropdown.OptionData($"{colourTag}{portalName}  ({strDistance})");
+                var option = new Dropdown.OptionData($"{colourTag}{portalName}{distanceTag}");
 
                 // Insert at the next index
                 targetPortalDropdown.options.Insert(++index, option);
