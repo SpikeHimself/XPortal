@@ -11,23 +11,30 @@ namespace XPortal.Patches
     static class ZDOMan_ConnectPortals
     {
 
-        static ZDOID FindNewId(List<ZDOID> allPortals, ZDOID thisId, ZDOID targetId)
+        static ZDOID FindNewId(List<ZDOID> allPortals, ZDOID oldId)
         {
-            foreach (var newId in allPortals.Where(p => p != thisId))
+            // Go over all portal ZDOIDs
+            foreach (var newId in allPortals)
             {
                 ZDO newZdo = ZDOMan.instance.GetZDO(newId);
-                if (newZdo != null)
+
+                // Skip if the ZDO does not exist
+                if (newZdo == null) continue;
+
+                // Get the configured previous ZDOID of this portal
+                var previousId = newZdo.GetZDOID(XPortal.Key_PreviousId);
+
+                // If this portal's PreviousId matches the oldId we're looking for, return its new ZDOID
+                if (oldId == previousId)
                 {
-                    var previousId = newZdo.GetZDOID(XPortal.Key_PreviousId);
-                    if (targetId == previousId)
-                    {
-                        Log.Debug($"  New ZDOID for old Target `{targetId}` is `{newId}`");
-                        return newId;
-                    }
+                    var portalName = newZdo.GetString("tag");
+                    Log.Debug($"Old ZDOID `{oldId}` is now `{newId}` (`{portalName}`)");
+                    return newId;
                 }
+                
             }
 
-            return targetId;
+            return oldId;
         }
 
         static void Postfix()
