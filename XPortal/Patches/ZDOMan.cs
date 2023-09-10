@@ -39,38 +39,48 @@ namespace XPortal.Patches
 
         static void Postfix()
         {
+            // Find all Portals and Targets
             List<ZDOID> connectionIds1 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal );
             List<ZDOID> connectionIds2 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal | ZDOExtraData.ConnectionType.Target);
             
+            // Combine the Portals and Targets into one list
             List<ZDOID> allPortalIds = new List<ZDOID>();
             allPortalIds.AddRange(connectionIds1);
             allPortalIds.AddRange(connectionIds2);
 
             Log.Debug($"Found {allPortalIds.Count} portals");
 
+            // Go over each portal in the list and try to reconnect it
             foreach (ZDOID portalId in allPortalIds)
             {
                 ZDO portalZdo = ZDOMan.instance.GetZDO(portalId);
-                if (portalZdo != null)
+
+                // Skip if the ZDO does not exist
+                if (portalZdo == null) continue;
+                
+                var portalName = portalZdo.GetString("tag");
+                Log.Debug($"Checking connection for `{portalId}` (`{portalName}`)");
+
+                // Get the configured target ZDOID of this portal
+                var targetId = portalZdo.GetZDOID(XPortal.Key_TargetId);
+
+                // Find the ZDO of this target
+                var targetZdo = ZDOMan.instance.GetZDO(targetId);
+
+                // If the target ZDO does not exist, or it does not have a PreviousId set, then this is not an existing portal                    
+                if(targetZdo == null || string.IsNullOrEmpty(targetZdo.GetString(XPortal.Key_PreviousId)))
                 {
-                    Log.Debug($"Checking connections for `{portalId}`");
-
-                    var targetId = portalZdo.GetZDOID(XPortal.Key_TargetId);
-                    var targetZdo = ZDOMan.instance.GetZDO(targetId);
-
-                    if (targetZdo == null)
-                    {
-                        Log.Debug($" Target `{targetId}` does not exist, finding new ZDOID..");
-                        targetId = FindNewId(allPortalIds, portalId, targetId);
-                    }
-
-                    Log.Debug($"Connecting `{portalId}` to `{targetId}`");
-
-                    portalZdo.SetOwner(ZDOMan.GetSessionID());
-                    portalZdo.SetConnection(ZDOExtraData.ConnectionType.Portal, targetId);
-                    portalZdo.Set(XPortal.Key_TargetId, targetId);
-                    continue;
+                    Log.Debug($"Target `{targetId}` does not exist, finding new ZDOID..");
+                    targetId = FindNewId(allPortalIds, targetId);
+                    targetZdo = ZDOMan.instance.GetZDO(targetId);
                 }
+
+                var targetPortalName = targetZdo.GetString("tag");
+                Log.Info($"Connecting: `{portalId}` (`{portalName}`)  ==>  `{targetId}` (`{targetPortalName}`)");
+
+                portalZdo.SetOwner(ZDOMan.GetSessionID());
+                portalZdo.SetConnection(ZDOExtraData.ConnectionType.Portal, targetId);
+                portalZdo.Set(XPortal.Key_TargetId, targetId);
             }
 
             // Finish by setting the previousid so that the next session can use that to find the new zdoids
