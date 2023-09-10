@@ -552,6 +552,7 @@ namespace XPortal.UI
                 defaultPortalToggle = defaultPortalCheckboxObject.GetComponent<Toggle>();
                 defaultPortalToggle.isOn = false;
 
+                AddGamepadHint(defaultPortalCheckboxObject, "JoyLStick", KeyCode.None);
 
                 // Okay button
                 var okayButtonObject = GUIManager.Instance.CreateButton(
