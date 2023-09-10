@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XPortal.Extension;
 
 namespace XPortal.UI
 {
@@ -234,7 +235,7 @@ namespace XPortal.UI
             defaultPortalToggle.isOn = false;
             defaultPortalToggle.GetComponent<Behaviour>().enabled = true;
 
-            var isDefaultPortal = thisPortal.Location.Equals(XPortalConfig.Instance.Local.DefaultPortal.Value);
+            var isDefaultPortal = thisPortal.Location.Round().Equals(XPortalConfig.Instance.Local.DefaultPortal.Value.Round());
             if (isDefaultPortal)
             {
                 Log.Debug($"This (`{thisPortal.Id}`) is the default portal");

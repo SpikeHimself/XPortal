@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using XPortal.Extension;
 using XPortal.RPC;
 
 namespace XPortal
@@ -179,12 +180,12 @@ namespace XPortal
 
         public KnownPortal FindByLocation(Vector3 location)
         {
-            return knownPortals.Values.Where(p => p.Location.Equals(location)).FirstOrDefault();
+            return knownPortals.Values.Where(p => p.Location.Round().Equals(location)).FirstOrDefault();
         }
 
         public ZDOID FindDefaultPortal()
         {
-            Vector3 defaultLocation = XPortalConfig.Instance.Local.DefaultPortal.Value;
+            Vector3 defaultLocation = XPortalConfig.Instance.Local.DefaultPortal.Value.Round();
             var defaultPortal = FindByLocation(defaultLocation);
 
             if (defaultPortal == null)

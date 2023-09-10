@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using XPortal.RPC;
 using XPortal.UI;
+using XPortal.Extension;
 
 namespace XPortal
 {
@@ -354,7 +355,7 @@ namespace XPortal
             if (defaultPortal)
             {
                 Log.Debug($"Setting Default Portal to `{portal.Id}`");
-                XPortalConfig.Instance.Local.DefaultPortal.Value = portal.Location;
+                XPortalConfig.Instance.Local.DefaultPortal.Value = portal.Location.Round();
             }
 
             if (!portal.Name.Equals(newName) || !portal.Targets(newTarget))
