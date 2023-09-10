@@ -173,7 +173,8 @@ namespace XPortal
                 SendToServer.AddOrUpdateRequest(portal);
             }
 
-            Log.Info($"Known portals updated. Current total: {Count}");
+            Log.Info($"Known portals updated:");
+            ReportAllPortals();
         }
 
         public KnownPortal FindByLocation(Vector3 location)
@@ -192,6 +193,17 @@ namespace XPortal
             }
 
             return defaultPortal.Id;
+        }
+
+        public void ReportAllPortals()  // "reportalls" hehehe
+        {
+            if(!knownPortals.Any())
+            {
+                Log.Debug(" No portals found.");
+                return;
+            }
+
+            knownPortals.Values.ToList().ForEach(p => Log.Debug($" {p}"));
         }
 
         public void Reset()

@@ -79,6 +79,9 @@ namespace XPortal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MonoBehaviour.OnDestroy occurs when a Scene or game ends.")]
         private void OnDestroy()
         {
+            Log.Debug("Full portal list:");
+            KnownPortalsManager.Instance.ReportAllPortals();
+
             Patches.Patcher.Unpatch();
             if (!Environment.IsHeadless)
             {

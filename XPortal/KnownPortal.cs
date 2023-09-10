@@ -88,7 +88,7 @@ namespace XPortal
 
         public override string ToString()
         {
-            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{GetFriendlyTargetName()}`, Colour: `{Colour}` }}";
+            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
         }
     }
 }
