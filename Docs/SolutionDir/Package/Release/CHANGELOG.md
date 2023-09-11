@@ -1,13 +1,23 @@
-#### v1.2.15 (2023-09-01)
+#### v1.2.16 (2023-09-11)
 
-* Block game input when configuring portal
+* Add Default Portal checkbox on the portal configuration panel
 
-* Restore portal connections between sessions (for real this time)
+* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals
 
-* Update Jotun 2.12.7
+* Fix bug where sometimes portals would (still) not reconnect
+
+* Fix Dutch translation
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.21.5** (2023-09-01)
+	
+	* Block game input when configuring portal
+
+	* Restore portal connections between sessions (for real this time)
+
+	* Update Jotunn 2.12.7
 
 * **v1.2.14** (2023-08-26)
 	

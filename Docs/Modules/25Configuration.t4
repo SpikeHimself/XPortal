@@ -14,6 +14,10 @@ Show a coloured ">>" tag in the list of portals to indicate the portal type (int
 
 Since XPortal is essentially a cheat, in that you only need half the amount of portals now, this setting allows you to compensate for that by doubling portal costs. This setting is enforced (but not overwritten) by the server.
 
+<#= mf.Code("HidePortalDistance") #>
+
+If you don't want to see how far away the portals in the list are, you can use this option to remove that. This setting is enforced (but not overwritten) by the server.
+
 <#= mf.Code("DefaultPortal") #>
 
-This configuration option exists to save your default portal. Its value will be set by checking the Default Portal checkbox on the portal configuration panel. This value should not be manually edited in the file.
+This configuration option exists to save your personal Default Portal. Its value will be set by checking the Default Portal checkbox on the portal configuration panel. This value should not be manually edited in the file.

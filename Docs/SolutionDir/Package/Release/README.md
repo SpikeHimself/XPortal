@@ -19,6 +19,10 @@ No more tag pairing, and no more portal hubs!
 When interacting with a portal, instead of entering a tag which has to match another portal's, XPortal lets you choose the portal's destination from a list.
 For your convenience, this list also shows you how far away the portals are.
 
+#### Default destination
+
+A Portal can be marked as the "Default Portal". When a Default Portal has been set, all newly built portals will immediately connect with that portal, without you having to go into the portal configuration panel.
+
 #### Longer names
 
 XPortal completely removes the character length restriction on portal names, so that you can give your portals clear and descriptive titles.
@@ -81,6 +85,14 @@ Show a coloured ">>" tag in the list of portals to indicate the portal type (int
 `DoublePortalCosts`
 
 Since XPortal is essentially a cheat, in that you only need half the amount of portals now, this setting allows you to compensate for that by doubling portal costs. This setting is enforced (but not overwritten) by the server.
+
+`HidePortalDistance`
+
+If you don't want to see how far away the portals in the list are, you can use this option to remove that. This setting is enforced (but not overwritten) by the server.
+
+`DefaultPortal`
+
+This configuration option exists to save your personal Default Portal. Its value will be set by checking the Default Portal checkbox on the portal configuration panel. This value should not be manually edited in the file.
 
 
 # Installation instructions
