@@ -1,15 +1,29 @@
-#### v1.2.16 (2023-09-11)
+#### v1.2.17 (2023-09-12)
 
-* Add Default Portal checkbox on the portal configuration panel
+* v1.2.17 is a hotfix to v1.2.16
 
-* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals
+* Fix a bug where the world file would fail to load (v1.2.17)
 
-* Fix bug where sometimes portals would (still) not reconnect
+* Add Default Portal checkbox on the portal configuration panel (v1.2.16)
 
-* Fix Dutch translation
+* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals (v1.2.16)
+
+* Fix bug where sometimes portals would (still) not reconnect (v1.2.16)
+
+* Fix Dutch translation (v1.2.16)
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.16** (2023-09-11)
+
+	* Add Default Portal checkbox on the portal configuration panel
+
+	* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals
+
+	* Fix bug where sometimes portals would (still) not reconnect
+
+	* Fix Dutch translation
 	
 * **v1.2.15** (2023-09-01)
 	
