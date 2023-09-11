@@ -18,7 +18,7 @@ namespace XPortal
     {
         public const string Key_TargetId = Mod.Info.Name + "_TargetId";
         public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
-
+        
         public const string StonePortalPrefabName = "portal";
 
         private static bool portalRecipeAltered = false;
@@ -354,8 +354,17 @@ namespace XPortal
         {
             if (defaultPortal)
             {
-                Log.Debug($"Setting Default Portal to `{portal.Id}`");
+                // The "Default Portal" checkbox is checked: make this the default portal
                 XPortalConfig.Instance.Local.DefaultPortal.Value = portal.Location.Round();
+            }
+            else
+            {
+                // The "Default Portal" checkbox is not checked
+                if (portal.IsDefaultPortal)
+                {
+                    // This portal was the default portal: unset it
+                    XPortalConfig.Instance.Local.DefaultPortal.Value = Vector3.zero;
+                }
             }
 
             if (!portal.Name.Equals(newName) || !portal.Targets(newTarget))

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XPortal.Extension;
 
 namespace XPortal
 {
@@ -10,6 +11,14 @@ namespace XPortal
         public ZDOID Target { get; set; }
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
+
+        public bool IsDefaultPortal
+        {
+            get
+            {
+                return Location.Round().Equals(XPortalConfig.Instance.Local.DefaultPortal.Value.Round());
+            }
+        }
 
         public KnownPortal(ZDOID id)
         {

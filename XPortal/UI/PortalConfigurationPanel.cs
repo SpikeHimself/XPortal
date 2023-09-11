@@ -232,18 +232,7 @@ namespace XPortal.UI
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
             
-            defaultPortalToggle.isOn = false;
-            defaultPortalToggle.GetComponent<Behaviour>().enabled = true;
-
-            var isDefaultPortal = thisPortal.Location.Round().Equals(XPortalConfig.Instance.Local.DefaultPortal.Value.Round());
-            if (isDefaultPortal)
-            {
-                Log.Debug($"This (`{thisPortal.Id}`) is the default portal");
-                defaultPortalToggle.isOn = true;
-
-                // We can't unset the default portal - it can only be changed by making another portal the default
-                defaultPortalToggle.GetComponent<Behaviour>().enabled = false;
-            }
+            defaultPortalToggle.isOn = thisPortal.IsDefaultPortal;
 
             PopulateDropdown();
 
