@@ -1,7 +1,1 @@
-* Add Default Portal checkbox on the portal configuration panel
-
-* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals
-
-* Fix bug where sometimes portals would (still) not reconnect
-
-* Fix Dutch translation
+* No changes yet
