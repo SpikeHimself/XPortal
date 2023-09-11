@@ -11,7 +11,7 @@
 <details>
 <summary>Click to view previous versions</summary>
 	
-* **v1.21.5** (2023-09-01)
+* **v1.2.15** (2023-09-01)
 	
 	* Block game input when configuring portal
 
