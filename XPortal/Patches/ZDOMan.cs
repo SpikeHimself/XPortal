@@ -39,6 +39,8 @@ namespace XPortal.Patches
 
         static void Postfix()
         {
+            Log.Debug("Restoring Portal connections..");
+
             // Find all Portals and Targets
             List<ZDOID> connectionIds1 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal );
             List<ZDOID> connectionIds2 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal | ZDOExtraData.ConnectionType.Target);

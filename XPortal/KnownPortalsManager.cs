@@ -174,7 +174,7 @@ namespace XPortal
                 SendToServer.AddOrUpdateRequest(portal);
             }
 
-            Log.Info($"Known portals updated:");
+            Log.Info($"Known portals updated");
             ReportAllPortals();
         }
 
@@ -204,7 +204,10 @@ namespace XPortal
                 return;
             }
 
-            knownPortals.Values.ToList().ForEach(p => Log.Debug($" {p}"));
+            foreach(KnownPortal p in knownPortals.Values)
+            {
+                Log.Debug($" {p}");
+            }
         }
 
         public void Reset()
