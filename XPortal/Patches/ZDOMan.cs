@@ -37,7 +37,7 @@ namespace XPortal.Patches
             return oldId;
         }
 
-        static void Postfix()
+        static bool Prefix()
         {
             Log.Debug("Restoring Portal connections..");
 
@@ -54,7 +54,7 @@ namespace XPortal.Patches
 
 
             // If there are no portals, there is nothing to do
-            if (allPortalIds.Count == 0) return;
+            if (allPortalIds.Count == 0) return false;
 
 
             // Go over each portal in the list and try to reconnect it
@@ -104,6 +104,8 @@ namespace XPortal.Patches
                 ZDO portalZdo = ZDOMan.instance.GetZDO(portalId);
                 portalZdo?.Set(XPortal.Key_PreviousId, portalId);
             }
+
+            return false;
         }
 
     }
