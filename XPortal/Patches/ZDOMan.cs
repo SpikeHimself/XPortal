@@ -89,6 +89,12 @@ namespace XPortal.Patches
                     targetZdo = ZDOMan.instance.GetZDO(targetId);
                 }
 
+                if(targetZdo == null)
+                {
+                    Log.Debug($"Target `{targetId}` could not be found by its PreviousId either. Skipping..");
+                    continue;
+                }
+
                 var targetPortalName = targetZdo.GetString("tag");
                 Log.Info($"Connecting: `{portalId}` (`{portalName}`)  ==>  `{targetId}` (`{targetPortalName}`)");
 
