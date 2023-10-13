@@ -1,16 +1,10 @@
 ### Changelog
 
-* v1.2.17 is a hotfix to v1.2.16
+* Completely skip vanilla portal connection behaviour
 
-* Fix a bug where the world file would fail to load (v1.2.17)
+* Fix bug that causes world not to load after Valheim update 0.217.22
 
-* Add Default Portal checkbox on the portal configuration panel (v1.2.16)
-
-* Add config option `HidePortalDistance` which can be used to remove the distance indicator from the list of portals (v1.2.16)
-
-* Fix bug where sometimes portals would (still) not reconnect (v1.2.16)
-
-* Fix Dutch translation (v1.2.16)
+* Update Jotunn v2.14.4, BepInEx v5.4.2200
 
 ### Debug
 

@@ -1,1 +1,5 @@
+* Completely skip vanilla portal connection behaviour
+
+* Fix bug that causes world not to load after Valheim update 0.217.22
+
 * Update Jotunn v2.14.4, BepInEx v5.4.2200
