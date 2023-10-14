@@ -1,5 +1,14 @@
 <details>
 <summary>Click to view previous versions</summary>
+
+* **v1.2.18** (2023-10-13)
+
+	* Completely skip vanilla portal connection behaviour
+
+	* Fix bug that causes world not to load after Valheim update 0.217.22
+
+	* Update Jotunn v2.14.4, BepInEx v5.4.2200
+
 	
 * **v1.2.17** (2023-09-12)
 
