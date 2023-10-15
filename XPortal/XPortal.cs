@@ -4,9 +4,9 @@ using Jotunn.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using XPortal.Extension;
 using XPortal.RPC;
 using XPortal.UI;
-using XPortal.Extension;
 
 namespace XPortal
 {
@@ -18,7 +18,7 @@ namespace XPortal
     {
         public const string Key_TargetId = Mod.Info.Name + "_TargetId";
         public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
-        
+
         public const string StonePortalPrefabName = "portal";
 
         private static bool portalRecipeAltered = false;

@@ -1,9 +1,5 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using static UnityEngine.GraphicsBuffer;
 
 namespace XPortal.Patches
 {
@@ -31,7 +27,7 @@ namespace XPortal.Patches
                     Log.Debug($"Old ZDOID `{oldId}` is now `{newId}` (`{portalName}`)");
                     return newId;
                 }
-                
+
             }
 
             return oldId;
@@ -42,9 +38,9 @@ namespace XPortal.Patches
             Log.Debug("Restoring Portal connections..");
 
             // Find all Portals and Targets
-            List<ZDOID> connectionIds1 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal );
+            List<ZDOID> connectionIds1 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal);
             List<ZDOID> connectionIds2 = ZDOExtraData.GetAllConnectionZDOIDs(ZDOExtraData.ConnectionType.Portal | ZDOExtraData.ConnectionType.Target);
-            
+
             // Combine the Portals and Targets into one list
             List<ZDOID> allPortalIds = new List<ZDOID>();
             allPortalIds.AddRange(connectionIds1);
@@ -89,7 +85,7 @@ namespace XPortal.Patches
                     targetZdo = ZDOMan.instance.GetZDO(targetId);
                 }
 
-                if(targetZdo == null)
+                if (targetZdo == null)
                 {
                     Log.Debug($"Target `{targetId}` could not be found by its PreviousId either. Skipping..");
                     continue;

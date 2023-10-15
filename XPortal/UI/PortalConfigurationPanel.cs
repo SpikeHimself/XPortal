@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XPortal.Extension;
 
 namespace XPortal.UI
 {
@@ -231,7 +230,7 @@ namespace XPortal.UI
             thisPortal = portal;
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
-            
+
             defaultPortalToggle.isOn = thisPortal.IsDefaultPortal;
 
             PopulateDropdown();
@@ -481,7 +480,7 @@ namespace XPortal.UI
                 targetPortalDropdownUpDownKeyhintRt.anchorMax = new Vector2(0, 0.5f);
                 targetPortalDropdownUpDownKeyhintRt.sizeDelta = new Vector2(36, 36);
                 targetPortalDropdownUpDownKeyhintRt.anchoredPosition = new Vector2(10, 0);
-                
+
                 var targetPortalDropdownUpDownKeyhintImg = targetPortalDropdownUpDownKeyhint.GetComponent<Image>();
                 targetPortalDropdownUpDownKeyhintImg.sprite = GUIManager.Instance.GetSprite("dpad_updown");
 
@@ -572,7 +571,7 @@ namespace XPortal.UI
 
                 AddGamepadHint(cancelButtonObject, "JoyButtonB", KeyCode.Escape);
 
-                
+
                 // Add listeners to button click events
                 pingMapButtonObject.GetComponent<Button>().onClick.AddListener(OnPingMapButtonClicked);
                 okayButtonObject.GetComponent<Button>().onClick.AddListener(OnOkayButtonClicked);

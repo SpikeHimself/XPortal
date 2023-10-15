@@ -198,13 +198,13 @@ namespace XPortal
 
         public void ReportAllPortals()  // "reportalls" hehehe
         {
-            if(!knownPortals.Any())
+            if (!knownPortals.Any())
             {
                 Log.Debug(" No portals found.");
                 return;
             }
 
-            foreach(KnownPortal p in knownPortals.Values)
+            foreach (KnownPortal p in knownPortals.Values)
             {
                 Log.Debug($" {p}");
             }
