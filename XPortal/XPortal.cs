@@ -278,6 +278,8 @@ namespace XPortal
         {
             Log.Debug($"Portal `{portalId}` was placed");
 
+            ZDOMan.instance.ForceSendZDO(portalId);
+
             var portal = new KnownPortal(portalId, location);
             SendToServer.AddOrUpdateRequest(portal);
         }

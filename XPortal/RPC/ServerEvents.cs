@@ -33,21 +33,40 @@
 
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            var portalZDO = ZDOMan.instance.GetZDO(updatedPortal.Id);
-            if (portalZDO != null)
+            delayedPortalId = updatedPortal.Id;
+            UpdatePortalZdo();
+
+            SendToClient.SyncPortal(updatedPortal);
+        }
+
+        private static ZDOID delayedPortalId;
+        private static void UpdatePortalZdo(bool delayed = true)
+        {
+            if (delayed)
             {
-                Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of `{sender}`");
+                Log.Debug("Queueing ConnectPortal()..");
+                QueuedAction.Queue(UpdatePortalZdo, delay: 1);
+            }
+            else
+            {
+                var updatedPortal = KnownPortalsManager.Instance.GetKnownPortalById(delayedPortalId);
+                var portalZDO = ZDOMan.instance.GetZDO(updatedPortal.Id);
+
+                if (portalZDO == null)
+                {
+                    Log.Debug("Portal ZDO still not found, queueing again..");
+                    QueuedAction.Queue(UpdatePortalZdo, delay: 3);
+                    return;
+                }
+
+                Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` after a delay");
                 portalZDO.Set("tag", updatedPortal.Name);
                 portalZDO.SetOwner(ZDOMan.GetSessionID());
 
                 portalZDO.Set(XPortal.Key_TargetId, updatedPortal.Target);
                 portalZDO.Set(XPortal.Key_PreviousId, updatedPortal.Id);
                 portalZDO.SetConnection(ZDOExtraData.ConnectionType.Portal, updatedPortal.Target);
-
-                ZDOMan.instance.ForceSendZDO(updatedPortal.Id);
             }
-
-            SendToClient.SyncPortal(updatedPortal);
         }
 
         /// <summary>
