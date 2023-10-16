@@ -66,6 +66,18 @@
                 portalZDO.Set(XPortal.Key_TargetId, updatedPortal.Target);
                 portalZDO.Set(XPortal.Key_PreviousId, updatedPortal.Id);
                 portalZDO.SetConnection(ZDOExtraData.ConnectionType.Portal, updatedPortal.Target);
+
+                if (updatedPortal.HasTarget())
+                {
+                    // Set the target of the other portal to this portal, if that portal does not currently have a target
+                    var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(updatedPortal.Target);
+                    if (!targetPortal.HasTarget())
+                    {
+                        Log.Info("Target portal does not have a target itself, setting target portal's target to this portal");
+                        targetPortal.Target = updatedPortal.Id;
+                        SendToServer.AddOrUpdateRequest(targetPortal);
+                    }
+                }
             }
         }
 
