@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace XPortal
 {
-    internal static class QueuedAction
+    internal class QueuedAction
     {
-        private static readonly Dictionary<Action<bool>, int> queuedActions;
+        private static readonly Dictionary<Guid, QueuedAction> queuedActions;
 
         static QueuedAction()
         {
-            queuedActions = new Dictionary<Action<bool>, int>();
+            queuedActions = new Dictionary<Guid, QueuedAction>();
         }
 
         public static void Update()
@@ -25,16 +25,17 @@ namespace XPortal
 
         public static void Queue(Action<bool> action, int delay = 2)
         {
-            queuedActions.Add(action, delay);
+            var newAction = new QueuedAction(action, delay);
+            queuedActions.Add(Guid.NewGuid(), newAction);
         }
 
         private static void Trigger()
         {
-            var readyActions = queuedActions.Where(kvp => kvp.Value == 0).Select(kvp => kvp.Key).ToList();
+            var readyActions = queuedActions.Where(kvp => kvp.Value.Delay == 0).ToList();
             foreach (var readyAction in readyActions)
             {
-                readyAction.Invoke(false);
-                queuedActions.Remove(readyAction);
+                queuedActions.Remove(readyAction.Key);
+                readyAction.Value.Action.Invoke(false);
             }
         }
 
@@ -42,18 +43,27 @@ namespace XPortal
         {
             foreach (var queuedAction in queuedActions.Keys.ToList())
             {
-                queuedActions[queuedAction]--;
+                queuedActions[queuedAction].Delay--;
             }
         }
 
         private static void Cleanup()
         {
-            var processedActions = queuedActions.Where(kvp => kvp.Value < 0).Select(kvp => kvp.Key);
-            foreach (var processedAction in processedActions.ToList())
+            var processedActions = queuedActions.Where(kvp => kvp.Value.Delay < 0).ToList();
+            foreach (var processedAction in processedActions)
             {
-                Log.Warning($"Cleaned up stale action {processedAction.Method.Name}");
-                queuedActions.Remove(processedAction);
+                Log.Warning($"Cleaned up stale action {processedAction.Value.Action.Method.Name}");
+                queuedActions.Remove(processedAction.Key);
             }
+        }
+
+        private Action<bool> Action;
+        private int Delay;
+
+        private QueuedAction(Action<bool> action, int delay)
+        {
+            Action = action;
+            Delay = delay;
         }
     }
 }
