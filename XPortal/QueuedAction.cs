@@ -23,9 +23,9 @@ namespace XPortal
             }
         }
 
-        public static void Queue(Action<bool> action, int delay = 2)
+        public static void Queue(Action<bool, object> action, int delay = 2, object state = null)
         {
-            var newAction = new QueuedAction(action, delay);
+            var newAction = new QueuedAction(action, delay, state);
             queuedActions.Add(Guid.NewGuid(), newAction);
         }
 
@@ -35,7 +35,7 @@ namespace XPortal
             foreach (var readyAction in readyActions)
             {
                 queuedActions.Remove(readyAction.Key);
-                readyAction.Value.Action.Invoke(false);
+                readyAction.Value.Action.Invoke(false, readyAction.Value.State);
             }
         }
 
@@ -57,13 +57,15 @@ namespace XPortal
             }
         }
 
-        private Action<bool> Action;
+        private readonly Action<bool, object> Action;
         private int Delay;
+        private object State;
 
-        private QueuedAction(Action<bool> action, int delay)
+        private QueuedAction(Action<bool, object> action, int delay, object state = null)
         {
             Action = action;
             Delay = delay;
+            State = state;
         }
     }
 }

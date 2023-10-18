@@ -160,7 +160,7 @@ namespace XPortal.UI
             }
         }
 
-        private void ActivateInputField(bool delayed = true)
+        private void ActivateInputField(bool delayed = true, object state = null)
         {
             if (delayed)
             {
@@ -176,7 +176,7 @@ namespace XPortal.UI
             SetActive(true);
         }
 
-        public void Hide(bool delayed = true)
+        public void Hide(bool delayed = true, object state = null)
         {
             if (delayed)
             {

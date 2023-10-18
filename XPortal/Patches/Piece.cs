@@ -22,7 +22,7 @@ namespace XPortal.Patches
             CheckWearNTearCreationTime();
         }
 
-        private static void CheckWearNTearCreationTime(bool delayed = true)
+        private static void CheckWearNTearCreationTime(bool delayed = true, object state = null)
         {
             if (delayed)
             {
