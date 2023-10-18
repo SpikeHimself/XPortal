@@ -33,50 +33,20 @@
 
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            delayedPortalId = updatedPortal.Id;
-            UpdatePortalZdo();
+            Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of {sender}");
+            ZdoTools.UpdateFromKnownPortal(state: updatedPortal);
 
             SendToClient.SyncPortal(updatedPortal);
-        }
 
-        private static ZDOID delayedPortalId;
-        private static void UpdatePortalZdo(bool delayed = true)
-        {
-            if (delayed)
+            if (updatedPortal.HasTarget())
             {
-                Log.Debug("Queueing ConnectPortal()..");
-                QueuedAction.Queue(UpdatePortalZdo, delay: 1);
-            }
-            else
-            {
-                var updatedPortal = KnownPortalsManager.Instance.GetKnownPortalById(delayedPortalId);
-                var portalZDO = ZDOMan.instance.GetZDO(updatedPortal.Id);
-
-                if (portalZDO == null)
+                // Set the target of the other portal to this portal, if that portal does not currently have a target
+                var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(updatedPortal.Target);
+                if (!targetPortal.HasTarget())
                 {
-                    Log.Debug("Portal ZDO still not found, queueing again..");
-                    QueuedAction.Queue(UpdatePortalZdo, delay: 3);
-                    return;
-                }
-
-                Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` after a delay");
-                portalZDO.Set("tag", updatedPortal.Name);
-                portalZDO.SetOwner(ZDOMan.GetSessionID());
-
-                portalZDO.Set(XPortal.Key_TargetId, updatedPortal.Target);
-                portalZDO.Set(XPortal.Key_PreviousId, updatedPortal.Id);
-                portalZDO.SetConnection(ZDOExtraData.ConnectionType.Portal, updatedPortal.Target);
-
-                if (updatedPortal.HasTarget())
-                {
-                    // Set the target of the other portal to this portal, if that portal does not currently have a target
-                    var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(updatedPortal.Target);
-                    if (!targetPortal.HasTarget())
-                    {
-                        Log.Info("Target portal does not have a target itself, setting target portal's target to this portal");
-                        targetPortal.Target = updatedPortal.Id;
-                        SendToServer.AddOrUpdateRequest(targetPortal);
-                    }
+                    Log.Info("Target portal does not have a target itself, setting target portal's target to this portal");
+                    targetPortal.Target = updatedPortal.Id;
+                    SendToServer.AddOrUpdateRequest(targetPortal);
                 }
             }
         }
