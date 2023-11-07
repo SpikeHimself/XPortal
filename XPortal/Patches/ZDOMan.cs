@@ -23,7 +23,7 @@ namespace XPortal.Patches
                 // If this portal's PreviousId matches the oldId we're looking for, return its new ZDOID
                 if (oldId == previousId)
                 {
-                    var portalName = newZdo.GetString("tag");
+                    var portalName = ZdoTools.GetName(newZdo);
                     Log.Debug($"Old ZDOID `{oldId}` is now `{newId}` (`{portalName}`)");
                     return newId;
                 }

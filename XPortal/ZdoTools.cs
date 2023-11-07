@@ -2,6 +2,11 @@
 {
     internal static class ZdoTools
     {
+        public static string GetName(ZDO portalZdo)
+        {
+            return portalZdo.GetString("tag");
+        }
+
         public static void SetName (ZDO portalZdo, string name)
         {
             portalZdo.Set("tag", name);
