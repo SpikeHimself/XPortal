@@ -40,6 +40,12 @@ namespace XPortal
         {
             return knownPortals[id];
         }
+        
+        public KnownPortal GetKnownPortalByPreviousId(ZDOID previousId)
+        {
+            return knownPortals.Where(p => p.Value.PreviousId == previousId).Select(kvp => kvp.Value).FirstOrDefault();
+        }
+
 
         public List<KnownPortal> GetList()
         {
