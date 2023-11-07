@@ -1,13 +1,22 @@
-#### v1.2.18 (2023-10-13)
+#### v1.2.19 (2023-11-07)
 
-* Completely skip vanilla portal connection behaviour
+* Fix bug where a client's portals would not connect to their Default Portal
 
-* Fix bug that causes world not to load after Valheim update 0.217.22
+* Fix bug where Portal Configuration Panel would not open after latest game update
 
-* Update Jotunn v2.14.4, BepInEx v5.4.2200
+* Update Jotunn v2.14.6
 
 <details>
 <summary>Click to view previous versions</summary>
+
+* **v1.2.18** (2023-10-13)
+
+	* Completely skip vanilla portal connection behaviour
+
+	* Fix bug that causes world not to load after Valheim update 0.217.22
+
+	* Update Jotunn v2.14.4, BepInEx v5.4.2200
+
 	
 * **v1.2.17** (2023-09-12)
 

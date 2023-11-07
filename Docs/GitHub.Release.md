@@ -1,10 +1,10 @@
 ### Changelog
 
-* Completely skip vanilla portal connection behaviour
+* Fix bug where a client's portals would not connect to their Default Portal
 
-* Fix bug that causes world not to load after Valheim update 0.217.22
+* Fix bug where Portal Configuration Panel would not open after latest game update
 
-* Update Jotunn v2.14.4, BepInEx v5.4.2200
+* Update Jotunn v2.14.6
 
 ### Debug
 
