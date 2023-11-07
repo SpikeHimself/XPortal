@@ -1,1 +1,3 @@
 * Fix bug where a client's portals would not connect to their Default Portal
+
+* Update Jotunn v2.14.6
