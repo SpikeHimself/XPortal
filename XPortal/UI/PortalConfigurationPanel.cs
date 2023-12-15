@@ -472,7 +472,7 @@ namespace XPortal.UI
                 targetPortalDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
                 ApplyDropdownStyle(targetPortalDropdown);
 
-                AddGamepadHint(targetPortalDropdownObject, "JoyButtonX", KeyCode.None);
+                AddGamepadHint(targetPortalDropdownObject, "buttonWest", KeyCode.None);
 
 
                 // Target portal dropdown up/down keyhint image
@@ -503,7 +503,7 @@ namespace XPortal.UI
                 pingMapButtonObject.name = GO_PINGMAPBUTTON;
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
-                AddGamepadHint(pingMapButtonObject, "JoyButtonY", KeyCode.None);
+                AddGamepadHint(pingMapButtonObject, "buttonNorth", KeyCode.None);
 
 
                 // Default Portal label
@@ -546,7 +546,7 @@ namespace XPortal.UI
                 defaultPortalToggle = defaultPortalCheckboxObject.GetComponent<Toggle>();
                 defaultPortalToggle.isOn = false;
 
-                AddGamepadHint(defaultPortalCheckboxObject, "JoyLStick", KeyCode.None);
+                AddGamepadHint(defaultPortalCheckboxObject, "leftStickButton", KeyCode.None);
 
                 // Okay button
                 var okayButtonObject = GUIManager.Instance.CreateButton(
@@ -560,7 +560,7 @@ namespace XPortal.UI
                 okayButtonObject.name = GO_OKAYBUTTON;
                 okayButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                AddGamepadHint(okayButtonObject, "JoyButtonA", KeyCode.Return);
+                AddGamepadHint(okayButtonObject, "buttonSouth", KeyCode.Return);
 
 
                 // Cancel button
@@ -575,7 +575,7 @@ namespace XPortal.UI
                 cancelButtonObject.name = GO_CANCELBUTTON;
                 cancelButtonObject.GetComponent<RectTransform>().pivot = new Vector2(1, 0);    // pivot bottom right
 
-                AddGamepadHint(cancelButtonObject, "JoyButtonB", KeyCode.Escape);
+                AddGamepadHint(cancelButtonObject, "buttonEast", KeyCode.Escape);
 
 
                 // Add listeners to button click events
