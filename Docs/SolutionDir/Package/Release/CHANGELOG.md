@@ -1,13 +1,18 @@
-#### v1.2.19 (2023-11-07)
+#### v1.2.20 (2023-12-15)
 
-* Fix bug where a client's portals would not connect to their Default Portal
-
-* Fix bug where Portal Configuration Panel would not open after latest game update
-
-* Update Jotunn v2.14.6
+* Update Jotunn 2.15.2
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.19** (2023-11-07)
+
+	* Fix bug where a client's portals would not connect to their Default Portal
+
+	* Fix bug where Portal Configuration Panel would not open after latest game update
+
+	* Update Jotunn v2.14.6
+
 
 * **v1.2.18** (2023-10-13)
 

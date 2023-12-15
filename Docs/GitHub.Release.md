@@ -1,10 +1,6 @@
 ### Changelog
 
-* Fix bug where a client's portals would not connect to their Default Portal
-
-* Fix bug where Portal Configuration Panel would not open after latest game update
-
-* Update Jotunn v2.14.6
+* Update Jotunn 2.15.2
 
 ### Debug
 
