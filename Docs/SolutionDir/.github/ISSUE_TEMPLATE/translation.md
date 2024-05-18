@@ -44,4 +44,5 @@ Please use the English name as it is used on this page:  https://valheim-modding
 4: Target: "Destination",
 5: Target 'none': "(None)",
 6: Name 'no name': "(No name)",
-7: XPortal UI header title: "Hail, traveller!"
+7: XPortal UI header title: "Hail, traveller!",
+8: Default portal: "Default portal"
