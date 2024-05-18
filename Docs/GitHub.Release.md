@@ -1,6 +1,6 @@
 ### Changelog
 
-* Update Jotunn 2.15.2
+* Update Jotunn 2.20.0
 
 ### Debug
 

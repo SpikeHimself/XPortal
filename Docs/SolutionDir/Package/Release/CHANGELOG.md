@@ -1,9 +1,14 @@
-#### v1.2.20 (2023-12-15)
+#### v1.2.21 (2024-05-18)
 
-* Update Jotunn 2.15.2
+* Update Jotunn 2.20.0
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.20** (2023-12-15)
+
+	* Update Jotunn 2.15.2
+
 	
 * **v1.2.19** (2023-11-07)
 
