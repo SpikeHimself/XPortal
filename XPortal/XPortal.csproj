@@ -118,6 +118,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Translations\Chinese\xportal-translation-chinese.json" />
     <None Include="Translations\English\xportal-translations-english.json" />
     <None Include="Translations\Dutch\xportal-translations-dutch.json" />
     <None Include="Translations\French\xportal-translations-french.json" />

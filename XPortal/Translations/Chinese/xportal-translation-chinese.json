@@ -1,0 +1,10 @@
+{
+  "piece_portal_description": "连接到另一个传送门",
+  "piece_portal_settag": "配置",
+  "piece_portal_tag": "名称",
+  "piece_portal_target": "目的地",
+  "piece_portal_target_none": "(无)",
+  "piece_portal_tag_none": "(无名称)",
+  "piece_portal_defaultportal": "Default portal",
+  "hud_xportal_title": "道路千万条，安全第一条！"
+}
