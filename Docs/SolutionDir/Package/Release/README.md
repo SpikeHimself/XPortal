@@ -133,6 +133,7 @@ To add a translation to XPortal, choose `Translation` when submitting a [New iss
 * hanawa07 for translating to Korean
 * bonesbro for adding a colour for Stone Portals (#39)
 * VasariRulez for translating to Italian
+* Felix for translating to Chinese
 
 
 # I did more too!

@@ -1,6 +1,8 @@
 ### Changelog
 
 * Update Jotunn 2.20.0
+* Minor translation fixes
+* Add translation to Chinese
 
 ### Debug
 

@@ -1,6 +1,8 @@
-#### v1.2.21 (2024-05-18)
+#### v1.2.21 (2024-05-19)
 
 * Update Jotunn 2.20.0
+* Minor translation fixes
+* Add translation to Chinese
 
 <details>
 <summary>Click to view previous versions</summary>
