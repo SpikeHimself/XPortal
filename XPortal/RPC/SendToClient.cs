@@ -74,7 +74,7 @@ namespace XPortal.RPC
             // ..but XPortal much prefers to show the name of the portal, instead of the name of the player
             localUserInfo.Name = text;
 
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty, PrivilegeManager.GetNetworkUserId());
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CHATMESSAGE, location, (int)Talker.Type.Ping, localUserInfo, string.Empty);
         }
     }
 }
