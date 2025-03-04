@@ -353,17 +353,17 @@ namespace XPortal.UI
                 // Minimum width of Main Panel so that everything fits
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 
-                var pixelFixGui = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui");
+                var GuiHook = GameObject.Find("_GameMain/LoadingGUI/CustomGUIFront");
 
-                if (!pixelFixGui)
+                if (!GuiHook)
                 {
-                    Log.Error("PixelFix GUI not found");
+                    Log.Error("GuiHook not found");
                     return;
                 }
 
                 // Main "parent" panel
                 mainPanel = GUIManager.Instance.CreateWoodpanel(
-                        parent: pixelFixGui.transform,
+                        parent: GuiHook.transform,
                         anchorMin: new Vector2(0.5f, 0.5f),
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
