@@ -1,11 +1,20 @@
-#### v1.2.21 (2024-05-19)
+#### v1.2.22 (2025-03-04)
 
-* Update Jotunn 2.20.0
-* Minor translation fixes
-* Add translation to Chinese
+* Update Jotunn 2.24.1
+
+* Fixed UI not showing since game update 0.220.3
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.21** (2024-05-19)
+
+	* Update Jotunn 2.20.0
+	
+	* Minor translation fixes
+	
+	* Add translation to Chinese
+
 	
 * **v1.2.20** (2023-12-15)
 
@@ -18,7 +27,7 @@
 
 	* Fix bug where Portal Configuration Panel would not open after latest game update
 
-	* Update Jotunn v2.14.6
+	* Update Jotunn 2.14.6
 
 
 * **v1.2.18** (2023-10-13)
@@ -27,7 +36,7 @@
 
 	* Fix bug that causes world not to load after Valheim update 0.217.22
 
-	* Update Jotunn v2.14.4, BepInEx v5.4.2200
+	* Update Jotunn 2.14.4, BepInEx 5.4.2200
 
 	
 * **v1.2.17** (2023-09-12)
