@@ -1,11 +1,16 @@
-#### v1.2.22 (2025-03-04)
+#### v1.2.22 (2025-03-17)
 
-* Update Jotunn 2.24.1
-
-* Fixed UI not showing since game update 0.220.3
+* No changes yet!
 
 <details>
 <summary>Click to view previous versions</summary>
+	
+* **v1.2.22** (2025-03-04)
+	
+	* Update Jotunn 2.24.1
+
+	* Fixed UI not showing since game update 0.220.3
+
 	
 * **v1.2.21** (2024-05-19)
 

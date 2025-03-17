@@ -61,6 +61,7 @@ XPortal is known to be fully incompatible with:
 
 <#= 
 mf.List(ListBullets.Asterisk, items: new string[] {
-	$"{linkAnyPortal} by sweetgiorni"
+	$"{linkAnyPortal} by sweetgiorni",
+	$"{linkComfyGizmo} by redseiko"
 })
 #>

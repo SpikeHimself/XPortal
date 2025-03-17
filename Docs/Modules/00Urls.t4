@@ -33,6 +33,7 @@
 	var linkJotunn = CreateLink("Jotunn", 1138, "ValheimModding/Jotunn");
 	var linkStonePortal = CreateLink("Stone Portal", 2007, "JereKuusela/Stone_Portal");
 	var linkAdvancedPortals = CreateLink("Advanced Portals", 2187, "RandyKnapp/AdvancedPortals");
+	var linkComfyGizmo = mf.Link("ComfyGizmo", "https://github.com/redseiko/ValheimMods/releases");
 
 
 	// Static links to other pages

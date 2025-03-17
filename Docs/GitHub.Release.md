@@ -1,8 +1,6 @@
 ### Changelog
 
-* Update Jotunn 2.24.1
-
-* Fixed UI not showing since game update 0.220.3
+* No changes yet!
 
 ### Debug
 
