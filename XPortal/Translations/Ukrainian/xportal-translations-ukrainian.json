@@ -1,0 +1,10 @@
+{
+  "piece_portal_description": "Приєднується до іншого порталу",
+  "piece_portal_settag": "Настроїти",
+  "piece_portal_tag": "Назва",
+  "piece_portal_target": "Пункт призначення",
+  "piece_portal_target_none": "(Немає)",
+  "piece_portal_tag_none": "(Без назви)",
+  "piece_portal_defaultportal":  "Портал за-замовчуванням",
+  "hud_xportal_title": "Привіт, мандрівнику!"
+}
