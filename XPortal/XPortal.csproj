@@ -129,6 +129,7 @@
     <None Include="Translations\Portuguese_Brazilian\xportal-translations-portuguese_brazillian.json" />
     <None Include="Translations\Russian\xportal-translations-russian.json" />
     <None Include="Translations\Spanish\xportal-translations-spanish.json" />
+    <None Include="Translations\Ukrainian\xportal-translations-ukrainian.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

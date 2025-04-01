@@ -10,6 +10,7 @@ mf.List(ListBullets.Asterisk, items: new string[] {
 	"hanawa07 for translating to Korean",
 	"bonesbro for adding a colour for Stone Portals (#39)",
 	"VasariRulez for translating to Italian",
-	"Felix for translating to Chinese"
+	"Felix for translating to Chinese",
+	"cawa-93 for translating to Ukrainian"
 }) 
 #>
