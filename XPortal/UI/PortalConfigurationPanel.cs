@@ -118,8 +118,6 @@ namespace XPortal.UI
 
         public void HandleInput()
         {
-
-
             if (targetPortalDropdownUpDownKeyhint)
             {
                 targetPortalDropdownUpDownKeyhint.SetActive(ZInput.IsGamepadActive());
@@ -373,6 +371,11 @@ namespace XPortal.UI
                 mainPanel.name = GO_MAINPANEL;
                 mainPanel.AddComponent<CanvasGroup>();
                 mainPanel.AddComponent<UIGroupHandler>();
+
+                if (!mainPanel.GetComponentInParent<Localize>())
+                {
+                    mainPanel.AddComponent<Localize>();
+                }
 
                 // Header text
                 var headerTextObject = GUIManager.Instance.CreateText(
@@ -648,7 +651,7 @@ namespace XPortal.UI
             textMesh.text = $"$KEY_{buttonName}";
             textMesh.fontSize = 18;
             textMesh.alignment = TextAlignmentOptions.Center;
-            Localization.instance.textMeshStrings.Add(textMesh, textMesh.text);
+            Localization.instance.textMeshStrings[textMesh] = textMesh.text;
 
             var rt = goGamepadHint.GetComponent<RectTransform>();
             rt.pivot = new Vector2(0.5f, 0.5f); // pivot middle centre
