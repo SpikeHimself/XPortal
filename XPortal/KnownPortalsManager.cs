@@ -112,7 +112,7 @@ namespace XPortal
         public void UpdateFromZDOList(List<ZDO> zdoList)
         {
             var portalsWithZdos = new List<KnownPortal>();
-
+            
             // Create a list of all portals
             foreach (var portalZDO in zdoList)
             {

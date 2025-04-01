@@ -225,6 +225,7 @@ namespace XPortal.UI
         public void ConfigurePortal(KnownPortal portal)
         {
             InitialiseUI();
+            
             thisPortal = portal;
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
@@ -352,7 +353,7 @@ namespace XPortal.UI
                 float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 
                 var GuiHook = GameObject.Find("_GameMain/LoadingGUI/CustomGUIFront");
-
+                
                 if (!GuiHook)
                 {
                     Log.Error("GuiHook not found");
