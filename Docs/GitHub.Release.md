@@ -1,6 +1,10 @@
 ### Changelog
 
-* No changes yet!
+* Fixed gamepad keyhints not showing in UI
+
+* Add translation to Ukrainian
+
+* Update Jotunn 2.24.3
 
 ### Debug
 

@@ -1,6 +1,10 @@
-#### v1.2.22 (2025-03-17)
+#### v1.2.23 (2025-04-01)
 
-* No changes yet!
+* Fixed gamepad keyhints not showing in UI
+
+* Add translation to Ukrainian
+
+* Update Jotunn 2.24.3
 
 <details>
 <summary>Click to view previous versions</summary>

@@ -17,14 +17,6 @@ XPortal is a Valheim mod that lets you select a portal's destination from a list
 
 </div>
 
-# Help wanted
-
-At any given point, there might be open issues that I need help with. For example, there could be compatibility issues with mods that I do not use myself. 
-
-If you would like to help, look at the [Issues page](https://github.com/SpikeHimself/XPortal/issues) to browse all open issues, or just click the link below to immediately filter the list of open issues by the tags https://github.com/SpikeHimself/XPortal/labels/help%20wanted and https://github.com/SpikeHimself/XPortal/labels/incomplete.
-
-https://github.com/SpikeHimself/XPortal/issues?q=label%3Aincomplete%2C%22help+wanted%22+is%3Aopen
-
 
 # Bugs, Feature Requests and Translations
 
