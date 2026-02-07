@@ -1,14 +1,21 @@
-#### v1.2.23 (2025-04-01)
+#### v1.2.24 (2026-02-07)
 
-* Fixed gamepad keyhints not showing in UI
+ * Update BepInEx 5.4.2333
 
-* Add translation to Ukrainian
-
-* Update Jotunn 2.24.3
+ * Update Jotunn 2.27.1
 
 <details>
 <summary>Click to view previous versions</summary>
 	
+* **v1.2.23** (2025-04-01)
+	
+	* Fixed gamepad keyhints not showing in UI
+
+	* Add translation to Ukrainian
+
+	* Update Jotunn 2.24.3
+
+
 * **v1.2.22** (2025-03-04)
 	
 	* Update Jotunn 2.24.1

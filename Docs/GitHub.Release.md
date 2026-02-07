@@ -1,10 +1,8 @@
 ### Changelog
 
-* Fixed gamepad keyhints not showing in UI
+ * Update BepInEx 5.4.2333
 
-* Add translation to Ukrainian
-
-* Update Jotunn 2.24.3
+ * Update Jotunn 2.27.1
 
 ### Debug
 

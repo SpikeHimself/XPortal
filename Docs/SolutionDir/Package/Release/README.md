@@ -69,6 +69,7 @@ XPortal is known to be fully incompatible with:
 
 * [AnyPortal](https://valheim.thunderstore.io/package/sweetgiorni/AnyPortal/) by sweetgiorni
 * [ComfyGizmo](https://github.com/redseiko/ValheimMods/releases) by redseiko
+* [Custom Meshes](https://www.nexusmods.com/valheim/mods/184) by aedenthorn
 
 
 # Configuration
