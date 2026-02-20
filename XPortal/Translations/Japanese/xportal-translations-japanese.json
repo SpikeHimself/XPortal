@@ -1,0 +1,10 @@
+{
+  "piece_portal_description": "他のポータルに接続",
+  "piece_portal_settag": "設定",
+  "piece_portal_tag": "名前",
+  "piece_portal_target": "接続先",
+  "piece_portal_target_none": "(無指定)",
+  "piece_portal_tag_none": "(無名)",
+  "piece_portal_defaultportal": "既定ポータル",
+  "hud_xportal_title": "やあ、トラベラー!"
+}
