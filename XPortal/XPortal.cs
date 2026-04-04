@@ -20,6 +20,7 @@ namespace XPortal
         public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
         public const string Key_NetworkOwnerPlayerId = Mod.Info.Name + "_NetworkOwnerPlayerId";
         public const string Key_NetworkOwnerDisplayName = Mod.Info.Name + "_NetworkOwnerDisplayName";
+        public const string Key_IsPrivate = Mod.Info.Name + "_IsPrivate";
 
         public const string StonePortalPrefabName = "portal";
 
@@ -270,8 +271,10 @@ namespace XPortal
             Log.Debug($"Interacting with: {portal}");
             var piece = teleportWorld.GetComponent<Piece>();
             var mayEditNetworkAsAdmin = XPortalAdminSync.IsLocalPortalNetworkAdmin();
-            var canEditNetwork = piece != null && (piece.IsCreator() || mayEditNetworkAsAdmin);
-            PortalConfigurationPanel.Instance.ConfigurePortal(portal, canEditNetwork);
+            var isCreator = piece != null && piece.IsCreator();
+            var canEditNetwork = isCreator || mayEditNetworkAsAdmin;
+            var canEditPortalFully = isCreator || mayEditNetworkAsAdmin;
+            PortalConfigurationPanel.Instance.ConfigurePortal(portal, canEditNetwork, canEditPortalFully);
         }
 
         /// <summary>
@@ -303,6 +306,46 @@ namespace XPortal
             var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
             Log.Debug($"Portal `{portalName}` is being destroyed");
             SendToServer.RemoveRequest(portalId);
+        }
+
+        /// <summary>
+        /// True when playerId may not use this portal because the destination is someone else’s private portal.
+        /// </summary>
+        internal static bool PrivateUseBlocked(ZDOID sourcePortalId, long playerId)
+        {
+            if (!KnownPortalsManager.Instance.TryGetValue(sourcePortalId, out var source)
+                || !source.HasTarget()
+                || !KnownPortalsManager.Instance.TryGetValue(source.Target, out var dest)
+                || !dest.IsPrivate)
+            {
+                return false;
+            }
+
+            var destZdo = ZDOMan.instance != null ? ZDOMan.instance.GetZDO(dest.Id) : null;
+            var creator = destZdo != null ? destZdo.GetLong(ZDOVars.s_creator) : 0L;
+            return creator != playerId;
+        }
+
+        internal static bool LocalPrivateUseBlocked(ZDOID sourcePortalId)
+        {
+            return Player.m_localPlayer != null && PrivateUseBlocked(sourcePortalId, Player.m_localPlayer.GetPlayerID());
+        }
+
+        /// <summary>For <c>TeleportWorld.UpdatePortal</c> transpiler: same as <see cref="PrivateUseBlocked"/> but takes live instances.</summary>
+        internal static bool IsUsablePortal(TeleportWorld portal, Player player, bool originalFlag)
+        {
+            if (!originalFlag || portal == null || player == null || portal.m_nview == null || !portal.m_nview.IsValid())
+                return false;
+
+            var zdo = portal.m_nview.GetZDO();
+            if (zdo == null)
+            {
+                return true;
+            }
+            
+            var useBlocked = PrivateUseBlocked(zdo.m_uid, player.GetPlayerID());
+
+            return !useBlocked;
         }
         #endregion
 
@@ -357,7 +400,7 @@ namespace XPortal
         /// <param name="portal">The KnownPortal that was being configured</param>
         /// <param name="newName">The new name for the portal</param>
         /// <param name="newTarget">The new target for the portal</param>
-        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget, bool defaultPortal, long networkOwnerPlayerId)
+        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget, bool defaultPortal, long networkOwnerPlayerId, bool isPrivate)
         {
             if (defaultPortal)
             {
@@ -380,8 +423,14 @@ namespace XPortal
             var portalZdo = ZDOMan.instance != null ? ZDOMan.instance.GetZDO(portal.Id) : null;
             var pieceCreator = portalZdo != null ? portalZdo.GetLong(ZDOVars.s_creator) : 0L;
 
+            var effectiveNetworkId = networkOwnerPlayerId;
+            if (isPrivate)
+            {
+                effectiveNetworkId = pieceCreator != 0L ? pieceCreator : localPlayerId;
+            }
+
             var networkOwnerDisplayName = portal.NetworkOwnerDisplayName ?? string.Empty;
-            if (networkOwnerPlayerId == 0L)
+            if (effectiveNetworkId == 0L)
             {
                 networkOwnerDisplayName = string.Empty;
             }
@@ -393,16 +442,18 @@ namespace XPortal
                 networkOwnerDisplayName = PortalNetwork.SanitizeNetworkOwnerDisplayName(fromPlayer);
             }
 
-            var networkChanged = portal.NetworkOwnerPlayerId != networkOwnerPlayerId;
+            var networkChanged = portal.NetworkOwnerPlayerId != effectiveNetworkId;
             var nameOrTargetChanged = !portal.Name.Equals(newName) || !portal.Targets(newTarget);
             var networkDisplayNameChanged = !string.Equals(portal.NetworkOwnerDisplayName ?? string.Empty, networkOwnerDisplayName, System.StringComparison.Ordinal);
+            var privateChanged = portal.IsPrivate != isPrivate;
 
-            if (nameOrTargetChanged || networkChanged || networkDisplayNameChanged)
+            if (nameOrTargetChanged || networkChanged || networkDisplayNameChanged || privateChanged)
             {
                 portal.Name = newName;
                 portal.Target = newTarget;
-                portal.NetworkOwnerPlayerId = networkOwnerPlayerId;
+                portal.NetworkOwnerPlayerId = effectiveNetworkId;
                 portal.NetworkOwnerDisplayName = networkOwnerDisplayName;
+                portal.IsPrivate = isPrivate;
 
                 // Ask the server to update the portal
                 Log.Debug($"Updating portal `{portal.Name}`");

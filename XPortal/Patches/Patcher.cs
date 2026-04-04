@@ -16,6 +16,8 @@ namespace XPortal.Patches
             patcher.PatchAll(typeof(Game_ConnectPortalsCoroutine));
             //patcher.PatchAll(typeof(Player_PlacePiece));
             patcher.PatchAll(typeof(TeleportWorld_GetHoverText));
+            patcher.PatchAll(typeof(TeleportWorld_Teleport_PrivateDestination));
+            patcher.PatchAll(typeof(TeleportWorld_UpdatePortal_Transpiler));
             patcher.PatchAll(typeof(TextInput_RequestText));
             patcher.PatchAll(typeof(WearNTear_Destroy));
             patcher.PatchAll(typeof(ZDOMan_ConnectPortals));

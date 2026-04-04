@@ -12,5 +12,7 @@
   "hud_xportal_destination_portal": "Portal",
   "hud_xportal_network_global": "Globale Portale",
   "hud_xportal_network_suffix": "Portale",
-  "hud_xportal_no_destinations": "Keine anderen Portale"
+  "hud_xportal_no_destinations": "Keine anderen Portale",
+  "piece_portal_private": "Privates Portal",
+  "hud_xportal_network_my_private": "Meine privaten Portale"
 }

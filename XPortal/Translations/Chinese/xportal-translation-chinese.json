@@ -12,5 +12,7 @@
   "hud_xportal_destination_portal": "传送门",
   "hud_xportal_network_global": "全局传送门",
   "hud_xportal_network_suffix": "传送门",
-  "hud_xportal_no_destinations": "没有其他传送门"
+  "hud_xportal_no_destinations": "没有其他传送门",
+  "piece_portal_private": "私人传送门",
+  "hud_xportal_network_my_private": "我的私人传送门"
 }

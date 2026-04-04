@@ -12,5 +12,7 @@
   "hud_xportal_destination_portal": "포털",
   "hud_xportal_network_global": "전역 포털",
   "hud_xportal_network_suffix": "포털",
-  "hud_xportal_no_destinations": "다른 포털 없음"
+  "hud_xportal_no_destinations": "다른 포털 없음",
+  "piece_portal_private": "비공개 포털",
+  "hud_xportal_network_my_private": "내 비공개 포털"
 }

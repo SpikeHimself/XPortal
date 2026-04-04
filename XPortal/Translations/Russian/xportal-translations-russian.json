@@ -12,5 +12,7 @@
   "hud_xportal_destination_portal": "Портал",
   "hud_xportal_network_global": "Глобальные порталы",
   "hud_xportal_network_suffix": "Порталы",
-  "hud_xportal_no_destinations": "Нет других порталов"
+  "hud_xportal_no_destinations": "Нет других порталов",
+  "piece_portal_private": "Частный портал",
+  "hud_xportal_network_my_private": "Мои частные порталы"
 }

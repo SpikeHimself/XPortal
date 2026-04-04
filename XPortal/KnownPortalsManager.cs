@@ -154,6 +154,7 @@ namespace XPortal
                     Target = portalZDO.GetZDOID(XPortal.Key_TargetId),
                     NetworkOwnerPlayerId = ZdoTools.GetNetworkOwnerPlayerId(portalZDO),
                     NetworkOwnerDisplayName = ZdoTools.GetNetworkOwnerDisplayName(portalZDO),
+                    IsPrivate = ZdoTools.GetIsPrivate(portalZDO),
                 };
 
                 portalsWithZdos.Add(knownPortal);

@@ -23,6 +23,11 @@ namespace XPortal
         /// </summary>
         public string NetworkOwnerDisplayName { get; set; }
 
+        /// <summary>
+        /// Private portals are listed only for their owner (and excluded from others' destination lists); they cannot use the global network.
+        /// </summary>
+        public bool IsPrivate { get; set; }
+
         public bool IsDefaultPortal
         {
             get
@@ -41,6 +46,7 @@ namespace XPortal
             Colour = PortalColour.GetPortalColour(id);
             NetworkOwnerPlayerId = 0L;
             NetworkOwnerDisplayName = string.Empty;
+            IsPrivate = false;
         }
 
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
@@ -58,6 +64,7 @@ namespace XPortal
             Colour = pkg.ReadString();
             NetworkOwnerPlayerId = pkg.ReadLong();
             NetworkOwnerDisplayName = ReadOptionalString(pkg);
+            IsPrivate = ReadOptionalBool(pkg);
         }
 
         /// <summary>Reads the packed network owner display name, or empty if the package has no more data.</summary>
@@ -70,6 +77,18 @@ namespace XPortal
             catch (EndOfStreamException)
             {
                 return string.Empty;
+            }
+        }
+
+        private static bool ReadOptionalBool(ZPackage pkg)
+        {
+            try
+            {
+                return pkg.ReadBool();
+            }
+            catch (EndOfStreamException)
+            {
+                return false;
             }
         }
 
@@ -117,6 +136,7 @@ namespace XPortal
             pkg.Write(Colour);
             pkg.Write(NetworkOwnerPlayerId);
             pkg.Write(NetworkOwnerDisplayName ?? string.Empty);
+            pkg.Write(IsPrivate);
             return pkg;
         }
 
@@ -127,7 +147,7 @@ namespace XPortal
 
         public override string ToString()
         {
-            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Private: `{IsPrivate}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
         }
 
         public bool IsGlobalNetwork()

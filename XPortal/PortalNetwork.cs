@@ -2,6 +2,9 @@ namespace XPortal
 {
     internal static class PortalNetwork
     {
+        /// <summary>Dropdown sentinel: "My Private Portals" bucket (not a real network owner id).</summary>
+        internal const long DestinationNetworkMyPrivateBucket = -1L;
+
         /// <summary>Trims and limits length for a stored network owner display name.</summary>
         internal static string SanitizeNetworkOwnerDisplayName(string raw)
         {
@@ -22,6 +25,11 @@ namespace XPortal
 
         internal static string FormatNetworkLabel(long ownerPlayerId)
         {
+            if (ownerPlayerId == DestinationNetworkMyPrivateBucket)
+            {
+                return Localization.instance.Localize("$hud_xportal_network_my_private");
+            }
+
             if (ownerPlayerId == 0L)
             {
                 return Localization.instance.Localize("$hud_xportal_network_global");

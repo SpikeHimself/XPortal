@@ -12,5 +12,7 @@
   "hud_xportal_destination_portal": "ポータル",
   "hud_xportal_network_global": "グローバルポータル",
   "hud_xportal_network_suffix": "ポータル",
-  "hud_xportal_no_destinations": "他にポータルがありません"
+  "hud_xportal_no_destinations": "他にポータルがありません",
+  "piece_portal_private": "プライベートポータル",
+  "hud_xportal_network_my_private": "自分のプライベートポータル"
 }

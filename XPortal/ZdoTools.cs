@@ -48,6 +48,16 @@
             portalZdo.Set(XPortal.Key_NetworkOwnerDisplayName, displayName ?? string.Empty);
         }
 
+        public static bool GetIsPrivate(ZDO portalZdo)
+        {
+            return portalZdo.GetBool(XPortal.Key_IsPrivate, false);
+        }
+
+        public static void SetIsPrivate(ZDO portalZdo, bool isPrivate)
+        {
+            portalZdo.Set(XPortal.Key_IsPrivate, isPrivate);
+        }
+
         public static void UpdateFromKnownPortal(bool delayed = false, object state = null)
         {
             if (delayed)
@@ -71,6 +81,7 @@
             SetPreviousId(portalZdo);
             SetNetworkOwnerPlayerId(portalZdo, portal.NetworkOwnerPlayerId);
             SetNetworkOwnerDisplayName(portalZdo, portal.NetworkOwnerDisplayName ?? string.Empty);
+            SetIsPrivate(portalZdo, portal.IsPrivate);
             SetTarget(portalZdo, portal.Target);
         }
     }
