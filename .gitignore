@@ -376,3 +376,5 @@ FodyWeavers.xsd
 
 # Don't ignore the Docs/SolutionDir contents
 !**Docs/[Ss]olution[Dd]ir/**
+.idea
+*.DotSettings
