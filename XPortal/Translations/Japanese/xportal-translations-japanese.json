@@ -6,5 +6,11 @@
   "piece_portal_target_none": "(無指定)",
   "piece_portal_tag_none": "(無名)",
   "piece_portal_defaultportal": "既定ポータル",
-  "hud_xportal_title": "やあ、トラベラー!"
+  "hud_xportal_title": "やあ、トラベラー!",
+  "hud_xportal_portal_network": "ポータルネットワーク",
+  "hud_xportal_destination_network": "接続先ネットワーク",
+  "hud_xportal_destination_portal": "ポータル",
+  "hud_xportal_network_global": "グローバルポータル",
+  "hud_xportal_network_suffix": "ポータル",
+  "hud_xportal_no_destinations": "他にポータルがありません"
 }

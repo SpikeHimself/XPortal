@@ -3,6 +3,7 @@ using Jotunn.Configs;
 using Jotunn.Managers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,10 @@ namespace XPortal.UI
         internal const string GO_DEFAULTPORTALCHECKBOX = Mod.Info.Name + "_DefaultPortalCheckbox";
         internal const string GO_OKAYBUTTON = Mod.Info.Name + "_OkayButton";
         internal const string GO_CANCELBUTTON = Mod.Info.Name + "_CancelButton";
+        internal const string GO_NETWORKASSIGNLABEL = Mod.Info.Name + "_NetworkAssignHeader";
+        internal const string GO_NETWORKASSIGNDROPDOWN = Mod.Info.Name + "_NetworkAssignDropdown";
+        internal const string GO_DESTINATIONNETWORKLABEL = Mod.Info.Name + "_DestinationNetworkHeader";
+        internal const string GO_DESTINATIONNETWORKDROPDOWN = Mod.Info.Name + "_DestinationNetworkDropdown";
 
         #region Pain
         // Creating the UI was incredibly painful. I will never change the layout again. Ever.
@@ -55,9 +60,12 @@ namespace XPortal.UI
         static readonly float submitButtonHeight = 48f;
         static readonly float inputShortWidth = 460f;
         static readonly float inputLongWidth = inputShortWidth + padding + buttonWidth;
-        static readonly float firstRowTop = -60f - padding;
-        static readonly float secondRowTop = firstRowTop - rowHeight - padding;
-        static readonly float thirdRowTop = secondRowTop - rowHeight - padding;
+        static readonly float rowStep = rowHeight + padding;
+        static readonly float networkAssignRowTop = -60f - padding;
+        static readonly float nameRowTop = networkAssignRowTop - rowStep;
+        static readonly float destinationNetworkRowTop = nameRowTop - rowStep;
+        static readonly float destinationPortalRowTop = destinationNetworkRowTop - rowStep;
+        static readonly float defaultPortalRowTop = destinationPortalRowTop - rowStep;
         static readonly float firstColumnLeft = 0f + padding;
         static readonly float secondColumnLeft = firstColumnLeft + labelWidth + padding;
         // Great. Anyway, let's move on now..
@@ -70,15 +78,24 @@ namespace XPortal.UI
         private GameObject targetPortalDropdownUpDownKeyhint;
         private InputField portalNameInputField;
         private Toggle defaultPortalToggle;
+        private Dropdown networkAssignmentDropdown;
+        private Dropdown destinationNetworkDropdown;
 
         // A look-up list to find the portal ZDOID by dropdown list index
         private readonly Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
+        private readonly Dictionary<int, long> destinationNetworkIndexToOwnerId = new Dictionary<int, long>();
 
         // The KnownPortal being configured
         private KnownPortal thisPortal;
 
         // The ZDOID of the target that was selected in the dropdown
         private ZDOID selectedTargetId;
+
+        private long selectedDestinationNetworkOwnerId;
+        private bool canEditNetworkAssignment;
+
+        /// <summary>Piece <see cref="ZDOVars.s_creator"/>; personal network option uses this owner id (admin editing someone else's portal).</summary>
+        private long pieceCreatorPlayerId;
 
         #region Input Button Configs
         private ButtonConfig uiDropdownScrollUpButton;
@@ -216,69 +233,229 @@ namespace XPortal.UI
             pingMapButtonObject.SetActive(active);
 
             var mainPanelRT = mainPanel.GetComponent<RectTransform>();
-            float dropdownWidth = (active ? inputShortWidth : inputLongWidth) - mainPanelRT.rect.width;
+            var dropdownWidth = (active ? inputShortWidth : inputLongWidth) - mainPanelRT.rect.width;
             targetPortalDropdownObject.GetComponent<RectTransform>().sizeDelta = new Vector2(dropdownWidth, rowHeight);
         }
         #endregion
 
         #region Values
-        public void ConfigurePortal(KnownPortal portal)
+        public void ConfigurePortal(KnownPortal portal, bool canEditNetwork)
         {
             InitialiseUI();
-            
+
             thisPortal = portal;
+            canEditNetworkAssignment = canEditNetwork;
+            pieceCreatorPlayerId = 0L;
+            if (ZDOMan.instance != null)
+            {
+                var portalZdo = ZDOMan.instance.GetZDO(portal.Id);
+                if (portalZdo != null)
+                {
+                    pieceCreatorPlayerId = portalZdo.GetLong(ZDOVars.s_creator);
+                }
+            }
+
             portalNameInputField.text = portal.Name;
             selectedTargetId = portal.Target;
 
             defaultPortalToggle.isOn = thisPortal.IsDefaultPortal;
 
-            PopulateDropdown();
+            PopulateNetworkAssignmentDropdown();
+            PopulateDestinationNetworkDropdown();
+            PopulateDestinationPortalDropdown();
 
             Show();
         }
 
-        private void PopulateDropdown()
+        private void PopulateNetworkAssignmentDropdown()
         {
-            // Remove any listeners so they don't get all upset
-            targetPortalDropdown.onValueChanged.RemoveAllListeners();
+            networkAssignmentDropdown.onValueChanged.RemoveAllListeners();
+            networkAssignmentDropdown.ClearOptions();
 
-            // Forget what we know
-            targetPortalDropdown.ClearOptions();
-            dropdownIndexToZDOIDMapping.Clear();
-
-            int index = -1;
-
-            // Add "None" option at index `0`
-            var strNone = Localization.instance.Localize("$piece_portal_target_none"); // "(None)"
-            targetPortalDropdown.options.Insert(++index, new Dropdown.OptionData(strNone));
-            targetPortalDropdown.value = index;
-            dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
-
-            // Get all KnownPortals, sorted by Name
-            var portalsSorted = KnownPortalsManager.Instance.GetSortedList();
-
-            foreach (var portal in portalsSorted)
+            if (!canEditNetworkAssignment)
             {
-                // Skip the one we're currently interacting with
-                if (portal.Id == thisPortal.Id)
+                networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(thisPortal.NetworkOwnerPlayerId)));
+                networkAssignmentDropdown.value = 0;
+                networkAssignmentDropdown.interactable = false;
+                ApplyDropdownStyle(networkAssignmentDropdown);
+                networkAssignmentDropdown.RefreshShownValue();
+                return;
+            }
+
+            networkAssignmentDropdown.interactable = true;
+            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(0L)));
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+            long personalNetworkOwnerId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(personalNetworkOwnerId)));
+
+            if (thisPortal.NetworkOwnerPlayerId == 0L)
+            {
+                networkAssignmentDropdown.value = 0;
+            }
+            else
+            {
+                networkAssignmentDropdown.value = 1;
+            }
+
+            ApplyDropdownStyle(networkAssignmentDropdown);
+            networkAssignmentDropdown.RefreshShownValue();
+            networkAssignmentDropdown.onValueChanged.AddListener(delegate { OnNetworkAssignmentDropdownValueChanged(networkAssignmentDropdown); });
+        }
+
+        private void OnNetworkAssignmentDropdownValueChanged(Dropdown change)
+        {
+            // Reserved for future validation
+        }
+
+        private long GetSubmittedNetworkOwnerPlayerId()
+        {
+            if (!canEditNetworkAssignment)
+            {
+                return thisPortal.NetworkOwnerPlayerId;
+            }
+
+            if (networkAssignmentDropdown.value == 0)
+            {
+                return 0L;
+            }
+
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+            return pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+        }
+
+        private void PopulateDestinationNetworkDropdown()
+        {
+            destinationNetworkDropdown.onValueChanged.RemoveAllListeners();
+            destinationNetworkDropdown.ClearOptions();
+            destinationNetworkIndexToOwnerId.Clear();
+
+            var ownerIds = new HashSet<long>();
+            foreach (var p in KnownPortalsManager.Instance.GetList())
+            {
+                if (p.Id == thisPortal.Id)
                 {
                     continue;
                 }
 
-                // Get portal name
-                string portalName = portal.Name;
+                ownerIds.Add(p.NetworkOwnerPlayerId);
+            }
 
+            var sorted = ownerIds.ToList();
+            sorted.Sort(CompareNetworkOwnerIds);
+
+            var index = -1;
+            foreach (var ownerId in sorted)
+            {
+                destinationNetworkDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(ownerId)));
+                destinationNetworkIndexToOwnerId.Add(++index, ownerId);
+            }
+
+            if (sorted.Count == 0)
+            {
+                destinationNetworkDropdown.options.Add(new Dropdown.OptionData(Localization.instance.Localize("$hud_xportal_no_destinations")));
+                destinationNetworkIndexToOwnerId.Add(0, 0L);
+                destinationNetworkDropdown.value = 0;
+                selectedDestinationNetworkOwnerId = 0L;
+                ApplyDropdownStyle(destinationNetworkDropdown);
+                destinationNetworkDropdown.RefreshShownValue();
+                destinationNetworkDropdown.onValueChanged.AddListener(delegate { OnDestinationNetworkDropdownValueChanged(destinationNetworkDropdown); });
+                return;
+            }
+
+            selectedDestinationNetworkOwnerId = ResolveInitialDestinationNetworkOwnerId(sorted);
+            var selectIdx = 0;
+            for (var i = 0; i < sorted.Count; i++)
+            {
+                if (sorted[i] == selectedDestinationNetworkOwnerId)
+                {
+                    selectIdx = i;
+                    break;
+                }
+            }
+
+            destinationNetworkDropdown.value = selectIdx;
+            selectedDestinationNetworkOwnerId = destinationNetworkIndexToOwnerId[selectIdx];
+            ApplyDropdownStyle(destinationNetworkDropdown);
+            destinationNetworkDropdown.RefreshShownValue();
+            destinationNetworkDropdown.onValueChanged.AddListener(delegate { OnDestinationNetworkDropdownValueChanged(destinationNetworkDropdown); });
+        }
+
+        private static int CompareNetworkOwnerIds(long a, long b)
+        {
+            if (a == 0L && b != 0L)
+            {
+                return -1;
+            }
+
+            if (a != 0L && b == 0L)
+            {
+                return 1;
+            }
+
+            return a.CompareTo(b);
+        }
+
+        private long ResolveInitialDestinationNetworkOwnerId(List<long> sortedOwnerIds)
+        {
+            if (!thisPortal.HasTarget() || !KnownPortalsManager.Instance.ContainsId(thisPortal.Target))
+            {
+                return sortedOwnerIds[0];
+            }
+
+            var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(thisPortal.Target);
+            if (sortedOwnerIds.Contains(targetPortal.NetworkOwnerPlayerId))
+            {
+                return targetPortal.NetworkOwnerPlayerId;
+            }
+
+            return sortedOwnerIds[0];
+        }
+
+        private void OnDestinationNetworkDropdownValueChanged(Dropdown change)
+        {
+            if (destinationNetworkIndexToOwnerId.Count == 0)
+            {
+                return;
+            }
+
+            selectedDestinationNetworkOwnerId = destinationNetworkIndexToOwnerId[change.value];
+            PopulateDestinationPortalDropdown();
+        }
+
+        private void PopulateDestinationPortalDropdown()
+        {
+            targetPortalDropdown.onValueChanged.RemoveAllListeners();
+            targetPortalDropdown.ClearOptions();
+            dropdownIndexToZDOIDMapping.Clear();
+
+            var index = -1;
+
+            var strNone = Localization.instance.Localize("$piece_portal_target_none");
+            targetPortalDropdown.options.Insert(++index, new Dropdown.OptionData(strNone));
+            targetPortalDropdown.value = index;
+            dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
+
+            var portalsSorted = KnownPortalsManager.Instance.GetSortedList()
+                .Where(p => p.Id != thisPortal.Id && p.NetworkOwnerPlayerId == selectedDestinationNetworkOwnerId)
+                .ToList();
+
+            foreach (var portal in portalsSorted)
+            {
+                var portalName = portal.Name;
                 if (string.IsNullOrEmpty(portalName))
                 {
-                    portalName = Localization.instance.Localize("$piece_portal_tag_none"); // "(No Name)"
+                    portalName = Localization.instance.Localize("$piece_portal_tag_none");
                 }
 
-                // Calculate portal distance
                 var distanceTag = string.Empty;
                 if (!XPortalConfig.Instance.Server.HidePortalDistance)
                 {
                     float distance = (int)Vector3.Distance(thisPortal.Location, portal.Location);
-                    string strDistance = string.Format("{0} m", distance.ToString());
+                    var strDistance = string.Format("{0} m", distance.ToString());
                     if (distance >= 1000)
                     {
                         strDistance = string.Format("{0:0.0} km", distance / 1000);
@@ -294,17 +471,20 @@ namespace XPortal.UI
                 }
 
                 var option = new Dropdown.OptionData($"{colourTag}{portalName}{distanceTag}");
-
-                // Insert at the next index
                 targetPortalDropdown.options.Insert(++index, option);
 
-                // Select it in the list if this is the current target
                 if (portal.Id == selectedTargetId)
                 {
                     targetPortalDropdown.value = index;
                 }
 
                 dropdownIndexToZDOIDMapping.Add(index, portal.Id);
+            }
+
+            if (!dropdownIndexToZDOIDMapping.Values.Any(id => id == selectedTargetId))
+            {
+                targetPortalDropdown.value = 0;
+                selectedTargetId = ZDOID.None;
             }
 
             targetPortalDropdown.RefreshShownValue();
@@ -323,7 +503,7 @@ namespace XPortal.UI
 
         private void OnOkayButtonClicked()
         {
-            XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId, defaultPortalToggle.isOn);
+            XPortal.PortalInfoSubmitted(thisPortal, portalNameInputField.text, selectedTargetId, defaultPortalToggle.isOn, GetSubmittedNetworkOwnerPlayerId());
             Hide();
         }
 
@@ -350,7 +530,7 @@ namespace XPortal.UI
             if (!mainPanel)
             {
                 // Minimum width of Main Panel so that everything fits
-                float mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
+                var mainPanelWidthMin = padding + labelWidth + padding + inputLongWidth + padding;
 
                 var GuiHook = GameObject.Find("_GameMain/LoadingGUI/CustomGUIFront");
                 
@@ -367,7 +547,7 @@ namespace XPortal.UI
                         anchorMax: new Vector2(0.5f, 0.5f),
                         position: new Vector2(0f, 0f),
                         width: mainPanelWidthMin,
-                        height: 320f,
+                        height: 440f,
                         draggable: false);
                 mainPanel.name = GO_MAINPANEL;
                 mainPanel.AddComponent<CanvasGroup>();
@@ -400,13 +580,47 @@ namespace XPortal.UI
                 headerTextObject.GetComponent<RectTransform>().sizeDelta = new Vector2(250f, 50f);
 
 
+                // Portal network assignment label
+                var networkAssignLabelObject = GUIManager.Instance.CreateText(
+                        text: Localization.instance.Localize("$hud_xportal_portal_network"),
+                        parent: mainPanel.transform,
+                        anchorMin: new Vector2(0f, 1f),
+                        anchorMax: new Vector2(0f, 1f),
+                        position: new Vector2(firstColumnLeft, networkAssignRowTop),
+                        font: GUIManager.Instance.AveriaSerif,
+                        fontSize: 18,
+                        color: GUIManager.Instance.ValheimOrange,
+                        outline: true,
+                        outlineColor: Color.black,
+                        width: labelWidth,
+                        height: rowHeight,
+                        addContentSizeFitter: false);
+                networkAssignLabelObject.name = GO_NETWORKASSIGNLABEL;
+                networkAssignLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
+                networkAssignLabelObject.GetComponent<Text>().alignment = TextAnchor.MiddleLeft;
+                networkAssignLabelObject.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+                var networkAssignDropdownObject = GUIManager.Instance.CreateDropDown(
+                        parent: mainPanel.transform,
+                        anchorMin: new Vector2(0f, 1f),
+                        anchorMax: new Vector2(1f, 1f),
+                        position: new Vector2(secondColumnLeft, networkAssignRowTop),
+                        fontSize: 18,
+                        width: inputLongWidth,
+                        height: rowHeight);
+                networkAssignDropdownObject.name = GO_NETWORKASSIGNDROPDOWN;
+                networkAssignmentDropdown = networkAssignDropdownObject.GetComponent<Dropdown>();
+                networkAssignmentDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
+                ApplyDropdownStyle(networkAssignmentDropdown);
+
+
                 // Portal name label
                 var portalNameLabelObject = GUIManager.Instance.CreateText(
                         text: Localization.instance.Localize("$piece_portal_tag"), // "Name"
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(0f, 1f),    // anchor top left
                         anchorMax: new Vector2(0f, 1f),
-                        position: new Vector2(firstColumnLeft, firstRowTop),
+                        position: new Vector2(firstColumnLeft, nameRowTop),
                         font: GUIManager.Instance.AveriaSerif,
                         fontSize: 18,
                         color: GUIManager.Instance.ValheimOrange,
@@ -428,7 +642,7 @@ namespace XPortal.UI
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(0f, 1f),     // anchor top left
                         anchorMax: new Vector2(1f, 1f),     // anchor top right (so it stretches along with the panel)
-                        position: new Vector2(secondColumnLeft, firstRowTop),
+                        position: new Vector2(secondColumnLeft, nameRowTop),
                         contentType: InputField.ContentType.Standard,
                         placeholderText: Localization.instance.Localize("$piece_portal_tag.."), // "Name.."
                         fontSize: 18,
@@ -439,13 +653,47 @@ namespace XPortal.UI
                 portalNameInputField = portalNameInputObject.GetComponent<InputField>();
 
 
+                // Destination network label
+                var destinationNetworkLabelObject = GUIManager.Instance.CreateText(
+                    text: Localization.instance.Localize("$hud_xportal_destination_network"),
+                    parent: mainPanel.transform,
+                    anchorMin: new Vector2(0f, 1f),
+                    anchorMax: new Vector2(0f, 1f),
+                    position: new Vector2(firstColumnLeft, destinationNetworkRowTop),
+                    font: GUIManager.Instance.AveriaSerif,
+                    fontSize: 18,
+                    color: GUIManager.Instance.ValheimOrange,
+                    outline: true,
+                    outlineColor: Color.black,
+                    width: labelWidth,
+                    height: rowHeight,
+                    addContentSizeFitter: false);
+                destinationNetworkLabelObject.name = GO_DESTINATIONNETWORKLABEL;
+                destinationNetworkLabelObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
+                destinationNetworkLabelObject.GetComponent<Text>().alignment = TextAnchor.MiddleLeft;
+                destinationNetworkLabelObject.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+                var destinationNetworkDropdownObject = GUIManager.Instance.CreateDropDown(
+                        parent: mainPanel.transform,
+                        anchorMin: new Vector2(0f, 1f),
+                        anchorMax: new Vector2(1f, 1f),
+                        position: new Vector2(secondColumnLeft, destinationNetworkRowTop),
+                        fontSize: 18,
+                        width: inputLongWidth,
+                        height: rowHeight);
+                destinationNetworkDropdownObject.name = GO_DESTINATIONNETWORKDROPDOWN;
+                destinationNetworkDropdown = destinationNetworkDropdownObject.GetComponent<Dropdown>();
+                destinationNetworkDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
+                ApplyDropdownStyle(destinationNetworkDropdown);
+
+
                 // Target portal label
                 var targetPortalLabelObject = GUIManager.Instance.CreateText(
-                    text: Localization.instance.Localize("$piece_portal_target"),
+                    text: Localization.instance.Localize("$hud_xportal_destination_portal"),
                     parent: mainPanel.transform,
                     anchorMin: new Vector2(0f, 1f),    // anchor top left
                     anchorMax: new Vector2(0f, 1f),
-                    position: new Vector2(firstColumnLeft, secondRowTop),
+                    position: new Vector2(firstColumnLeft, destinationPortalRowTop),
                     font: GUIManager.Instance.AveriaSerif,
                     fontSize: 18,
                     color: GUIManager.Instance.ValheimOrange,
@@ -467,7 +715,7 @@ namespace XPortal.UI
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(0f, 1f),    // anchor top left
                         anchorMax: new Vector2(1f, 1f),    // anchor top right (so it stretches along with the panel)
-                        position: new Vector2(secondColumnLeft, secondRowTop),
+                        position: new Vector2(secondColumnLeft, destinationPortalRowTop),
                         fontSize: 18,
                         width: inputShortWidth,
                         height: rowHeight);
@@ -501,7 +749,7 @@ namespace XPortal.UI
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(1f, 1f),    // anchor top right
                         anchorMax: new Vector2(1f, 1f),
-                        position: new Vector2(0 - padding - buttonWidth, secondRowTop),
+                        position: new Vector2(0 - padding - buttonWidth, destinationPortalRowTop),
                         width: buttonWidth,
                         height: rowHeight);
                 pingMapButtonObject.name = GO_PINGMAPBUTTON;
@@ -516,7 +764,7 @@ namespace XPortal.UI
                         parent: mainPanel.transform,
                         anchorMin: new Vector2(0f, 1f),    // anchor top left
                         anchorMax: new Vector2(0f, 1f),
-                        position: new Vector2(firstColumnLeft, thirdRowTop),
+                        position: new Vector2(firstColumnLeft, defaultPortalRowTop),
                         font: GUIManager.Instance.AveriaSerif,
                         fontSize: 18,
                         color: GUIManager.Instance.ValheimOrange,
@@ -545,7 +793,7 @@ namespace XPortal.UI
                 defaultPortalCheckboxRt.pivot = new Vector2(0f, 1f);        // pivot top left
                 defaultPortalCheckboxRt.anchorMin = new Vector2(0f, 1f);    // anchor top left
                 defaultPortalCheckboxRt.anchorMax = new Vector2(0f, 1f);
-                defaultPortalCheckboxRt.anchoredPosition = new Vector2(secondColumnLeft + extraPadding, thirdRowTop - extraPadding);
+                defaultPortalCheckboxRt.anchoredPosition = new Vector2(secondColumnLeft + extraPadding, defaultPortalRowTop - extraPadding);
 
                 defaultPortalToggle = defaultPortalCheckboxObject.GetComponent<Toggle>();
                 defaultPortalToggle.isOn = false;
@@ -668,6 +916,8 @@ namespace XPortal.UI
         public void Dispose()
         {
             targetPortalDropdown?.onValueChanged.RemoveAllListeners();
+            networkAssignmentDropdown?.onValueChanged.RemoveAllListeners();
+            destinationNetworkDropdown?.onValueChanged.RemoveAllListeners();
 
             if (targetPortalDropdown)
                 GameObject.Destroy(targetPortalDropdown);

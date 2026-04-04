@@ -14,7 +14,7 @@ namespace XPortal.Patches
             if (sign is TeleportWorld teleportWorld)
             {
                 // Request the XPortal UI here instead of the vanilla "set tag" window
-                XPortal.OnPortalRequestText(teleportWorld.m_nview.GetZDO().m_uid);
+                XPortal.OnPortalRequestText(teleportWorld);
 
                 // Don't run the original method at all
                 return false;

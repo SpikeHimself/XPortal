@@ -6,5 +6,11 @@
   "piece_portal_target_none": "(Brak Celu)",
   "piece_portal_tag_none": "(Bez Nazwy)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "Witaj, Podróżniku!"
+  "hud_xportal_title": "Witaj, Podróżniku!",
+  "hud_xportal_portal_network": "Sieć portalu",
+  "hud_xportal_destination_network": "Sieć docelowa",
+  "hud_xportal_destination_portal": "Portal",
+  "hud_xportal_network_global": "Globalne portale",
+  "hud_xportal_network_suffix": "Portale",
+  "hud_xportal_no_destinations": "Brak innych portali"
 }

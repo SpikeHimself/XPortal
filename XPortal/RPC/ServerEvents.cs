@@ -1,4 +1,7 @@
-﻿namespace XPortal.RPC.Server
+﻿using XPortal;
+using XPortal.RPC;
+
+namespace XPortal.RPC.Server
 {
     internal static class ServerEvents
     {
@@ -31,9 +34,63 @@
             var portal = new KnownPortal(pkg);
             Log.Debug($"{sender} wants `{portal.Id}` to be added or updated");
 
+            var requesterPlayerId = NetPeerUtility.GetPeerPlayerId(sender);
+            var portalZdo = ZDOMan.instance.GetZDO(portal.Id);
+            if (portalZdo == null)
+            {
+                Log.Error($"Portal ZDO `{portal.Id}` not found for network validation");
+                return;
+            }
+
+            var pieceCreator = portalZdo.GetLong(ZDOVars.s_creator);
+            var requesterIsCreator = requesterPlayerId != 0L && requesterPlayerId == pieceCreator;
+            var requesterMayChangeNetwork = requesterIsCreator || NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
+
+            KnownPortalsManager.Instance.TryGetValue(portal.Id, out var existing);
+
+            if (!requesterMayChangeNetwork)
+            {
+                var authoritativeNetwork = existing != null
+                    ? existing.NetworkOwnerPlayerId
+                    : ZdoTools.GetNetworkOwnerPlayerId(portalZdo);
+                portal.NetworkOwnerPlayerId = authoritativeNetwork;
+                portal.NetworkOwnerDisplayName = existing != null
+                    ? existing.NetworkOwnerDisplayName
+                    : ZdoTools.GetNetworkOwnerDisplayName(portalZdo);
+            }
+            else
+            {
+                if (portal.NetworkOwnerPlayerId == 0L)
+                {
+                    portal.NetworkOwnerDisplayName = string.Empty;
+                }
+                else
+                {
+                    portal.NetworkOwnerPlayerId = pieceCreator;
+                    if (pieceCreator == 0L)
+                    {
+                        portal.NetworkOwnerDisplayName = string.Empty;
+                    }
+                    else if (requesterIsCreator)
+                    {
+                        var fromClient = PortalNetwork.SanitizeNetworkOwnerDisplayName(portal.NetworkOwnerDisplayName);
+                        portal.NetworkOwnerDisplayName = !string.IsNullOrEmpty(fromClient)
+                            ? fromClient
+                            : (PortalNetwork.TryResolveByWorldState(pieceCreator) ?? string.Empty);
+                    }
+                    else
+                    {
+                        portal.NetworkOwnerDisplayName = PortalNetwork.TryResolveByWorldState(pieceCreator)
+                            ?? existing?.NetworkOwnerDisplayName
+                            ?? ZdoTools.GetNetworkOwnerDisplayName(portalZdo)
+                            ?? string.Empty;
+                    }
+                }
+            }
+
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of {sender}");
+            Log.Info($"Setting portal tag `{updatedPortal.Name}`, network `{updatedPortal.NetworkOwnerPlayerId}` (`{updatedPortal.NetworkOwnerDisplayName}`), target `{updatedPortal.Target}` on behalf of {sender}");
             ZdoTools.UpdateFromKnownPortal(state: updatedPortal);
 
             SendToClient.SyncPortal(updatedPortal);
@@ -104,6 +161,32 @@
             Log.Debug($"{sender} wants to receive the config");
             var pkg = XPortalConfig.Instance.PackLocalConfig();
             SendToClient.Config(sender, pkg);
+        }
+
+        /// <summary>
+        /// Client asks whether this connection is a server admin for portal network UI.
+        /// </summary>
+        internal static void RPC_RequestAdminSync(long sender, ZPackage _)
+        {
+            if (!Environment.IsServer)
+            {
+                return;
+            }
+
+            bool isAdmin = false;
+            var peer = ZNet.instance.GetPeer(sender);
+            if (peer != null)
+            {
+                isAdmin = ZNet.instance.IsAdmin(peer.m_socket.GetHostName());
+            }
+            else if (ZNet.instance.IsServer() && sender == ZNet.GetUID())
+            {
+                isAdmin = ZNet.instance.LocalPlayerIsAdminOrHost();
+            }
+
+            var outPkg = new ZPackage();
+            outPkg.Write(isAdmin);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, RPCManager.RPC_ADMINSYNC, outPkg);
         }
     }
 }

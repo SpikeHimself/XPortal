@@ -1,4 +1,6 @@
-﻿namespace XPortal.RPC.Client
+﻿using XPortal.RPC;
+
+namespace XPortal.RPC.Client
 {
     internal static class ClientEvents
     {
@@ -49,6 +51,21 @@
         {
             Log.Info("Received XPortal Config from server");
             XPortalConfig.Instance.ReceiveServerConfig(pkg);
+        }
+
+        /// <summary>
+        /// Server reply: whether this client is a server admin for portal network UI.
+        /// </summary>
+        internal static void RPC_AdminSync(long sender, ZPackage pkg)
+        {
+            if (Environment.IsServer)
+            {
+                return;
+            }
+
+            bool isAdmin = pkg.ReadBool();
+            XPortalAdminSync.ApplyServerReply(isAdmin);
+            Log.Debug($"Portal network admin UI allowed: {isAdmin}");
         }
     }
 }

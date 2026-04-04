@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using XPortal.Extension;
 
 namespace XPortal
@@ -11,6 +12,16 @@ namespace XPortal
         public ZDOID Target { get; set; }
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
+
+        /// <summary>
+        /// 0 = Global network. Non-zero = personal network owned by this player id (matches Piece creator for that portal).
+        /// </summary>
+        public long NetworkOwnerPlayerId { get; set; }
+
+        /// <summary>
+        /// Label for the personal network owner; stored on the portal ZDO and replicated to clients.
+        /// </summary>
+        public string NetworkOwnerDisplayName { get; set; }
 
         public bool IsDefaultPortal
         {
@@ -28,6 +39,8 @@ namespace XPortal
             PreviousId = ZDOID.None;
             Target = KnownPortalsManager.Instance.FindDefaultPortal();
             Colour = PortalColour.GetPortalColour(id);
+            NetworkOwnerPlayerId = 0L;
+            NetworkOwnerDisplayName = string.Empty;
         }
 
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
@@ -43,6 +56,21 @@ namespace XPortal
             PreviousId = pkg.ReadZDOID();
             Target = pkg.ReadZDOID();
             Colour = pkg.ReadString();
+            NetworkOwnerPlayerId = pkg.ReadLong();
+            NetworkOwnerDisplayName = ReadOptionalString(pkg);
+        }
+
+        /// <summary>Reads the packed network owner display name, or empty if the package has no more data.</summary>
+        private static string ReadOptionalString(ZPackage pkg)
+        {
+            try
+            {
+                return pkg.ReadString();
+            }
+            catch (EndOfStreamException)
+            {
+                return string.Empty;
+            }
         }
 
         public string GetFriendlyName()
@@ -87,6 +115,8 @@ namespace XPortal
             pkg.Write(PreviousId);
             pkg.Write(Target);
             pkg.Write(Colour);
+            pkg.Write(NetworkOwnerPlayerId);
+            pkg.Write(NetworkOwnerDisplayName ?? string.Empty);
             return pkg;
         }
 
@@ -97,7 +127,12 @@ namespace XPortal
 
         public override string ToString()
         {
-            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+        }
+
+        public bool IsGlobalNetwork()
+        {
+            return NetworkOwnerPlayerId == 0L;
         }
     }
 }

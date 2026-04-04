@@ -18,6 +18,8 @@ namespace XPortal
     {
         public const string Key_TargetId = Mod.Info.Name + "_TargetId";
         public const string Key_PreviousId = Mod.Info.Name + "_PreviousId";
+        public const string Key_NetworkOwnerPlayerId = Mod.Info.Name + "_NetworkOwnerPlayerId";
+        public const string Key_NetworkOwnerDisplayName = Mod.Info.Name + "_NetworkOwnerDisplayName";
 
         public const string StonePortalPrefabName = "portal";
 
@@ -121,7 +123,7 @@ namespace XPortal
                 return;
             }
 
-            ItemDrop hammer = ObjectDB.instance.GetItemPrefab("Hammer")?.GetComponent<ItemDrop>();
+            var hammer = ObjectDB.instance.GetItemPrefab("Hammer")?.GetComponent<ItemDrop>();
             if (!hammer)
             {
                 Log.Error("Could not find Hammer prefab");
@@ -190,12 +192,12 @@ namespace XPortal
 
         #region Patch Events
         /// <summary>
-        /// Called by a patch on Game.Start.
-        /// At this point the world is beginning to load. The portals don't exist yet.
+        /// Called from a Game.Start patch. Resets portal and admin-sync state, then registers RPC handlers.
         /// </summary>
         internal static void GameStarted()
         {
             KnownPortalsManager.Instance.Reset();
+            XPortalAdminSync.ResetForNewSession();
             RPCManager.Register();
         }
 
@@ -254,9 +256,9 @@ namespace XPortal
         /// <summary>
         /// When interacting with a portal, we want to show the XPortal UI
         /// </summary>
-        /// <param name="portalId"></param>
-        internal static void OnPortalRequestText(ZDOID portalId)
+        internal static void OnPortalRequestText(TeleportWorld teleportWorld)
         {
+            var portalId = teleportWorld.m_nview.GetZDO().m_uid;
             if (!KnownPortalsManager.Instance.ContainsId(portalId))
             {
                 // TODO: show a friendly message on the screen
@@ -266,7 +268,10 @@ namespace XPortal
 
             var portal = KnownPortalsManager.Instance.GetKnownPortalById(portalId);
             Log.Debug($"Interacting with: {portal}");
-            PortalConfigurationPanel.Instance.ConfigurePortal(portal);
+            var piece = teleportWorld.GetComponent<Piece>();
+            var mayEditNetworkAsAdmin = XPortalAdminSync.IsLocalPortalNetworkAdmin();
+            var canEditNetwork = piece != null && (piece.IsCreator() || mayEditNetworkAsAdmin);
+            PortalConfigurationPanel.Instance.ConfigurePortal(portal, canEditNetwork);
         }
 
         /// <summary>
@@ -352,7 +357,7 @@ namespace XPortal
         /// <param name="portal">The KnownPortal that was being configured</param>
         /// <param name="newName">The new name for the portal</param>
         /// <param name="newTarget">The new target for the portal</param>
-        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget, bool defaultPortal)
+        internal static void PortalInfoSubmitted(KnownPortal portal, string newName, ZDOID newTarget, bool defaultPortal, long networkOwnerPlayerId)
         {
             if (defaultPortal)
             {
@@ -369,10 +374,35 @@ namespace XPortal
                 }
             }
 
-            if (!portal.Name.Equals(newName) || !portal.Targets(newTarget))
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+            var portalZdo = ZDOMan.instance != null ? ZDOMan.instance.GetZDO(portal.Id) : null;
+            var pieceCreator = portalZdo != null ? portalZdo.GetLong(ZDOVars.s_creator) : 0L;
+
+            var networkOwnerDisplayName = portal.NetworkOwnerDisplayName ?? string.Empty;
+            if (networkOwnerPlayerId == 0L)
+            {
+                networkOwnerDisplayName = string.Empty;
+            }
+            else if (pieceCreator != 0L && localPlayerId == pieceCreator)
+            {
+                var fromPlayer = Player.m_localPlayer != null
+                    ? Player.m_localPlayer.GetPlayerName()
+                    : Game.instance.GetPlayerProfile().GetName();
+                networkOwnerDisplayName = PortalNetwork.SanitizeNetworkOwnerDisplayName(fromPlayer);
+            }
+
+            var networkChanged = portal.NetworkOwnerPlayerId != networkOwnerPlayerId;
+            var nameOrTargetChanged = !portal.Name.Equals(newName) || !portal.Targets(newTarget);
+            var networkDisplayNameChanged = !string.Equals(portal.NetworkOwnerDisplayName ?? string.Empty, networkOwnerDisplayName, System.StringComparison.Ordinal);
+
+            if (nameOrTargetChanged || networkChanged || networkDisplayNameChanged)
             {
                 portal.Name = newName;
                 portal.Target = newTarget;
+                portal.NetworkOwnerPlayerId = networkOwnerPlayerId;
+                portal.NetworkOwnerDisplayName = networkOwnerDisplayName;
 
                 // Ask the server to update the portal
                 Log.Debug($"Updating portal `{portal.Name}`");
@@ -396,8 +426,8 @@ namespace XPortal
             Log.Debug($"Pinging portal: {portal}");
 
             // Get selected portal name and position
-            string name = portal.GetFriendlyName();
-            Vector3 location = portal.Location;
+            var name = portal.GetFriendlyName();
+            var location = portal.Location;
 
             // Send ping to all players
             SendToClient.PingMap(location, name);

@@ -6,5 +6,11 @@
   "piece_portal_target_none": "(Нет Цели)",
   "piece_portal_tag_none": "(Без Имени)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "Привет, путник!"
+  "hud_xportal_title": "Привет, путник!",
+  "hud_xportal_portal_network": "Сеть портала",
+  "hud_xportal_destination_network": "Сеть назначения",
+  "hud_xportal_destination_portal": "Портал",
+  "hud_xportal_network_global": "Глобальные порталы",
+  "hud_xportal_network_suffix": "Порталы",
+  "hud_xportal_no_destinations": "Нет других порталов"
 }

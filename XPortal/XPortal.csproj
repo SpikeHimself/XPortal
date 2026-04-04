@@ -86,6 +86,10 @@
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ModInfo.cs" />
+    <Compile Include="NetPeerUtility.cs" />
+    <Compile Include="Patches\ZNet.cs" />
+    <Compile Include="RPC\XPortalAdminSync.cs" />
+    <Compile Include="PortalNetwork.cs" />
     <Compile Include="Patches\Dropdown.cs" />
     <Compile Include="Patches\Game.cs" />
     <Compile Include="Patches\Piece.cs" />

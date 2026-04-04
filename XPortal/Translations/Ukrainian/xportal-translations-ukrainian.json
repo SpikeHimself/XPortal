@@ -6,5 +6,11 @@
   "piece_portal_target_none": "(Немає)",
   "piece_portal_tag_none": "(Без назви)",
   "piece_portal_defaultportal":  "Портал за-замовчуванням",
-  "hud_xportal_title": "Привіт, мандрівнику!"
+  "hud_xportal_title": "Привіт, мандрівнику!",
+  "hud_xportal_portal_network": "Мережа порталу",
+  "hud_xportal_destination_network": "Мережа призначення",
+  "hud_xportal_destination_portal": "Портал",
+  "hud_xportal_network_global": "Глобальні портали",
+  "hud_xportal_network_suffix": "Портали",
+  "hud_xportal_no_destinations": "Інших порталів немає"
 }

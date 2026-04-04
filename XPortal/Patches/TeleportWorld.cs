@@ -13,6 +13,7 @@ namespace XPortal.Patches
             if (Environment.ShuttingDown)
             {
                 Log.Debug("Shutting down, ignoring hover");
+                __result = string.Empty;
 
                 // Don't run the original method
                 return false;
@@ -27,7 +28,7 @@ namespace XPortal.Patches
                 return false;
             }
 
-            ZDO portalZDO = ___m_nview.GetZDO();
+            var portalZDO = ___m_nview.GetZDO();
             var portalId = portalZDO.m_uid;
             var location = portalZDO.GetPosition();
             XPortal.OnPrePortalHover(out __result, portalId, location);

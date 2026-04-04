@@ -5,6 +5,12 @@
   "piece_portal_target": "Destination",
   "piece_portal_target_none": "(None)",
   "piece_portal_tag_none": "(No Name)",
-  "piece_portal_defaultportal":  "Default portal",
-  "hud_xportal_title": "Hail, traveller!"
+  "piece_portal_defaultportal": "Default portal",
+  "hud_xportal_title": "Hail, traveller!",
+  "hud_xportal_portal_network": "Portal network",
+  "hud_xportal_destination_network": "Destination network",
+  "hud_xportal_destination_portal": "Portal",
+  "hud_xportal_network_global": "Global Portals",
+  "hud_xportal_network_suffix": "Portals",
+  "hud_xportal_no_destinations": "No other portals"
 }

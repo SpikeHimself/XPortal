@@ -6,5 +6,11 @@
   "piece_portal_target_none": "(Nessuno)",
   "piece_portal_tag_none": "(Senza nome)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "Salute, viaggiatore!"
+  "hud_xportal_title": "Salute, viaggiatore!",
+  "hud_xportal_portal_network": "Rete del portale",
+  "hud_xportal_destination_network": "Rete di destinazione",
+  "hud_xportal_destination_portal": "Portale",
+  "hud_xportal_network_global": "Portali globali",
+  "hud_xportal_network_suffix": "Portali",
+  "hud_xportal_no_destinations": "Nessun altro portale"
 }
