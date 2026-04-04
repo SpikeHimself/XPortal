@@ -404,6 +404,7 @@ namespace XPortal
         {
             if (defaultPortal)
             {
+                isPrivate = false;
                 // The "Default Portal" checkbox is checked: make this the default portal
                 XPortalConfig.Instance.Local.DefaultPortal.Value = portal.Location.Round();
             }

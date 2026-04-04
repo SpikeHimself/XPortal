@@ -276,6 +276,13 @@ namespace XPortal.UI
 
             defaultPortalToggle.isOn = thisPortal.IsDefaultPortal;
             privatePortalToggle.isOn = thisPortal.IsPrivate;
+            if (defaultPortalToggle.isOn)
+            {
+                privatePortalToggle.SetIsOnWithoutNotify(false);
+            }
+
+            defaultPortalToggle.onValueChanged.RemoveAllListeners();
+            defaultPortalToggle.onValueChanged.AddListener(OnDefaultPortalToggleChanged);
 
             privatePortalToggle.onValueChanged.RemoveAllListeners();
             privatePortalToggle.onValueChanged.AddListener(OnPrivatePortalToggleChanged);
@@ -298,7 +305,7 @@ namespace XPortal.UI
             destinationNetworkDropdown.interactable = allowEdits;
             networkAssignmentDropdown.interactable = canEditNetworkAssignment && allowEdits;
             defaultPortalToggle.interactable = allowEdits;
-            privatePortalToggle.interactable = canEditPortalFully && allowEdits;
+            privatePortalToggle.interactable = canEditPortalFully && allowEdits && !defaultPortalToggle.isOn;
             if (okayButton != null)
             {
                 okayButton.interactable = allowEdits;
@@ -311,8 +318,23 @@ namespace XPortal.UI
             }
         }
 
+        private void OnDefaultPortalToggleChanged(bool isOn)
+        {
+            if (isOn)
+            {
+                privatePortalToggle.SetIsOnWithoutNotify(false);
+            }
+
+            ApplyReadOnlyState();
+        }
+
         private void OnPrivatePortalToggleChanged(bool isOn)
         {
+            if (isOn)
+            {
+                defaultPortalToggle.SetIsOnWithoutNotify(false);
+            }
+
             if (!canEditNetworkAssignment)
             {
                 return;
@@ -385,7 +407,7 @@ namespace XPortal.UI
                 : Game.instance.GetPlayerProfile().GetPlayerID();
             var personalId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
 
-            if (privatePortalToggle.isOn)
+            if (privatePortalToggle.isOn && !defaultPortalToggle.isOn)
             {
                 return personalId;
             }
@@ -609,7 +631,7 @@ namespace XPortal.UI
                 selectedTargetId,
                 defaultPortalToggle.isOn,
                 GetSubmittedNetworkOwnerPlayerId(),
-                privatePortalToggle.isOn);
+                privatePortalToggle.isOn && !defaultPortalToggle.isOn);
             Hide();
         }
 
@@ -1067,6 +1089,11 @@ namespace XPortal.UI
             if (privatePortalToggle != null)
             {
                 privatePortalToggle.onValueChanged.RemoveAllListeners();
+            }
+
+            if (defaultPortalToggle != null)
+            {
+                defaultPortalToggle.onValueChanged.RemoveAllListeners();
             }
 
             if (targetPortalDropdown)
