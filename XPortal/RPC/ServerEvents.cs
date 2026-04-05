@@ -126,7 +126,8 @@ namespace XPortal.RPC.Server
                 var targetZdo = ZDOMan.instance.GetZDO(destForValidation.Id);
                 var destPieceCreator = targetZdo != null ? targetZdo.GetLong(ZDOVars.s_creator) : 0L;
                 var mayTargetPrivatePortal = NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender)
-                    || (destPieceCreator != 0L && destPieceCreator == requesterPlayerId);
+                    || (destPieceCreator != 0L && destPieceCreator == requesterPlayerId)
+                    || (destForValidation.NetworkOwnerPlayerId != 0L && destForValidation.NetworkOwnerPlayerId == requesterPlayerId);
                 if (!mayTargetPrivatePortal)
                 {
                     portal.Target = existing != null ? existing.Target : ZDOID.None;

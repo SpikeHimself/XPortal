@@ -310,6 +310,8 @@ namespace XPortal
 
         /// <summary>
         /// True when playerId may not use this portal because the destination is someone else’s private portal.
+        /// Uses piece creator when present; falls back to <see cref="KnownPortal.NetworkOwnerPlayerId"/> so clients
+        /// still allow the owner when <see cref="ZDOVars.s_creator"/> is not replicated yet (0).
         /// </summary>
         internal static bool PrivateUseBlocked(ZDOID sourcePortalId, long playerId)
         {
@@ -323,7 +325,9 @@ namespace XPortal
 
             var destZdo = ZDOMan.instance != null ? ZDOMan.instance.GetZDO(dest.Id) : null;
             var creator = destZdo != null ? destZdo.GetLong(ZDOVars.s_creator) : 0L;
-            return creator != playerId;
+            var isOwnerByCreator = creator != 0L && creator == playerId;
+            var isOwnerByNetwork = dest.NetworkOwnerPlayerId != 0L && dest.NetworkOwnerPlayerId == playerId;
+            return !isOwnerByCreator && !isOwnerByNetwork;
         }
 
         internal static bool LocalPrivateUseBlocked(ZDOID sourcePortalId)
