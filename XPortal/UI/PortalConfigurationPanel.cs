@@ -492,13 +492,18 @@ namespace XPortal.UI
                 return 0L;
             }
 
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+
             var targetPortal = KnownPortalsManager.Instance.GetKnownPortalById(thisPortal.Target);
             if (targetPortal.NetworkOwnerPlayerId == 0L)
             {
                 return 0L;
             }
 
-            if (targetPortal.IsPrivate && targetPortal.NetworkOwnerPlayerId == personalNetworkOwnerId)
+            // Destination networks are always from the local user's perspective ("My Private" = this player's privates).
+            if (targetPortal.IsPrivate && targetPortal.NetworkOwnerPlayerId == localPlayerId)
             {
                 return PortalNetwork.DestinationNetworkMyPrivateBucket;
             }
@@ -535,6 +540,10 @@ namespace XPortal.UI
             targetPortalDropdown.value = index;
             dropdownIndexToZDOIDMapping.Add(index, ZDOID.None);
 
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+
             var portalsSorted = KnownPortalsManager.Instance.GetSortedList()
                 .Where(p => p.Id != thisPortal.Id)
                 .Where(p =>
@@ -546,22 +555,12 @@ namespace XPortal.UI
 
                     if (selectedDestinationNetworkOwnerId == PortalNetwork.DestinationNetworkMyPrivateBucket)
                     {
-                        return p.NetworkOwnerPlayerId == personalNetworkOwnerId && p.IsPrivate;
+                        return p.NetworkOwnerPlayerId == localPlayerId && p.IsPrivate;
                     }
 
                     return p.NetworkOwnerPlayerId == selectedDestinationNetworkOwnerId && !p.IsPrivate;
                 })
                 .ToList();
-
-            var localPlayerId = Player.m_localPlayer != null
-                ? Player.m_localPlayer.GetPlayerID()
-                : Game.instance.GetPlayerProfile().GetPlayerID();
-            if (!canEditPortalFully && !thisPortal.IsPrivate)
-            {
-                portalsSorted = portalsSorted
-                    .Where(p => !(p.IsPrivate && p.NetworkOwnerPlayerId == localPlayerId))
-                    .ToList();
-            }
 
             foreach (var portal in portalsSorted)
             {
