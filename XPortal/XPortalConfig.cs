@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using System;
+using System.IO;
 using UnityEngine;
 using XPortal.RPC;
 
@@ -31,6 +32,8 @@ namespace XPortal
             public ConfigEntry<Vector3> DefaultPortal;
             public ConfigEntry<bool> DefaultPrivatePortal;
             public bool HidePortalDistance;
+            /// <summary>Server-enforced portal hammer removal rules.</summary>
+            public bool RestrictPortalRemoval;
         }
 
         /// <summary>
@@ -95,6 +98,13 @@ namespace XPortal
 
             var cfgHidePortalDistance = configFile.Bind("General", "HidePortalDistance", false, "In the list of portals, do not show how far away other portals are." + Desc_EnforcedByServer);
             Local.HidePortalDistance = cfgHidePortalDistance.Value;
+
+            var cfgRestrictPortalRemoval = configFile.Bind(
+                "General",
+                "RestrictPortalRemoval",
+                false,
+                "When true, only the player who placed the portal or a server admin may remove it with the hammer. Other removal (e.g. structural damage) is unchanged." + Desc_EnforcedByServer);
+            Local.RestrictPortalRemoval = cfgRestrictPortalRemoval.Value;
         }
 
         /// <summary>
@@ -124,6 +134,7 @@ namespace XPortal
             pkg.Write(Local.PingMapDisabled);
             pkg.Write(Local.DoublePortalCosts);
             pkg.Write(Local.HidePortalDistance);
+            pkg.Write(Local.RestrictPortalRemoval);
             return pkg;
         }
 
@@ -136,10 +147,19 @@ namespace XPortal
             Server.PingMapDisabled = pkg.ReadBool();
             Server.DoublePortalCosts = pkg.ReadBool();
             Server.HidePortalDistance = pkg.ReadBool();
+            try
+            {
+                Server.RestrictPortalRemoval = pkg.ReadBool();
+            }
+            catch (EndOfStreamException)
+            {
+                Server.RestrictPortalRemoval = false;
+            }
 
             Log.Debug($"PingMapDisabled {{ Local: {Local.PingMapDisabled}, Server: {Server.PingMapDisabled} }}");
             Log.Debug($"DoublePortalCosts {{ Local: {Local.DoublePortalCosts}, Server: {Server.DoublePortalCosts} }}");
             Log.Debug($"HidePortalDistance {{ Local: {Local.HidePortalDistance}, Server: {Server.HidePortalDistance} }}");
+            Log.Debug($"RestrictPortalRemoval {{ Local: {Local.RestrictPortalRemoval}, Server: {Server.RestrictPortalRemoval} }}");
 
             OnServerConfigChanged?.Invoke();
         }

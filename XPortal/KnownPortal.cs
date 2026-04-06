@@ -43,7 +43,7 @@ namespace XPortal
             IsPrivate = false;
         }
 
-        /// <summary>Used when a portal is first placed (or hover placeholder). Privacy default comes from config (<see cref="XPortalConfig.ConfigSettings.DefaultPrivatePortal"/>).</summary>
+        /// <summary>New or hover placeholder portal; privacy default from config.</summary>
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
         {
             Location = location;

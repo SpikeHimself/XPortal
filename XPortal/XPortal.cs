@@ -316,13 +316,18 @@ namespace XPortal
         /// <param name="portalId">The ZDOID of the portal being destroyed</param>
         internal static void OnPortalDestroyed(ZDOID portalId)
         {
-            if (!KnownPortalsManager.Instance.ContainsId(portalId))
+            if (KnownPortalsManager.Instance.ContainsId(portalId))
             {
-                Log.Error($"Portal `{portalId}` is being destroyed, but XPortal does not know it");
-                return;
+                var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
+                Log.Debug($"Portal `{portalName}` is being destroyed");
+                KnownPortalsManager.Instance.Remove(portalId);
             }
-            var portalName = KnownPortalsManager.Instance.GetKnownPortalById(portalId).Name;
-            Log.Debug($"Portal `{portalName}` is being destroyed");
+            else
+            {
+                // Normal if placement never registered (sync/order) or list was cleared; server may still track it.
+                Log.Debug($"Portal `{portalId}` destroyed — was not in local known list; notifying server anyway");
+            }
+
             SendToServer.RemoveRequest(portalId);
         }
 

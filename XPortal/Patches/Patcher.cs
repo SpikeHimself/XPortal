@@ -21,6 +21,7 @@ namespace XPortal.Patches
             patcher.PatchAll(typeof(TeleportWorld_UpdatePortal_Transpiler));
             patcher.PatchAll(typeof(TextInput_RequestText));
             patcher.PatchAll(typeof(WearNTear_Destroy));
+            patcher.PatchAll(typeof(Piece_CanBeRemoved));
             patcher.PatchAll(typeof(ZDOMan_ConnectPortals));
             patcher.PatchAll(typeof(ZNet_RPC_PeerInfo_Postfix));
 
