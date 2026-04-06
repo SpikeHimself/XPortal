@@ -47,6 +47,15 @@ namespace XPortal
 
             var networkWord = Localization.instance.Localize("$hud_xportal_network_suffix");
 
+            // Portal ZDOs cache a display name for the network owner; that string can be stale or wrong
+            // (e.g. another character) while NetworkOwnerPlayerId is correct. For the local player's id,
+            // always use live resolution so the UI matches the character you are playing.
+            if (IsLocalPlayerNetworkId(ownerPlayerId))
+            {
+                var self = ResolvePlayerDisplayName(ownerPlayerId).Trim();
+                return $"{self} {networkWord}";
+            }
+
             var cached = KnownPortalsManager.Instance.GetNetworkOwnerDisplayNameForPlayerId(ownerPlayerId);
             if (!string.IsNullOrEmpty(cached))
             {
@@ -60,6 +69,16 @@ namespace XPortal
             }
 
             return $"{name} {networkWord}";
+        }
+
+        private static bool IsLocalPlayerNetworkId(long ownerPlayerId)
+        {
+            if (Player.m_localPlayer != null)
+            {
+                return Player.m_localPlayer.GetPlayerID() == ownerPlayerId;
+            }
+
+            return Game.instance != null && Game.instance.GetPlayerProfile().GetPlayerID() == ownerPlayerId;
         }
 
         private static string ResolvePlayerDisplayName(long ownerPlayerId)
