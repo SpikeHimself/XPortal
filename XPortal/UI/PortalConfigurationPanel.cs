@@ -29,6 +29,8 @@ namespace XPortal.UI
         internal const string GO_DESTINATIONLABEL = Info.Name + "_DestinationHeader";
         internal const string GO_DESTINATIONDROPDOWN = Info.Name + "_DestinationDropdown";
         internal const string GO_DESTINATIONGAMEPADHINT = Info.Name + "_DestinationGamepadHint";
+        internal const string GO_NETWORKASSIGNLISTNAVHINT = Info.Name + "_NetworkAssignListNavHint";
+        internal const string GO_DESTINATIONNETWORKLISTNAVHINT = Info.Name + "_DestinationNetworkListNavHint";
         internal const string GO_PINGMAPBUTTON = Info.Name + "_PingMapButton";
         internal const string GO_DEFAULTPORTALLABEL = Info.Name + "_DefaultPortalHeader";
         internal const string GO_DEFAULTPORTALCHECKBOX = Info.Name + "_DefaultPortalCheckbox";
@@ -82,7 +84,7 @@ namespace XPortal.UI
         private GameObject pingMapButtonObject;
         private GameObject targetPortalDropdownObject;
         private Dropdown targetPortalDropdown;
-        private GameObject targetPortalDropdownUpDownKeyhint;
+        private readonly List<GameObject> dropdownListNavHints = new List<GameObject>();
         private InputField portalNameInputField;
         private Toggle defaultPortalToggle;
         private Toggle privatePortalToggle;
@@ -116,9 +118,14 @@ namespace XPortal.UI
         private ButtonConfig uiDropdownScrollDownButton;
         #endregion
 
-        public bool DropdownExpanded = false;
+        // Open list, if any (managed dropdowns only).
+        public Dropdown ExpandedDropdown { get; private set; }
+
+        public bool DropdownExpanded => ExpandedDropdown != null;
 
         private static ScrollRect listScrollCache;
+
+        private Dropdown lastSyncedScrollDropdown;
 
         private int lastSyncedListScroll = int.MinValue;
 
@@ -148,6 +155,31 @@ namespace XPortal.UI
         private PortalConfigurationPanel()
         {
             dropdownIndexToZDOIDMapping = new Dictionary<int, ZDOID>();
+        }
+
+        internal static bool IsManagedDropdown(Dropdown d)
+        {
+            return d != null && IsManagedDropdownName(d.name);
+        }
+
+        internal static bool IsManagedDropdownName(string name)
+        {
+            return name == GO_DESTINATIONDROPDOWN
+                || name == GO_NETWORKASSIGNDROPDOWN
+                || name == GO_DESTINATIONNETWORKDROPDOWN;
+        }
+
+        internal void SetExpandedDropdown(Dropdown d)
+        {
+            ExpandedDropdown = d;
+        }
+
+        internal void ClearExpandedDropdownIf(Dropdown d)
+        {
+            if (ExpandedDropdown == d)
+            {
+                ExpandedDropdown = null;
+            }
         }
 
         internal static void QueueListScroll(Dropdown dropdown)
@@ -274,7 +306,7 @@ namespace XPortal.UI
 
         private static void FocusListRow(Dropdown dropdown, int rowIndex)
         {
-            if (Instance == null || !Instance.DropdownExpanded || dropdown == null)
+            if (Instance == null || Instance.ExpandedDropdown != dropdown || dropdown == null)
             {
                 return;
             }
@@ -341,6 +373,7 @@ namespace XPortal.UI
             listScrollCache = null;
             if (Instance != null)
             {
+                Instance.lastSyncedScrollDropdown = null;
                 Instance.lastSyncedListScroll = int.MinValue;
                 Instance.listNavNextTime = 0f;
             }
@@ -348,19 +381,20 @@ namespace XPortal.UI
 
         internal void SyncListScroll()
         {
-            if (!DropdownExpanded || targetPortalDropdown == null)
+            if (ExpandedDropdown == null)
             {
                 return;
             }
 
-            int v = targetPortalDropdown.value;
-            if (v == lastSyncedListScroll)
+            int v = ExpandedDropdown.value;
+            if (ExpandedDropdown == lastSyncedScrollDropdown && v == lastSyncedListScroll)
             {
                 return;
             }
 
+            lastSyncedScrollDropdown = ExpandedDropdown;
             lastSyncedListScroll = v;
-            ApplyListScroll(targetPortalDropdown, rebuildLayout: true);
+            ApplyListScroll(ExpandedDropdown, rebuildLayout: true);
         }
 
         private static MethodInfo scrollRectUpdateBounds;
@@ -608,9 +642,18 @@ namespace XPortal.UI
 
         public void HandleInput()
         {
-            if (targetPortalDropdownUpDownKeyhint)
+            bool gamepad = ZInput.IsGamepadActive();
+            for (int i = 0; i < dropdownListNavHints.Count; i++)
             {
-                targetPortalDropdownUpDownKeyhint.SetActive(ZInput.IsGamepadActive());
+                GameObject h = dropdownListNavHints[i];
+                if (!h)
+                {
+                    continue;
+                }
+
+                Dropdown owner = h.transform.parent != null ? h.transform.parent.GetComponent<Dropdown>() : null;
+                bool show = gamepad && owner != null && ExpandedDropdown == owner;
+                h.SetActive(show);
             }
 
             ProcessListNav();
@@ -618,7 +661,7 @@ namespace XPortal.UI
 
         private void ProcessListNav()
         {
-            if (!DropdownExpanded || targetPortalDropdown == null)
+            if (ExpandedDropdown == null)
             {
                 listNavNextTime = 0f;
                 return;
@@ -711,19 +754,25 @@ namespace XPortal.UI
 
         private void BumpDropdown(bool up)
         {
-            int max = targetPortalDropdown.options.Count - 1;
+            Dropdown dd = ExpandedDropdown;
+            if (dd == null)
+            {
+                return;
+            }
+
+            int max = dd.options.Count - 1;
             if (max < 0)
             {
                 return;
             }
 
-            int newVal = Mathf.Clamp(targetPortalDropdown.value + (up ? -1 : 1), 0, max);
-            if (newVal == targetPortalDropdown.value)
+            int newVal = Mathf.Clamp(dd.value + (up ? -1 : 1), 0, max);
+            if (newVal == dd.value)
             {
                 return;
             }
 
-            targetPortalDropdown.value = newVal;
+            dd.value = newVal;
         }
 
         private void SetPingMapButtonActive(bool active)
@@ -1288,6 +1337,8 @@ namespace XPortal.UI
                 networkAssignmentDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
                 ApplyDropdownStyle(networkAssignmentDropdown);
 
+                AddGamepadHint(networkAssignDropdownObject, "JoyButtonY", KeyCode.None);
+                AttachDropdownListNavHint(networkAssignDropdownObject, GO_NETWORKASSIGNLISTNAVHINT);
 
                 // Portal name label
                 var portalNameLabelObject = GUIManager.Instance.CreateText(
@@ -1361,6 +1412,8 @@ namespace XPortal.UI
                 destinationNetworkDropdown.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
                 ApplyDropdownStyle(destinationNetworkDropdown);
 
+                AddGamepadHint(destinationNetworkDropdownObject, "JoyLBumper", KeyCode.None);
+                AttachDropdownListNavHint(destinationNetworkDropdownObject, GO_DESTINATIONNETWORKLISTNAVHINT);
 
                 // Target portal label
                 var targetPortalLabelObject = GUIManager.Instance.CreateText(
@@ -1400,23 +1453,7 @@ namespace XPortal.UI
                 ApplyDropdownStyle(targetPortalDropdown);
 
                 AddGamepadHint(targetPortalDropdownObject, "JoyButtonX", KeyCode.None);
-
-
-                // Target portal dropdown up/down keyhint image
-                // This is shown on the *left* side of the dropdown
-                targetPortalDropdownUpDownKeyhint = new GameObject(GO_DESTINATIONGAMEPADHINT, typeof(RectTransform), typeof(Image));
-                targetPortalDropdownUpDownKeyhint.transform.SetParent(targetPortalDropdownObject.transform, worldPositionStays: false);
-
-                var targetPortalDropdownUpDownKeyhintRt = targetPortalDropdownUpDownKeyhint.GetComponent<RectTransform>();
-                targetPortalDropdownUpDownKeyhintRt.pivot = new Vector2(1, 0.5f); // pivot middle right
-                targetPortalDropdownUpDownKeyhintRt.anchorMin = new Vector2(0, 0.5f); // anchor middle left
-                targetPortalDropdownUpDownKeyhintRt.anchorMax = new Vector2(0, 0.5f);
-                targetPortalDropdownUpDownKeyhintRt.sizeDelta = new Vector2(36, 36);
-                targetPortalDropdownUpDownKeyhintRt.anchoredPosition = new Vector2(10, 0);
-
-                var targetPortalDropdownUpDownKeyhintImg = targetPortalDropdownUpDownKeyhint.GetComponent<Image>();
-                targetPortalDropdownUpDownKeyhintImg.sprite = GUIManager.Instance.GetSprite("dpad_updown");
-
+                AttachDropdownListNavHint(targetPortalDropdownObject, GO_DESTINATIONGAMEPADHINT);
 
                 // Ping on Map button
                 pingMapButtonObject = GUIManager.Instance.CreateButton(
@@ -1430,7 +1467,7 @@ namespace XPortal.UI
                 pingMapButtonObject.name = GO_PINGMAPBUTTON;
                 pingMapButtonObject.GetComponent<RectTransform>().pivot = new Vector2(0, 1);    // pivot top left
 
-                AddGamepadHint(pingMapButtonObject, "JoyButtonY", KeyCode.None);
+                AddGamepadHint(pingMapButtonObject, "JoyRBumper", KeyCode.None);
 
 
                 // Private portal label
@@ -1469,7 +1506,7 @@ namespace XPortal.UI
                 privatePortalToggle = privatePortalCheckboxObject.GetComponent<Toggle>();
                 privatePortalToggle.isOn = false;
 
-                AddGamepadHint(privatePortalCheckboxObject, "JoyLStick", KeyCode.None);
+                AddGamepadHint(privatePortalCheckboxObject, "JoyRStick", KeyCode.None);
 
 
                 // Default Portal label
@@ -1628,6 +1665,20 @@ namespace XPortal.UI
             uiInputHint.m_gamepadHint = goGamepadHint;
         }
 
+        private void AttachDropdownListNavHint(GameObject dropdownObject, string hintObjectName)
+        {
+            var hint = new GameObject(hintObjectName, typeof(RectTransform), typeof(Image));
+            hint.transform.SetParent(dropdownObject.transform, false);
+            RectTransform rt = hint.GetComponent<RectTransform>();
+            rt.pivot = new Vector2(1f, 0.5f);
+            rt.anchorMin = new Vector2(0f, 0.5f);
+            rt.anchorMax = new Vector2(0f, 0.5f);
+            rt.sizeDelta = new Vector2(36f, 36f);
+            rt.anchoredPosition = new Vector2(10f, 0f);
+            hint.GetComponent<Image>().sprite = GUIManager.Instance.GetSprite("dpad_updown");
+            dropdownListNavHints.Add(hint);
+        }
+
         private GameObject CreateGamepadHint(string buttonName)
         {
             var goGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
@@ -1671,7 +1722,11 @@ namespace XPortal.UI
                 GameObject.Destroy(targetPortalDropdown);
 
             if (mainPanel)
+            {
                 GameObject.Destroy(mainPanel);
+            }
+
+            dropdownListNavHints.Clear();
         }
     }
 }
