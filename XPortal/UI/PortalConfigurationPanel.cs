@@ -1605,21 +1605,17 @@ namespace XPortal.UI
             Transform contentTransform = dropdown.template.Find("Viewport/Content");
             if (contentTransform != null)
             {
+                Transform oldSpacer = contentTransform.Find(ListBottomSpacerName);
+                if (oldSpacer != null)
+                {
+                    GameObject.Destroy(oldSpacer.gameObject);
+                }
+
                 VerticalLayoutGroup contentVlg = contentTransform.GetComponent<VerticalLayoutGroup>();
                 if (contentVlg != null)
                 {
-                    contentVlg.padding.bottom = Mathf.Max(contentVlg.padding.bottom, 20);
-                }
-
-                if (contentTransform.Find(ListBottomSpacerName) == null)
-                {
-                    GameObject spacerGo = new GameObject(ListBottomSpacerName, typeof(RectTransform), typeof(LayoutElement));
-                    spacerGo.transform.SetParent(contentTransform, false);
-                    LayoutElement spacerLe = spacerGo.GetComponent<LayoutElement>();
-                    spacerLe.minHeight = ListBottomSpacerH;
-                    spacerLe.preferredHeight = ListBottomSpacerH;
-                    spacerLe.flexibleHeight = 0f;
-                    spacerGo.transform.SetAsLastSibling();
+                    int desiredBottom = 20 + Mathf.RoundToInt(ListBottomSpacerH);
+                    contentVlg.padding.bottom = Mathf.Max(contentVlg.padding.bottom, desiredBottom);
                 }
             }
 
@@ -1675,7 +1671,9 @@ namespace XPortal.UI
             rt.anchorMax = new Vector2(0f, 0.5f);
             rt.sizeDelta = new Vector2(36f, 36f);
             rt.anchoredPosition = new Vector2(10f, 0f);
-            hint.GetComponent<Image>().sprite = GUIManager.Instance.GetSprite("dpad_updown");
+            var img = hint.GetComponent<Image>();
+            img.sprite = GUIManager.Instance.GetSprite("dpad_updown");
+            img.raycastTarget = false;
             dropdownListNavHints.Add(hint);
         }
 
@@ -1690,6 +1688,7 @@ namespace XPortal.UI
             textMesh.text = $"$KEY_{buttonName}";
             textMesh.fontSize = 18;
             textMesh.alignment = TextAlignmentOptions.Center;
+            textMesh.raycastTarget = false;
             Localization.instance.textMeshStrings[textMesh] = textMesh.text;
 
             var rt = goGamepadHint.GetComponent<RectTransform>();
