@@ -10,6 +10,7 @@ namespace XPortal.Patches
             patcher.PatchAll(typeof(Dropdown_OnSubmit));
             patcher.PatchAll(typeof(Dropdown_Show));
             patcher.PatchAll(typeof(Dropdown_Hide));
+            patcher.PatchAll(typeof(Dropdown_SetValue));
             patcher.PatchAll(typeof(Game_Awake));
             patcher.PatchAll(typeof(Game_Start));
             patcher.PatchAll(typeof(Game_ConnectPortals));

@@ -77,6 +77,7 @@ namespace XPortal
             }
 
             PortalConfigurationPanel.Instance.HandleInput();
+            PortalConfigurationPanel.Instance.SyncListScroll();
         }
 
         /// <summary>

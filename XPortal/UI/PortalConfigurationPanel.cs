@@ -1,11 +1,15 @@
-﻿using Jotunn;
-using Jotunn.Configs;
-using Jotunn.Managers;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Jotunn;
+using Jotunn.Configs;
+using Jotunn.Managers;
+using Mod;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace XPortal.UI
@@ -18,20 +22,20 @@ namespace XPortal.UI
         public static PortalConfigurationPanel Instance { get { return lazy.Value; } }
         ////////////////////////////
 
-        internal const string GO_MAINPANEL = Mod.Info.Name + "_MainPanel";
-        internal const string GO_HEADERTEXT = Mod.Info.Name + "_PanelHeader";
-        internal const string GO_NAMELABEL = Mod.Info.Name + "_NameHeader";
-        internal const string GO_NAMEINPUT = Mod.Info.Name + "_NameInput";
-        internal const string GO_DESTINATIONLABEL = Mod.Info.Name + "_DestinationHeader";
-        internal const string GO_DESTINATIONDROPDOWN = Mod.Info.Name + "_DestinationDropdown";
-        internal const string GO_DESTINATIONGAMEPADHINT = Mod.Info.Name + "_DestinationGamepadHint";
-        internal const string GO_PINGMAPBUTTON = Mod.Info.Name + "_PingMapButton";
-        internal const string GO_DEFAULTPORTALLABEL = Mod.Info.Name + "_DefaultPortalHeader";
-        internal const string GO_DEFAULTPORTALCHECKBOX = Mod.Info.Name + "_DefaultPortalCheckbox";
+        internal const string GO_MAINPANEL = Info.Name + "_MainPanel";
+        internal const string GO_HEADERTEXT = Info.Name + "_PanelHeader";
+        internal const string GO_NAMELABEL = Info.Name + "_NameHeader";
+        internal const string GO_NAMEINPUT = Info.Name + "_NameInput";
+        internal const string GO_DESTINATIONLABEL = Info.Name + "_DestinationHeader";
+        internal const string GO_DESTINATIONDROPDOWN = Info.Name + "_DestinationDropdown";
+        internal const string GO_DESTINATIONGAMEPADHINT = Info.Name + "_DestinationGamepadHint";
+        internal const string GO_PINGMAPBUTTON = Info.Name + "_PingMapButton";
+        internal const string GO_DEFAULTPORTALLABEL = Info.Name + "_DefaultPortalHeader";
+        internal const string GO_DEFAULTPORTALCHECKBOX = Info.Name + "_DefaultPortalCheckbox";
         internal const string GO_PRIVATEPORTALLABEL = Mod.Info.Name + "_PrivatePortalHeader";
         internal const string GO_PRIVATEPORTALCHECKBOX = Mod.Info.Name + "_PrivatePortalCheckbox";
-        internal const string GO_OKAYBUTTON = Mod.Info.Name + "_OkayButton";
-        internal const string GO_CANCELBUTTON = Mod.Info.Name + "_CancelButton";
+        internal const string GO_OKAYBUTTON = Info.Name + "_OkayButton";
+        internal const string GO_CANCELBUTTON = Info.Name + "_CancelButton";
         internal const string GO_NETWORKASSIGNLABEL = Mod.Info.Name + "_NetworkAssignHeader";
         internal const string GO_NETWORKASSIGNDROPDOWN = Mod.Info.Name + "_NetworkAssignDropdown";
         internal const string GO_DESTINATIONNETWORKLABEL = Mod.Info.Name + "_DestinationNetworkHeader";
@@ -114,9 +118,468 @@ namespace XPortal.UI
 
         public bool DropdownExpanded = false;
 
+        private static ScrollRect listScrollCache;
+
+        private int lastSyncedListScroll = int.MinValue;
+
+        private float listNavNextTime;
+
+        private const float ListNavInitialDelay = 0.22f;
+
+        private const float ListNavRepeatInterval = 0.065f;
+
+        private const float ListWheelSensFloor = 520f;
+
+        private const float ListBottomSlackPx = 14f;
+
+        private const string ListBottomSpacerName = "XPortal_DropdownListBottomSpacer";
+
+        private const float ListBottomSpacerH = 64f;
+
+        private sealed class ListFocusState
+        {
+            public Dropdown Target;
+
+            public int Row;
+        }
+
+        private static FieldInfo dropdownItemsField;
+
         private PortalConfigurationPanel()
         {
             dropdownIndexToZDOIDMapping = new Dictionary<int, ZDOID>();
+        }
+
+        internal static void QueueListScroll(Dropdown dropdown)
+        {
+            if (dropdown == null)
+            {
+                return;
+            }
+
+            QueuedAction.Queue(DeferredListScroll, delay: 1, state: dropdown);
+            QueuedAction.Queue(DeferredListScroll, delay: 2, state: dropdown);
+        }
+
+        private static void DeferredListScroll(bool unused, object state)
+        {
+            ApplyListScroll(state as Dropdown);
+        }
+
+        internal static void ApplyListScroll(Dropdown dropdown, bool rebuildLayout = true)
+        {
+            if (dropdown?.options == null || dropdown.options.Count == 0)
+            {
+                return;
+            }
+
+            ScrollRect scrollRect = FindListScrollRect(dropdown);
+            if (scrollRect == null)
+            {
+                return;
+            }
+
+            scrollRect.scrollSensitivity = Mathf.Max(scrollRect.scrollSensitivity, ListWheelSensFloor);
+
+            int index = Mathf.Clamp(dropdown.value, 0, dropdown.options.Count - 1);
+            RectTransform content = scrollRect.content;
+            if (content == null || content.childCount == 0)
+            {
+                return;
+            }
+
+            if (rebuildLayout)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+                Canvas.ForceUpdateCanvases();
+            }
+
+            int optionCount = dropdown.options.Count;
+            int lastItemRow = Mathf.Max(0, optionCount - 1);
+            int scrollIndex = Mathf.Clamp(index, 0, lastItemRow);
+
+            float normalized;
+            if (lastItemRow <= 0)
+            {
+                normalized = 1f;
+            }
+            else if (scrollIndex >= lastItemRow)
+            {
+                normalized = 0f;
+            }
+            else if (scrollIndex <= 0)
+            {
+                normalized = 1f;
+            }
+            else
+            {
+                normalized = 1f - scrollIndex / (float)lastItemRow;
+            }
+
+            SetScrollNorm(scrollRect, normalized);
+
+            if (scrollIndex >= content.childCount)
+            {
+                FocusListRow(dropdown, scrollIndex);
+                QueueListFocus(dropdown, scrollIndex);
+                return;
+            }
+
+            RectTransform itemRt = content.GetChild(scrollIndex) as RectTransform;
+            NudgeRowIntoView(scrollRect, content, itemRt);
+
+            FocusListRow(dropdown, scrollIndex);
+            QueueListFocus(dropdown, scrollIndex);
+        }
+
+        private static Toggle ItemToggle(Dropdown dropdown, int index)
+        {
+            if (dropdown == null || index < 0)
+            {
+                return null;
+            }
+
+            if (dropdownItemsField == null)
+            {
+                dropdownItemsField = typeof(Dropdown).GetField("m_Items", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+
+            if (dropdownItemsField == null)
+            {
+                return null;
+            }
+
+            IList items = dropdownItemsField.GetValue(dropdown) as IList;
+            if (items == null || index >= items.Count)
+            {
+                return null;
+            }
+
+            object entry = items[index];
+            if (entry == null)
+            {
+                return null;
+            }
+
+            Type entryType = entry.GetType();
+            FieldInfo toggleField = entryType.GetField("toggle", BindingFlags.Instance | BindingFlags.Public);
+            if (toggleField != null)
+            {
+                return toggleField.GetValue(entry) as Toggle;
+            }
+
+            PropertyInfo toggleProp = entryType.GetProperty("toggle", BindingFlags.Instance | BindingFlags.Public);
+            return toggleProp?.GetValue(entry, null) as Toggle;
+        }
+
+        private static void FocusListRow(Dropdown dropdown, int rowIndex)
+        {
+            if (Instance == null || !Instance.DropdownExpanded || dropdown == null)
+            {
+                return;
+            }
+
+            if (rowIndex < 0 || rowIndex >= dropdown.options.Count)
+            {
+                return;
+            }
+
+            Toggle toggle = ItemToggle(dropdown, rowIndex);
+            if (toggle == null)
+            {
+                ScrollRect sr = FindListScrollRect(dropdown);
+                RectTransform content = sr?.content;
+                if (content != null && rowIndex < content.childCount)
+                {
+                    Transform row = content.GetChild(rowIndex);
+                    toggle = row.GetComponent<Toggle>() ?? row.GetComponentInChildren<Toggle>(true);
+                }
+            }
+
+            if (toggle == null)
+            {
+                return;
+            }
+
+            EventSystem es = EventSystem.current;
+            if (es != null)
+            {
+                es.SetSelectedGameObject(toggle.gameObject);
+            }
+            else
+            {
+                toggle.Select();
+            }
+        }
+
+        private static void QueueListFocus(Dropdown dropdown, int rowIndex)
+        {
+            if (dropdown == null)
+            {
+                return;
+            }
+
+            var st = new ListFocusState { Target = dropdown, Row = rowIndex };
+            QueuedAction.Queue(DeferredListFocus, delay: 0, state: st);
+            QueuedAction.Queue(DeferredListFocus, delay: 1, state: st);
+            QueuedAction.Queue(DeferredListFocus, delay: 2, state: st);
+        }
+
+        private static void DeferredListFocus(bool unused, object state)
+        {
+            ListFocusState s = state as ListFocusState;
+            if (s == null)
+            {
+                return;
+            }
+
+            FocusListRow(s.Target, s.Row);
+        }
+
+        internal static void ClearListScroll()
+        {
+            listScrollCache = null;
+            if (Instance != null)
+            {
+                Instance.lastSyncedListScroll = int.MinValue;
+                Instance.listNavNextTime = 0f;
+            }
+        }
+
+        internal void SyncListScroll()
+        {
+            if (!DropdownExpanded || targetPortalDropdown == null)
+            {
+                return;
+            }
+
+            int v = targetPortalDropdown.value;
+            if (v == lastSyncedListScroll)
+            {
+                return;
+            }
+
+            lastSyncedListScroll = v;
+            ApplyListScroll(targetPortalDropdown, rebuildLayout: true);
+        }
+
+        private static MethodInfo scrollRectUpdateBounds;
+
+        private static void UpdateScrollBounds(ScrollRect scrollRect)
+        {
+            if (scrollRectUpdateBounds == null)
+            {
+                scrollRectUpdateBounds = typeof(ScrollRect).GetMethod("UpdateBounds", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+
+            scrollRectUpdateBounds?.Invoke(scrollRect, null);
+        }
+
+        private static void SetScrollNorm(ScrollRect scrollRect, float normalized)
+        {
+            normalized = Mathf.Clamp01(normalized);
+            scrollRect.verticalNormalizedPosition = normalized;
+            scrollRect.StopMovement();
+            scrollRect.velocity = Vector2.zero;
+
+            UpdateScrollBounds(scrollRect);
+            Canvas.ForceUpdateCanvases();
+
+            if (scrollRect.verticalScrollbar != null)
+            {
+                scrollRect.verticalScrollbar.SetValueWithoutNotify(normalized);
+            }
+        }
+
+        private static Camera CanvasCamera(Canvas canvas)
+        {
+            if (canvas == null)
+            {
+                return null;
+            }
+
+            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                return null;
+            }
+
+            return canvas.worldCamera;
+        }
+
+        private static void ExtentsFromBounds(RectTransform item, Camera cam, Bounds lb, out float worldBottom, out float worldTop, out float screenMinY, out float screenMaxY)
+        {
+            Vector3 c = lb.center;
+            Vector3 e = lb.extents;
+            worldBottom = float.MaxValue;
+            worldTop = float.MinValue;
+            screenMinY = float.MaxValue;
+            screenMaxY = float.MinValue;
+
+            for (int a = 0; a < 8; a++)
+            {
+                Vector3 local = c + new Vector3(
+                    (a & 1) != 0 ? e.x : -e.x,
+                    (a & 2) != 0 ? e.y : -e.y,
+                    (a & 4) != 0 ? e.z : -e.z);
+                Vector3 w = item.TransformPoint(local);
+                worldBottom = Mathf.Min(worldBottom, w.y);
+                worldTop = Mathf.Max(worldTop, w.y);
+                float sy = RectTransformUtility.WorldToScreenPoint(cam, w).y;
+                screenMinY = Mathf.Min(screenMinY, sy);
+                screenMaxY = Mathf.Max(screenMaxY, sy);
+            }
+        }
+
+        private static float CornersMinScreenY(Vector3[] corners, Camera cam)
+        {
+            float m = float.MaxValue;
+            for (int i = 0; i < 4; i++)
+            {
+                m = Mathf.Min(m, RectTransformUtility.WorldToScreenPoint(cam, corners[i]).y);
+            }
+
+            return m;
+        }
+
+        private static float CornersMaxScreenY(Vector3[] corners, Camera cam)
+        {
+            float m = float.MinValue;
+            for (int i = 0; i < 4; i++)
+            {
+                m = Mathf.Max(m, RectTransformUtility.WorldToScreenPoint(cam, corners[i]).y);
+            }
+
+            return m;
+        }
+
+        private static void NudgeRowIntoView(ScrollRect scrollRect, RectTransform content, RectTransform item)
+        {
+            RectTransform viewport = scrollRect.viewport;
+            if (viewport == null || content == null || item == null)
+            {
+                return;
+            }
+
+            Canvas canvas = viewport.GetComponentInParent<Canvas>();
+            Camera cam = CanvasCamera(canvas);
+
+            RectTransform parentRt = content.parent as RectTransform;
+
+            const int maxSteps = 28;
+            const float epsWorld = 0.5f;
+
+            Vector3[] viewportCorners = new Vector3[4];
+
+            for (int step = 0; step < maxSteps; step++)
+            {
+                Canvas.ForceUpdateCanvases();
+
+                Bounds itemLocalBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(item);
+                ExtentsFromBounds(item, cam, itemLocalBounds, out float itemBottom, out float itemTop, out float itemBottomScreen, out float itemTopScreen);
+
+                viewport.GetWorldCorners(viewportCorners);
+                float viewBottom = Mathf.Min(viewportCorners[0].y, viewportCorners[3].y);
+                float viewTop = Mathf.Max(viewportCorners[1].y, viewportCorners[2].y);
+
+                float slackWorld = 0f;
+                if (canvas != null)
+                {
+                    float viewPixelH = Mathf.Max(1f, viewport.rect.height * canvas.scaleFactor);
+                    float viewWorldH = Mathf.Abs(viewTop - viewBottom);
+                    slackWorld = ListBottomSlackPx / viewPixelH * Mathf.Max(viewWorldH, 0.0001f);
+                }
+
+                float viewBottomScreen = CornersMinScreenY(viewportCorners, cam);
+                float viewTopScreen = CornersMaxScreenY(viewportCorners, cam);
+
+                bool fitsBottom = itemBottomScreen >= viewBottomScreen - ListBottomSlackPx - 0.5f;
+                bool fitsTop = itemTopScreen <= viewTopScreen + 0.5f;
+
+                if (itemBottom >= viewBottom - epsWorld - slackWorld && itemTop <= viewTop + epsWorld && fitsBottom && fitsTop)
+                {
+                    scrollRect.StopMovement();
+                    scrollRect.velocity = Vector2.zero;
+                    return;
+                }
+
+                float shiftWorldY = 0f;
+                if (itemBottom < viewBottom - epsWorld - slackWorld || !fitsBottom)
+                {
+                    shiftWorldY = viewBottom - itemBottom - slackWorld;
+                }
+                else if (itemTop > viewTop + epsWorld || !fitsTop)
+                {
+                    shiftWorldY = viewTop - itemTop;
+                }
+
+                if (Mathf.Abs(shiftWorldY) < 0.005f)
+                {
+                    break;
+                }
+
+                if (parentRt != null)
+                {
+                    Vector2 local = parentRt.InverseTransformVector(new Vector3(0f, shiftWorldY, 0f));
+                    content.anchoredPosition += new Vector2(0f, local.y);
+                }
+                else
+                {
+                    Vector3 ls = content.InverseTransformVector(new Vector3(0f, shiftWorldY, 0f));
+                    content.anchoredPosition += new Vector2(0f, ls.y);
+                }
+
+                scrollRect.StopMovement();
+                scrollRect.velocity = Vector2.zero;
+
+                UpdateScrollBounds(scrollRect);
+            }
+
+            Canvas.ForceUpdateCanvases();
+        }
+
+        private static ScrollRect FindListScrollRect(Dropdown dropdown)
+        {
+            if (listScrollCache != null && listScrollCache)
+            {
+                return listScrollCache;
+            }
+
+            Transform root = dropdown.transform.root;
+            foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+            {
+                if (!t.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                if (t.name.IndexOf("Dropdown List", StringComparison.Ordinal) < 0)
+                {
+                    continue;
+                }
+
+                ScrollRect sr = t.GetComponent<ScrollRect>() ?? t.GetComponentInChildren<ScrollRect>(true);
+                if (sr != null && sr.content != null)
+                {
+                    listScrollCache = sr;
+                    return sr;
+                }
+            }
+
+            FieldInfo field = typeof(Dropdown).GetField("m_Dropdown", BindingFlags.Instance | BindingFlags.NonPublic);
+            object raw = field?.GetValue(dropdown);
+            GameObject go = raw as GameObject ?? (raw as Component)?.gameObject;
+            if (go == null || !go.activeInHierarchy)
+            {
+                return null;
+            }
+
+            ScrollRect found = go.GetComponent<ScrollRect>() ?? go.GetComponentInChildren<ScrollRect>(true);
+            if (found != null)
+            {
+                listScrollCache = found;
+            }
+
+            return found;
         }
 
         #region Input
@@ -139,7 +602,7 @@ namespace XPortal.UI
                 RepeatDelay = 1000f,
                 BlockOtherInputs = true,
             };
-            InputManager.Instance.AddButton(Mod.Info.GUID, newButtonConfig);
+            InputManager.Instance.AddButton(Info.GUID, newButtonConfig);
             return newButtonConfig;
         }
 
@@ -150,16 +613,50 @@ namespace XPortal.UI
                 targetPortalDropdownUpDownKeyhint.SetActive(ZInput.IsGamepadActive());
             }
 
-            if (ZInput.GetButtonUp(uiDropdownScrollUpButton.Name))
+            ProcessListNav();
+        }
+
+        private void ProcessListNav()
+        {
+            if (!DropdownExpanded || targetPortalDropdown == null)
             {
-                ScrollDropdownItem(up: true);
+                listNavNextTime = 0f;
                 return;
             }
 
-            if (ZInput.GetButtonUp(uiDropdownScrollDownButton.Name))
+            bool up = ZInput.GetButton(uiDropdownScrollUpButton.Name);
+            bool down = ZInput.GetButton(uiDropdownScrollDownButton.Name);
+
+            if (ZInput.IsGamepadActive())
             {
-                ScrollDropdownItem(up: false);
+                up = up || ZInput.GetButton("JoyLStickUp") || ZInput.GetButton("JoyDPadUp");
+                down = down || ZInput.GetButton("JoyLStickDown") || ZInput.GetButton("JoyDPadDown");
+            }
+
+            if (up && down)
+            {
+                listNavNextTime = 0f;
                 return;
+            }
+
+            if (!up && !down)
+            {
+                listNavNextTime = 0f;
+                return;
+            }
+
+            float now = Time.unscaledTime;
+            if (listNavNextTime <= 0f)
+            {
+                BumpDropdown(up);
+                listNavNextTime = now + ListNavInitialDelay;
+                return;
+            }
+
+            if (now >= listNavNextTime)
+            {
+                BumpDropdown(up);
+                listNavNextTime = now + ListNavRepeatInterval;
             }
         }
         #endregion
@@ -212,24 +709,21 @@ namespace XPortal.UI
             SetActive(false);
         }
 
-        private void ScrollDropdownItem(bool up)
+        private void BumpDropdown(bool up)
         {
-            var dropdownWasExpanded = DropdownExpanded;
-
-            if (DropdownExpanded)
+            int max = targetPortalDropdown.options.Count - 1;
+            if (max < 0)
             {
-                targetPortalDropdown.enabled = false;
-                DropdownExpanded = false;
+                return;
             }
 
-            targetPortalDropdown.value += (up ? -1 : 1);
-
-            if (dropdownWasExpanded)
+            int newVal = Mathf.Clamp(targetPortalDropdown.value + (up ? -1 : 1), 0, max);
+            if (newVal == targetPortalDropdown.value)
             {
-                targetPortalDropdown.enabled = true;
-                targetPortalDropdown.Show();
-                DropdownExpanded = true;
+                return;
             }
+
+            targetPortalDropdown.value = newVal;
         }
 
         private void SetPingMapButtonActive(bool active)
@@ -464,7 +958,6 @@ namespace XPortal.UI
 
             if (privatePortalToggle.isOn && !defaultPortalToggle.isOn)
             {
-                return personalId;
             }
 
             if (!networkAssignmentIndexToOwnerId.TryGetValue(networkAssignmentDropdown.value, out var ownerId))
@@ -1072,6 +1565,27 @@ namespace XPortal.UI
             // Make the expanded list larger
             dropdown.template.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 400f);
 
+            Transform contentTransform = dropdown.template.Find("Viewport/Content");
+            if (contentTransform != null)
+            {
+                VerticalLayoutGroup contentVlg = contentTransform.GetComponent<VerticalLayoutGroup>();
+                if (contentVlg != null)
+                {
+                    contentVlg.padding.bottom = Mathf.Max(contentVlg.padding.bottom, 20);
+                }
+
+                if (contentTransform.Find(ListBottomSpacerName) == null)
+                {
+                    GameObject spacerGo = new GameObject(ListBottomSpacerName, typeof(RectTransform), typeof(LayoutElement));
+                    spacerGo.transform.SetParent(contentTransform, false);
+                    LayoutElement spacerLe = spacerGo.GetComponent<LayoutElement>();
+                    spacerLe.minHeight = ListBottomSpacerH;
+                    spacerLe.preferredHeight = ListBottomSpacerH;
+                    spacerLe.flexibleHeight = 0f;
+                    spacerGo.transform.SetAsLastSibling();
+                }
+            }
+
             // Get the template item
             var templateItem = dropdown.template.Find("Viewport/Content/Item");
 
@@ -1119,6 +1633,9 @@ namespace XPortal.UI
             var goGamepadHint = new GameObject("gamepad_hint", typeof(RectTransform), typeof(TextMeshProUGUI));
 
             var textMesh = goGamepadHint.GetComponent<TextMeshProUGUI>();
+            var font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(fa => fa.name == "Valheim-AveriaSansLibre");
+
+            textMesh.font = !font ? TMP_Settings.defaultFontAsset : font;
             textMesh.text = $"$KEY_{buttonName}";
             textMesh.fontSize = 18;
             textMesh.alignment = TextAlignmentOptions.Center;

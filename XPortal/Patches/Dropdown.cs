@@ -33,7 +33,10 @@ namespace XPortal.Patches
         {
             if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
+                PortalConfigurationPanel.ClearListScroll();
                 PortalConfigurationPanel.Instance.DropdownExpanded = true;
+                PortalConfigurationPanel.ApplyListScroll(__instance);
+                PortalConfigurationPanel.QueueListScroll(__instance);
             }
         }
     }
@@ -46,7 +49,27 @@ namespace XPortal.Patches
             if (__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
             {
                 PortalConfigurationPanel.Instance.DropdownExpanded = false;
+                PortalConfigurationPanel.ClearListScroll();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(Dropdown), "set_value")]
+    static class Dropdown_SetValue
+    {
+        static void Postfix(Dropdown __instance)
+        {
+            if (!__instance.name.Equals(PortalConfigurationPanel.GO_DESTINATIONDROPDOWN))
+            {
+                return;
+            }
+
+            if (PortalConfigurationPanel.Instance == null || !PortalConfigurationPanel.Instance.DropdownExpanded)
+            {
+                return;
+            }
+
+            PortalConfigurationPanel.ApplyListScroll(__instance);
         }
     }
 }
