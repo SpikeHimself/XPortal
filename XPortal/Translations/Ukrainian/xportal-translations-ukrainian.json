@@ -14,5 +14,7 @@
   "hud_xportal_network_suffix": "Портали",
   "hud_xportal_no_destinations": "Інших порталів немає",
   "piece_portal_private": "Приватний портал",
-  "hud_xportal_network_my_private": "Мої приватні портали"
+  "hud_xportal_network_my_private": "Мої приватні портали",
+  "settings_dropdown_scrollup": "Прокрутка списку вгору",
+  "settings_dropdown_scrolldown": "Прокрутка списку вниз"
 }

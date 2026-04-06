@@ -619,8 +619,8 @@ namespace XPortal.UI
         #region Input
         internal void AddInputs()
         {
-            uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "Dropdown scroll up", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
-            uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "Dropdown scroll down", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
+            uiDropdownScrollUpButton = AddInput("XPortal_DropdownScrollUp", "$settings_dropdown_scrollup", InputManager.GamepadButton.DPadUp, KeyCode.UpArrow);
+            uiDropdownScrollDownButton = AddInput("XPortal_DropdownScrollDown", "$settings_dropdown_scrolldown", InputManager.GamepadButton.DPadDown, KeyCode.DownArrow);
         }
 
         private ButtonConfig AddInput(string name, string hintToken, InputManager.GamepadButton gamepadButton, KeyCode key)
@@ -636,7 +636,9 @@ namespace XPortal.UI
                 RepeatDelay = 1000f,
                 BlockOtherInputs = true,
             };
+            
             InputManager.Instance.AddButton(Info.GUID, newButtonConfig);
+            
             return newButtonConfig;
         }
 

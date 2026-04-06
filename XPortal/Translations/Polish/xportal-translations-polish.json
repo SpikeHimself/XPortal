@@ -14,5 +14,7 @@
   "hud_xportal_network_suffix": "Portale",
   "hud_xportal_no_destinations": "Brak innych portali",
   "piece_portal_private": "Portal prywatny",
-  "hud_xportal_network_my_private": "Moje prywatne portale"
+  "hud_xportal_network_my_private": "Moje prywatne portale",
+  "settings_dropdown_scrollup": "Przewijanie listy rozwijanej w górę",
+  "settings_dropdown_scrolldown": "Przewijanie listy rozwijanej w dół"
 }
