@@ -1,5 +1,3 @@
-using XPortal;
-
 namespace XPortal.RPC
 {
     /// <summary>

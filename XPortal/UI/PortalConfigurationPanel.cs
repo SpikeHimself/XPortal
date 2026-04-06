@@ -7,7 +7,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XPortal;
 
 namespace XPortal.UI
 {
@@ -90,6 +89,8 @@ namespace XPortal.UI
         // A look-up list to find the portal ZDOID by dropdown list index
         private readonly Dictionary<int, ZDOID> dropdownIndexToZDOIDMapping;
         private readonly Dictionary<int, long> destinationNetworkIndexToOwnerId = new Dictionary<int, long>();
+        private readonly Dictionary<int, long> networkAssignmentIndexToOwnerId = new Dictionary<int, long>();
+        private int personalNetworkAssignmentIndex;
 
         // The KnownPortal being configured
         private KnownPortal thisPortal;
@@ -103,7 +104,7 @@ namespace XPortal.UI
         private long personalNetworkOwnerId;
         private bool readOnlyPrivatePortal;
 
-        /// <summary>Piece <see cref="ZDOVars.s_creator"/>; personal network option uses this owner id (admin editing someone else's portal).</summary>
+        /// <summary>Piece creator id; personal network row uses this owner (e.g. admin editing another player's portal).</summary>
         private long pieceCreatorPlayerId;
 
         #region Input Button Configs
@@ -342,14 +343,47 @@ namespace XPortal.UI
 
             if (isOn)
             {
-                networkAssignmentDropdown.SetValueWithoutNotify(1);
+                networkAssignmentDropdown.SetValueWithoutNotify(personalNetworkAssignmentIndex);
             }
+        }
+
+        internal void OnNetworksListChanged()
+        {
+            if (!IsActive() || thisPortal == null)
+            {
+                return;
+            }
+
+            if (!KnownPortalsManager.Instance.TryGetValue(thisPortal.Id, out var fresh))
+            {
+                return;
+            }
+
+            thisPortal = fresh;
+            PopulateNetworkAssignmentDropdown();
+            PopulateDestinationNetworkDropdown();
+            PopulateDestinationPortalDropdown();
+            ApplyReadOnlyState();
+        }
+
+        private int FindNetworkAssignmentDropdownIndex(long networkOwnerPlayerId)
+        {
+            foreach (var kvp in networkAssignmentIndexToOwnerId)
+            {
+                if (kvp.Value == networkOwnerPlayerId)
+                {
+                    return kvp.Key;
+                }
+            }
+
+            return -1;
         }
 
         private void PopulateNetworkAssignmentDropdown()
         {
             networkAssignmentDropdown.onValueChanged.RemoveAllListeners();
             networkAssignmentDropdown.ClearOptions();
+            networkAssignmentIndexToOwnerId.Clear();
 
             if (!canEditNetworkAssignment)
             {
@@ -362,24 +396,35 @@ namespace XPortal.UI
             }
 
             networkAssignmentDropdown.interactable = true;
-            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(0L)));
+
             var localPlayerId = Player.m_localPlayer != null
                 ? Player.m_localPlayer.GetPlayerID()
                 : Game.instance.GetPlayerProfile().GetPlayerID();
-            long personalNetworkOwnerId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+            var personalNetworkOwnerId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+
+            var index = -1;
+
+            networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(0L)));
+            networkAssignmentIndexToOwnerId.Add(++index, 0L);
+
+            foreach (var customId in CustomNetworks.GetSortedActiveIds())
+            {
+                networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(customId)));
+                networkAssignmentIndexToOwnerId.Add(++index, customId);
+            }
+
             networkAssignmentDropdown.options.Add(new Dropdown.OptionData(PortalNetwork.FormatNetworkLabel(personalNetworkOwnerId)));
+            networkAssignmentIndexToOwnerId.Add(++index, personalNetworkOwnerId);
+            personalNetworkAssignmentIndex = index;
 
             if (thisPortal.IsPrivate)
             {
-                networkAssignmentDropdown.value = 1;
-            }
-            else if (thisPortal.NetworkOwnerPlayerId == 0L)
-            {
-                networkAssignmentDropdown.value = 0;
+                networkAssignmentDropdown.value = personalNetworkAssignmentIndex;
             }
             else
             {
-                networkAssignmentDropdown.value = 1;
+                var matchIdx = FindNetworkAssignmentDropdownIndex(thisPortal.NetworkOwnerPlayerId);
+                networkAssignmentDropdown.value = matchIdx >= 0 ? matchIdx : 0;
             }
 
             ApplyDropdownStyle(networkAssignmentDropdown);
@@ -389,7 +434,17 @@ namespace XPortal.UI
 
         private void OnNetworkAssignmentDropdownValueChanged(Dropdown change)
         {
-            if (change.value == 0 && privatePortalToggle.isOn)
+            if (!networkAssignmentIndexToOwnerId.TryGetValue(change.value, out var ownerId))
+            {
+                return;
+            }
+
+            var localPlayerId = Player.m_localPlayer != null
+                ? Player.m_localPlayer.GetPlayerID()
+                : Game.instance.GetPlayerProfile().GetPlayerID();
+            var personalId = pieceCreatorPlayerId != 0L ? pieceCreatorPlayerId : localPlayerId;
+
+            if (ownerId != personalId && privatePortalToggle.isOn)
             {
                 privatePortalToggle.SetIsOnWithoutNotify(false);
             }
@@ -412,12 +467,12 @@ namespace XPortal.UI
                 return personalId;
             }
 
-            if (networkAssignmentDropdown.value == 0)
+            if (!networkAssignmentIndexToOwnerId.TryGetValue(networkAssignmentDropdown.value, out var ownerId))
             {
-                return 0L;
+                return thisPortal.NetworkOwnerPlayerId;
             }
 
-            return personalId;
+            return ownerId;
         }
 
         private void PopulateDestinationNetworkDropdown()

@@ -13,19 +13,13 @@ namespace XPortal
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
 
-        /// <summary>
-        /// 0 = Global network. Non-zero = personal network owned by this player id (matches Piece creator for that portal).
-        /// </summary>
+        /// <summary>0 = Global, 1–15 = custom globals, else personal network id.</summary>
         public long NetworkOwnerPlayerId { get; set; }
 
-        /// <summary>
-        /// Label for the personal network owner; stored on the portal ZDO and replicated to clients.
-        /// </summary>
+        /// <summary>Network owner label stored on the portal ZDO.</summary>
         public string NetworkOwnerDisplayName { get; set; }
 
-        /// <summary>
-        /// Private portals are listed only for their owner (and excluded from others' destination lists); they cannot use the global network.
-        /// </summary>
+        /// <summary>Private portals are owner-only in lists and behave as personal network.</summary>
         public bool IsPrivate { get; set; }
 
         public bool IsDefaultPortal
@@ -49,9 +43,11 @@ namespace XPortal
             IsPrivate = false;
         }
 
+        /// <summary>Used when a portal is first placed (or hover placeholder). Privacy default comes from config (<see cref="XPortalConfig.ConfigSettings.DefaultPrivatePortal"/>).</summary>
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
         {
             Location = location;
+            IsPrivate = XPortalConfig.Instance.Local.DefaultPrivatePortal.Value;
         }
 
         public KnownPortal(ZPackage pkg)

@@ -44,6 +44,8 @@ namespace XPortal
             XPortalConfig.Instance.OnLocalConfigChanged += OnLocalConfigChanged;
             XPortalConfig.Instance.OnServerConfigChanged += OnServerConfigChanged;
 
+            CustomNetworks.ListChanged += OnNetworksListChanged;
+
             if (!Environment.IsHeadless)
             {
                 // Add buttons
@@ -87,6 +89,7 @@ namespace XPortal
             KnownPortalsManager.Instance.ReportAllPortals();
 
             Patches.Patcher.Unpatch();
+            CustomNetworks.ShutdownServer();
             if (!Environment.IsHeadless)
             {
                 PortalConfigurationPanel.Instance?.Dispose();
@@ -104,6 +107,7 @@ namespace XPortal
         {
             // Ask the server to send us the config
             SendToServer.ConfigRequest();
+            SendToServer.RequestCustomNetworks();
 
             // Ask the server to send us the portals
             var myId = ZDOMan.GetSessionID();
@@ -180,6 +184,14 @@ namespace XPortal
         #endregion
 
         #region Config events
+        private static void OnNetworksListChanged()
+        {
+            if (!Environment.IsHeadless)
+            {
+                PortalConfigurationPanel.Instance.OnNetworksListChanged();
+            }
+        }
+
         internal static void OnLocalConfigChanged()
         {
             // Honestly, nobody cares
@@ -192,14 +204,17 @@ namespace XPortal
         #endregion
 
         #region Patch Events
-        /// <summary>
-        /// Called from a Game.Start patch. Resets portal and admin-sync state, then registers RPC handlers.
-        /// </summary>
+        /// <summary>Game start: reset state and register RPCs.</summary>
         internal static void GameStarted()
         {
             KnownPortalsManager.Instance.Reset();
             XPortalAdminSync.ResetForNewSession();
+            CustomNetworks.ResetSession();
             RPCManager.Register();
+            if (Environment.IsServer)
+            {
+                CustomNetworks.InitializeServer();
+            }
         }
 
         /// <summary>
@@ -289,6 +304,8 @@ namespace XPortal
             ZDOMan.instance.ForceSendZDO(portalId);
 
             var portal = new KnownPortal(portalId, location);
+            KnownPortalsManager.Instance.AddOrUpdate(portal);
+            ZdoTools.UpdateFromKnownPortal(state: portal);
             SendToServer.AddOrUpdateRequest(portal);
         }
 
@@ -308,11 +325,7 @@ namespace XPortal
             SendToServer.RemoveRequest(portalId);
         }
 
-        /// <summary>
-        /// True when playerId may not use this portal because the destination is someone else’s private portal.
-        /// Uses piece creator when present; falls back to <see cref="KnownPortal.NetworkOwnerPlayerId"/> so clients
-        /// still allow the owner when <see cref="ZDOVars.s_creator"/> is not replicated yet (0).
-        /// </summary>
+        /// <summary>True if the target is another player’s private portal and this player is not allowed to use it.</summary>
         internal static bool PrivateUseBlocked(ZDOID sourcePortalId, long playerId)
         {
             if (!KnownPortalsManager.Instance.TryGetValue(sourcePortalId, out var source)
@@ -335,7 +348,7 @@ namespace XPortal
             return Player.m_localPlayer != null && PrivateUseBlocked(sourcePortalId, Player.m_localPlayer.GetPlayerID());
         }
 
-        /// <summary>For <c>TeleportWorld.UpdatePortal</c> transpiler: same as <see cref="PrivateUseBlocked"/> but takes live instances.</summary>
+        /// <summary>Like PrivateUseBlocked but used from TeleportWorld with live portal/player instances.</summary>
         internal static bool IsUsablePortal(TeleportWorld portal, Player player, bool originalFlag)
         {
             if (!originalFlag || portal == null || player == null || portal.m_nview == null || !portal.m_nview.IsValid())
@@ -365,6 +378,11 @@ namespace XPortal
             Log.Debug($"Fetched {allPortalZDOs.Count} portals");
 
             ForceLocalPortalUpdate(allPortalZDOs);
+
+            if (Environment.IsServer)
+            {
+                CustomNetworks.MigrateInvalidNetworks();
+            }
 
             SendToClient.Resync(KnownPortalsManager.Instance.Pack(), reason);
 
@@ -438,6 +456,12 @@ namespace XPortal
             if (effectiveNetworkId == 0L)
             {
                 networkOwnerDisplayName = string.Empty;
+            }
+            else if (CustomNetworks.IsReservedIdRange(effectiveNetworkId))
+            {
+                networkOwnerDisplayName = CustomNetworks.TryGetDisplayName(effectiveNetworkId, out var customLabel)
+                    ? customLabel
+                    : string.Empty;
             }
             else if (pieceCreator != 0L && localPlayerId == pieceCreator)
             {

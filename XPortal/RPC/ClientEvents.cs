@@ -1,6 +1,4 @@
-﻿using XPortal.RPC;
-
-namespace XPortal.RPC.Client
+﻿namespace XPortal.RPC.Client
 {
     internal static class ClientEvents
     {
@@ -51,6 +49,12 @@ namespace XPortal.RPC.Client
         {
             Log.Info("Received XPortal Config from server");
             XPortalConfig.Instance.ReceiveServerConfig(pkg);
+        }
+
+        internal static void RPC_CustomNetworks(long sender, ZPackage pkg)
+        {
+            Log.Debug("Received custom networks from server");
+            CustomNetworks.ApplyFromServer(pkg);
         }
 
         /// <summary>

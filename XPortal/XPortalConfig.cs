@@ -29,6 +29,7 @@ namespace XPortal
             public bool DisplayPortalColour;
             public bool DoublePortalCosts;
             public ConfigEntry<Vector3> DefaultPortal;
+            public ConfigEntry<bool> DefaultPrivatePortal;
             public bool HidePortalDistance;
         }
 
@@ -85,6 +86,12 @@ namespace XPortal
             Local.DoublePortalCosts = cfgDoublePortalCosts.Value;
 
             Local.DefaultPortal = configFile.Bind("General", "DefaultPortal", Vector3.zero, "The Portal that newly built Portals immediately connect to.");
+
+            Local.DefaultPrivatePortal = configFile.Bind(
+                "General",
+                "DefaultPrivatePortal",
+                true,
+                "If true, newly placed portals start as private (owner-only). If false, they start public on the Global network until changed.");
 
             var cfgHidePortalDistance = configFile.Bind("General", "HidePortalDistance", false, "In the list of portals, do not show how far away other portals are." + Desc_EnforcedByServer);
             Local.HidePortalDistance = cfgHidePortalDistance.Value;

@@ -1,7 +1,4 @@
-﻿using XPortal;
-using XPortal.RPC;
-
-namespace XPortal.RPC.Server
+﻿namespace XPortal.RPC.Server
 {
     internal static class ServerEvents
     {
@@ -64,6 +61,19 @@ namespace XPortal.RPC.Server
                 if (portal.NetworkOwnerPlayerId == 0L)
                 {
                     portal.NetworkOwnerDisplayName = string.Empty;
+                }
+                else if (CustomNetworks.IsReservedIdRange(portal.NetworkOwnerPlayerId))
+                {
+                    if (CustomNetworks.IsActiveId(portal.NetworkOwnerPlayerId)
+                        && CustomNetworks.TryGetDisplayName(portal.NetworkOwnerPlayerId, out var customName))
+                    {
+                        portal.NetworkOwnerDisplayName = customName;
+                    }
+                    else
+                    {
+                        portal.NetworkOwnerPlayerId = 0L;
+                        portal.NetworkOwnerDisplayName = string.Empty;
+                    }
                 }
                 else
                 {
@@ -207,6 +217,19 @@ namespace XPortal.RPC.Server
             Log.Debug($"{sender} wants to receive the config");
             var pkg = XPortalConfig.Instance.PackLocalConfig();
             SendToClient.Config(sender, pkg);
+        }
+
+        /// <summary>Client asks for the custom network list.</summary>
+        internal static void RPC_RequestCustomNetworks(long sender)
+        {
+            if (!Environment.IsServer)
+            {
+                Log.Error($"{sender} wants custom networks, but I am not the server!");
+                return;
+            }
+
+            Log.Debug($"{sender} wants custom networks");
+            SendToClient.CustomNetworks(sender, CustomNetworks.PackForServer());
         }
 
         /// <summary>

@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Environment.cs" />
     <Compile Include="Extension\Vector3.cs" />
+    <Compile Include="CustomNetworks.cs" />
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ModInfo.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="ZdoTools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="xportal_networks.json" />
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Translations\Chinese\xportal-translation-chinese.json" />

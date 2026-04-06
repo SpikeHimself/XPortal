@@ -51,9 +51,7 @@ namespace XPortal
             return knownPortals.Where(p => p.Value.PreviousId == previousId).Select(kvp => kvp.Value).FirstOrDefault();
         }
 
-        /// <summary>
-        /// Returns <see cref="KnownPortal.NetworkOwnerDisplayName"/> from any portal on that network, or null if none are set.
-        /// </summary>
+        /// <summary>Returns any stored network display name for that network id, or null.</summary>
         public string GetNetworkOwnerDisplayNameForPlayerId(long networkOwnerPlayerId)
         {
             if (networkOwnerPlayerId == 0L)

@@ -35,6 +35,16 @@ namespace XPortal
                 return Localization.instance.Localize("$hud_xportal_network_global");
             }
 
+            if (ownerPlayerId >= CustomNetworks.MinId && ownerPlayerId <= CustomNetworks.MaxId)
+            {
+                if (CustomNetworks.TryGetDisplayName(ownerPlayerId, out var customName))
+                {
+                    return customName;
+                }
+
+                return ownerPlayerId.ToString();
+            }
+
             var networkWord = Localization.instance.Localize("$hud_xportal_network_suffix");
 
             var cached = KnownPortalsManager.Instance.GetNetworkOwnerDisplayNameForPlayerId(ownerPlayerId);

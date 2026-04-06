@@ -1,8 +1,6 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using JetBrains.Annotations;
 
@@ -44,11 +42,7 @@ namespace XPortal.Patches
         }
     }
 
-    /// <summary>
-    /// Blocks using a portal when its connection target is another player's private portal (client-side).
-    /// Vanilla <see cref="TeleportWorld.Teleport"/> then checks <see cref="Humanoid.IsTeleportable"/> for inventory
-    /// (ores, etc.); that call has no portal context, so destination privacy is handled here instead.
-    /// </summary>
+    /// <summary>Blocks teleport when the destination is another player’s private portal (client).</summary>
     [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Teleport))]
     static class TeleportWorld_Teleport_PrivateDestination
     {
