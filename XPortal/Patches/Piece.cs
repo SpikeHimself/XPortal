@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using XPortal.RPC;
 
 namespace XPortal.Patches
 {
@@ -63,7 +64,7 @@ namespace XPortal.Patches
 
         static bool CanRemovePortal(Piece piece)
         {
-            if (ZNet.instance != null && ZNet.instance.LocalPlayerIsAdminOrHost())
+            if (ZNet.instance.LocalPlayerIsAdminOrHost() || XPortalAdminSync.IsLocalPortalNetworkAdmin())
                 return true;
 
             return piece.IsCreator();
