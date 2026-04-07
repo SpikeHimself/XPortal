@@ -42,5 +42,12 @@
             Log.Debug($"Asking server to send me the config");
             ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_CONFIGREQUEST);
         }
+
+        /// <summary>Ask the server for the custom network list.</summary>
+        public static void RequestCustomNetworks()
+        {
+            Log.Debug("Asking server for custom networks");
+            ZRoutedRpc.instance.InvokeRoutedRPC(Environment.ServerPeerId, RPCManager.RPC_REQUESTCUSTOMNETWORKS);
+        }
     }
 }

@@ -6,5 +6,15 @@
   "piece_portal_target_none": "(Keins)",
   "piece_portal_tag_none": "(Kein Name)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "Sei gegrüßt, Reisender!"
+  "hud_xportal_title": "Sei gegrüßt, Reisender!",
+  "hud_xportal_portal_network": "Portal-Netzwerk",
+  "hud_xportal_destination_network": "Ziel-Netzwerk",
+  "hud_xportal_destination_portal": "Portal",
+  "hud_xportal_network_global": "Globale Portale",
+  "hud_xportal_network_suffix": "Portale",
+  "hud_xportal_no_destinations": "Keine anderen Portale",
+  "piece_portal_private": "Privates Portal",
+  "hud_xportal_network_my_private": "Meine privaten Portale",
+  "settings_dropdown_scrollup": "Dropdown nach oben scrollen",
+  "settings_dropdown_scrolldown": "Dropdown nach unten scrollen"
 }

@@ -50,5 +50,26 @@
             Log.Info("Received XPortal Config from server");
             XPortalConfig.Instance.ReceiveServerConfig(pkg);
         }
+
+        internal static void RPC_CustomNetworks(long sender, ZPackage pkg)
+        {
+            Log.Debug("Received custom networks from server");
+            CustomNetworks.ApplyFromServer(pkg);
+        }
+
+        /// <summary>
+        /// Server reply: whether this client is a server admin for portal network UI.
+        /// </summary>
+        internal static void RPC_AdminSync(long sender, ZPackage pkg)
+        {
+            if (Environment.IsServer)
+            {
+                return;
+            }
+
+            bool isAdmin = pkg.ReadBool();
+            XPortalAdminSync.ApplyServerReply(isAdmin);
+            Log.Debug($"Portal network admin UI allowed: {isAdmin}");
+        }
     }
 }

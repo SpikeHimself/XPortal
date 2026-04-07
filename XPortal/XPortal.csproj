@@ -83,9 +83,14 @@
   <ItemGroup>
     <Compile Include="Environment.cs" />
     <Compile Include="Extension\Vector3.cs" />
+    <Compile Include="CustomNetworks.cs" />
     <Compile Include="KnownPortalsManager.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ModInfo.cs" />
+    <Compile Include="NetPeerUtility.cs" />
+    <Compile Include="Patches\ZNet.cs" />
+    <Compile Include="RPC\XPortalAdminSync.cs" />
+    <Compile Include="PortalNetwork.cs" />
     <Compile Include="Patches\Dropdown.cs" />
     <Compile Include="Patches\Game.cs" />
     <Compile Include="Patches\Piece.cs" />
@@ -116,6 +121,7 @@
     <Compile Include="ZdoTools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="xportal_networks.json" />
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Translations\Chinese\xportal-translation-chinese.json" />

@@ -31,9 +31,122 @@
             var portal = new KnownPortal(pkg);
             Log.Debug($"{sender} wants `{portal.Id}` to be added or updated");
 
+            var requesterPlayerId = NetPeerUtility.GetPeerPlayerId(sender);
+            var portalZdo = ZDOMan.instance.GetZDO(portal.Id);
+            if (portalZdo == null)
+            {
+                Log.Error($"Portal ZDO `{portal.Id}` not found for network validation");
+                return;
+            }
+
+            var pieceCreator = portalZdo.GetLong(ZDOVars.s_creator);
+            var requesterIsCreator = requesterPlayerId != 0L && requesterPlayerId == pieceCreator;
+            var requesterMayChangeNetwork = requesterIsCreator || NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
+            var requesterMayEditPrivatePortal = requesterIsCreator || NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender);
+
+            KnownPortalsManager.Instance.TryGetValue(portal.Id, out var existing);
+
+            if (!requesterMayChangeNetwork)
+            {
+                var authoritativeNetwork = existing != null
+                    ? existing.NetworkOwnerPlayerId
+                    : ZdoTools.GetNetworkOwnerPlayerId(portalZdo);
+                portal.NetworkOwnerPlayerId = authoritativeNetwork;
+                portal.NetworkOwnerDisplayName = existing != null
+                    ? existing.NetworkOwnerDisplayName
+                    : ZdoTools.GetNetworkOwnerDisplayName(portalZdo);
+            }
+            else
+            {
+                if (portal.NetworkOwnerPlayerId == 0L)
+                {
+                    portal.NetworkOwnerDisplayName = string.Empty;
+                }
+                else if (CustomNetworks.IsReservedIdRange(portal.NetworkOwnerPlayerId))
+                {
+                    if (CustomNetworks.IsActiveId(portal.NetworkOwnerPlayerId)
+                        && CustomNetworks.TryGetDisplayName(portal.NetworkOwnerPlayerId, out var customName))
+                    {
+                        portal.NetworkOwnerDisplayName = customName;
+                    }
+                    else
+                    {
+                        portal.NetworkOwnerPlayerId = 0L;
+                        portal.NetworkOwnerDisplayName = string.Empty;
+                    }
+                }
+                else
+                {
+                    portal.NetworkOwnerPlayerId = pieceCreator;
+                    if (pieceCreator == 0L)
+                    {
+                        portal.NetworkOwnerDisplayName = string.Empty;
+                    }
+                    else if (requesterIsCreator)
+                    {
+                        var fromClient = PortalNetwork.SanitizeNetworkOwnerDisplayName(portal.NetworkOwnerDisplayName);
+                        portal.NetworkOwnerDisplayName = !string.IsNullOrEmpty(fromClient)
+                            ? fromClient
+                            : (PortalNetwork.TryResolveByWorldState(pieceCreator) ?? string.Empty);
+                    }
+                    else
+                    {
+                        portal.NetworkOwnerDisplayName = PortalNetwork.TryResolveByWorldState(pieceCreator)
+                            ?? existing?.NetworkOwnerDisplayName
+                            ?? ZdoTools.GetNetworkOwnerDisplayName(portalZdo)
+                            ?? string.Empty;
+                    }
+                }
+            }
+
+            if (existing != null && existing.IsPrivate && !requesterMayEditPrivatePortal)
+            {
+                portal.Name = existing.Name;
+                portal.Target = existing.Target;
+                portal.IsPrivate = existing.IsPrivate;
+                portal.NetworkOwnerPlayerId = existing.NetworkOwnerPlayerId;
+                portal.NetworkOwnerDisplayName = existing.NetworkOwnerDisplayName ?? string.Empty;
+            }
+            else if (existing != null && !existing.IsPrivate && !requesterMayEditPrivatePortal)
+            {
+                portal.IsPrivate = false;
+                if (portal.HasTarget()
+                    && KnownPortalsManager.Instance.TryGetValue(portal.Target, out var blockedTarget)
+                    && blockedTarget.IsPrivate
+                    && blockedTarget.NetworkOwnerPlayerId == requesterPlayerId)
+                {
+                    portal.Target = existing.Target;
+                }
+            }
+
+            if (portal.IsPrivate)
+            {
+                if (pieceCreator == 0L)
+                {
+                    portal.IsPrivate = false;
+                }
+                else
+                {
+                    portal.NetworkOwnerPlayerId = pieceCreator;
+                }
+            }
+
+            if (portal.HasTarget() && KnownPortalsManager.Instance.TryGetValue(portal.Target, out var destForValidation) && destForValidation.IsPrivate)
+            {
+                var targetZdo = ZDOMan.instance.GetZDO(destForValidation.Id);
+                var destPieceCreator = targetZdo != null ? targetZdo.GetLong(ZDOVars.s_creator) : 0L;
+                var mayTargetPrivatePortal = NetPeerUtility.IsPeerPrivilegedForPortalNetwork(sender)
+                    || (destPieceCreator != 0L && destPieceCreator == requesterPlayerId)
+                    || (destForValidation.NetworkOwnerPlayerId != 0L && destForValidation.NetworkOwnerPlayerId == requesterPlayerId);
+                if (!mayTargetPrivatePortal)
+                {
+                    portal.Target = existing != null ? existing.Target : ZDOID.None;
+                }
+            }
+
             var updatedPortal = KnownPortalsManager.Instance.AddOrUpdate(portal);
 
-            Log.Info($"Setting portal tag `{updatedPortal.Name}` and target `{updatedPortal.Target}` on behalf of {sender}");
+            Log.Info($"Setting portal tag `{updatedPortal.Name}`, network `{updatedPortal.NetworkOwnerPlayerId}` (`{updatedPortal.NetworkOwnerDisplayName}`), private `{updatedPortal.IsPrivate}`, target `{updatedPortal.Target}` on behalf of {sender}");
             ZdoTools.UpdateFromKnownPortal(state: updatedPortal);
 
             SendToClient.SyncPortal(updatedPortal);
@@ -104,6 +217,45 @@
             Log.Debug($"{sender} wants to receive the config");
             var pkg = XPortalConfig.Instance.PackLocalConfig();
             SendToClient.Config(sender, pkg);
+        }
+
+        /// <summary>Client asks for the custom network list.</summary>
+        internal static void RPC_RequestCustomNetworks(long sender)
+        {
+            if (!Environment.IsServer)
+            {
+                Log.Error($"{sender} wants custom networks, but I am not the server!");
+                return;
+            }
+
+            Log.Debug($"{sender} wants custom networks");
+            SendToClient.CustomNetworks(sender, CustomNetworks.PackForServer());
+        }
+
+        /// <summary>
+        /// Client asks whether this connection is a server admin for portal network UI.
+        /// </summary>
+        internal static void RPC_RequestAdminSync(long sender, ZPackage _)
+        {
+            if (!Environment.IsServer)
+            {
+                return;
+            }
+
+            bool isAdmin = false;
+            var peer = ZNet.instance.GetPeer(sender);
+            if (peer != null)
+            {
+                isAdmin = ZNet.instance.IsAdmin(peer.m_socket.GetHostName());
+            }
+            else if (ZNet.instance.IsServer() && sender == ZNet.GetUID())
+            {
+                isAdmin = ZNet.instance.LocalPlayerIsAdminOrHost();
+            }
+
+            var outPkg = new ZPackage();
+            outPkg.Write(isAdmin);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, RPCManager.RPC_ADMINSYNC, outPkg);
         }
     }
 }

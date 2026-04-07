@@ -40,12 +40,40 @@ namespace XPortal
         {
             return knownPortals[id];
         }
+
+        public bool TryGetValue(ZDOID id, out KnownPortal portal)
+        {
+            return knownPortals.TryGetValue(id, out portal);
+        }
         
         public KnownPortal GetKnownPortalByPreviousId(ZDOID previousId)
         {
             return knownPortals.Where(p => p.Value.PreviousId == previousId).Select(kvp => kvp.Value).FirstOrDefault();
         }
 
+        /// <summary>Returns any stored network display name for that network id, or null.</summary>
+        public string GetNetworkOwnerDisplayNameForPlayerId(long networkOwnerPlayerId)
+        {
+            if (networkOwnerPlayerId == 0L)
+            {
+                return null;
+            }
+
+            foreach (var p in knownPortals.Values)
+            {
+                if (p.NetworkOwnerPlayerId != networkOwnerPlayerId)
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(p.NetworkOwnerDisplayName))
+                {
+                    return p.NetworkOwnerDisplayName;
+                }
+            }
+
+            return null;
+        }
 
         public List<KnownPortal> GetList()
         {
@@ -122,6 +150,9 @@ namespace XPortal
                     Location = portalZDO.GetPosition(),
                     PreviousId = portalZDO.GetZDOID(XPortal.Key_PreviousId),
                     Target = portalZDO.GetZDOID(XPortal.Key_TargetId),
+                    NetworkOwnerPlayerId = ZdoTools.GetNetworkOwnerPlayerId(portalZDO),
+                    NetworkOwnerDisplayName = ZdoTools.GetNetworkOwnerDisplayName(portalZDO),
+                    IsPrivate = ZdoTools.GetIsPrivate(portalZDO),
                 };
 
                 portalsWithZdos.Add(knownPortal);
@@ -141,7 +172,7 @@ namespace XPortal
             var portalsInPackage = new List<KnownPortal>();
             if (count > 0)
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     var portalPkg = pkg.ReadPackage();
                     var portal = new KnownPortal(portalPkg);
@@ -191,7 +222,7 @@ namespace XPortal
 
         public ZDOID FindDefaultPortal()
         {
-            Vector3 defaultLocation = XPortalConfig.Instance.Local.DefaultPortal.Value.Round();
+            var defaultLocation = XPortalConfig.Instance.Local.DefaultPortal.Value.Round();
             var defaultPortal = FindByLocation(defaultLocation);
 
             if (defaultPortal == null)
@@ -210,7 +241,7 @@ namespace XPortal
                 return;
             }
 
-            foreach (KnownPortal p in knownPortals.Values)
+            foreach (var p in knownPortals.Values)
             {
                 Log.Debug($" {p}");
             }

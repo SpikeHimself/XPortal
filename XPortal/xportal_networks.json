@@ -1,0 +1,26 @@
+{
+  "comments": [
+    "This JSON file configures the Portal Networks feature of XPortal",
+    "- This list is server authoritative when connected to a host or dedicated server.",
+    "- There are a maximum of 15 networks allowed. Only Network ID's 1–15 are allowed.",
+    "- Rows with missing or empty names are ignored.",
+    "- If a configured id is removed, portals on that id are moved to Global Portal List."
+  ],
+  "networks": [
+    { "id": 1, "name": "Bosses" },
+    { "id": 2, "name": "Vendors" },
+    { "id": 3, "name": "" },
+    { "id": 4, "name": "" },
+    { "id": 5, "name": "" },
+    { "id": 6, "name": "" },
+    { "id": 7, "name": "" },
+    { "id": 8, "name": "" },
+    { "id": 9, "name": "" },
+    { "id": 10, "name": "" },
+    { "id": 11, "name": "" },
+    { "id": 12, "name": "" },
+    { "id": 13, "name": "" },
+    { "id": 14, "name": "" },
+    { "id": 15, "name": "" }
+  ]
+}

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using XPortal.RPC;
 
 namespace XPortal.Patches
 {
@@ -39,6 +40,34 @@ namespace XPortal.Patches
                 WearNTear_OnPlaced.Postfix(m_WearNTear);
                 m_WearNTear = null;
             }
+        }
+    }
+
+    /// <summary>Portal hammer removal when the server enables restrictions.</summary>
+    [HarmonyPatch(typeof(Piece), nameof(Piece.CanBeRemoved))]
+    static class Piece_CanBeRemoved
+    {
+        static void Postfix(Piece __instance, ref bool __result)
+        {
+            if (!__instance || string.IsNullOrEmpty(__instance.m_name) || !__instance.m_name.Contains("$piece_portal"))
+            {
+                return;
+            }
+
+            if (!XPortalConfig.Instance.Server.RestrictPortalRemoval)
+            {
+                return;
+            }
+
+            __result = CanRemovePortal(__instance);
+        }
+
+        static bool CanRemovePortal(Piece piece)
+        {
+            if (ZNet.instance.LocalPlayerIsAdminOrHost() || XPortalAdminSync.IsLocalPortalNetworkAdmin())
+                return true;
+
+            return piece.IsCreator();
         }
     }
 }

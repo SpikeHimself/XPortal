@@ -28,6 +28,36 @@
             portalZdo.SetConnection(ZDOExtraData.ConnectionType.Portal, targetId);
         }
 
+        public static long GetNetworkOwnerPlayerId(ZDO portalZdo)
+        {
+            return portalZdo.GetLong(XPortal.Key_NetworkOwnerPlayerId);
+        }
+
+        public static void SetNetworkOwnerPlayerId(ZDO portalZdo, long ownerPlayerId)
+        {
+            portalZdo.Set(XPortal.Key_NetworkOwnerPlayerId, ownerPlayerId);
+        }
+
+        public static string GetNetworkOwnerDisplayName(ZDO portalZdo)
+        {
+            return portalZdo.GetString(XPortal.Key_NetworkOwnerDisplayName);
+        }
+
+        public static void SetNetworkOwnerDisplayName(ZDO portalZdo, string displayName)
+        {
+            portalZdo.Set(XPortal.Key_NetworkOwnerDisplayName, displayName ?? string.Empty);
+        }
+
+        public static bool GetIsPrivate(ZDO portalZdo)
+        {
+            return portalZdo.GetBool(XPortal.Key_IsPrivate, false);
+        }
+
+        public static void SetIsPrivate(ZDO portalZdo, bool isPrivate)
+        {
+            portalZdo.Set(XPortal.Key_IsPrivate, isPrivate);
+        }
+
         public static void UpdateFromKnownPortal(bool delayed = false, object state = null)
         {
             if (delayed)
@@ -36,8 +66,8 @@
                 return;
             }
 
-            KnownPortal portal = (KnownPortal)state;
-            ZDO portalZdo = ZDOMan.instance.GetZDO(portal.Id);
+            var portal = (KnownPortal)state;
+            var portalZdo = ZDOMan.instance.GetZDO(portal.Id);
 
             if (portalZdo == null)
             {
@@ -49,6 +79,9 @@
             SetOwner(portalZdo);
             SetName(portalZdo, portal.Name);
             SetPreviousId(portalZdo);
+            SetNetworkOwnerPlayerId(portalZdo, portal.NetworkOwnerPlayerId);
+            SetNetworkOwnerDisplayName(portalZdo, portal.NetworkOwnerDisplayName ?? string.Empty);
+            SetIsPrivate(portalZdo, portal.IsPrivate);
             SetTarget(portalZdo, portal.Target);
         }
     }

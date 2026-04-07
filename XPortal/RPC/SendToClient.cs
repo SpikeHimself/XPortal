@@ -60,6 +60,25 @@ namespace XPortal.RPC
             ZRoutedRpc.instance.InvokeRoutedRPC(clientPeerID, RPCManager.RPC_CONFIG, pkg);
         }
 
+        /// <summary>Sends the custom network list to one client.</summary>
+        public static void CustomNetworks(long clientPeerID, ZPackage pkg)
+        {
+            Log.Debug($"Sending custom networks to {clientPeerID}");
+            ZRoutedRpc.instance.InvokeRoutedRPC(clientPeerID, RPCManager.RPC_CUSTOMNETWORKS, pkg);
+        }
+
+        /// <summary>Sends the custom network list to all connected peers.</summary>
+        public static void BroadcastCustomNetworks(ZPackage pkg)
+        {
+            if (ZNet.instance == null || ZNet.instance.GetConnectedPeers().Count == 0)
+            {
+                return;
+            }
+
+            Log.Debug("Broadcasting custom networks to everybody");
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, RPCManager.RPC_CUSTOMNETWORKS, pkg);
+        }
+
         /// <summary>
         /// Send a ping to everyone
         /// </summary>

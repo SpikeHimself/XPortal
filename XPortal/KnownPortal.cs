@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using XPortal.Extension;
 
 namespace XPortal
@@ -11,6 +12,15 @@ namespace XPortal
         public ZDOID Target { get; set; }
         public Vector3 Location { get; set; }
         public string Colour { get; set; }
+
+        /// <summary>0 = Global, 1–15 = custom globals, else personal network id.</summary>
+        public long NetworkOwnerPlayerId { get; set; }
+
+        /// <summary>Network owner label stored on the portal ZDO.</summary>
+        public string NetworkOwnerDisplayName { get; set; }
+
+        /// <summary>Private portals are owner-only in lists and behave as personal network.</summary>
+        public bool IsPrivate { get; set; }
 
         public bool IsDefaultPortal
         {
@@ -28,11 +38,16 @@ namespace XPortal
             PreviousId = ZDOID.None;
             Target = KnownPortalsManager.Instance.FindDefaultPortal();
             Colour = PortalColour.GetPortalColour(id);
+            NetworkOwnerPlayerId = 0L;
+            NetworkOwnerDisplayName = string.Empty;
+            IsPrivate = false;
         }
 
+        /// <summary>New or hover placeholder portal; privacy default from config.</summary>
         public KnownPortal(ZDOID id, Vector3 location) : this(id)
         {
             Location = location;
+            IsPrivate = XPortalConfig.Instance.Local.DefaultPrivatePortal.Value;
         }
 
         public KnownPortal(ZPackage pkg)
@@ -43,6 +58,34 @@ namespace XPortal
             PreviousId = pkg.ReadZDOID();
             Target = pkg.ReadZDOID();
             Colour = pkg.ReadString();
+            NetworkOwnerPlayerId = pkg.ReadLong();
+            NetworkOwnerDisplayName = ReadOptionalString(pkg);
+            IsPrivate = ReadOptionalBool(pkg);
+        }
+
+        /// <summary>Reads the packed network owner display name, or empty if the package has no more data.</summary>
+        private static string ReadOptionalString(ZPackage pkg)
+        {
+            try
+            {
+                return pkg.ReadString();
+            }
+            catch (EndOfStreamException)
+            {
+                return string.Empty;
+            }
+        }
+
+        private static bool ReadOptionalBool(ZPackage pkg)
+        {
+            try
+            {
+                return pkg.ReadBool();
+            }
+            catch (EndOfStreamException)
+            {
+                return false;
+            }
         }
 
         public string GetFriendlyName()
@@ -87,6 +130,9 @@ namespace XPortal
             pkg.Write(PreviousId);
             pkg.Write(Target);
             pkg.Write(Colour);
+            pkg.Write(NetworkOwnerPlayerId);
+            pkg.Write(NetworkOwnerDisplayName ?? string.Empty);
+            pkg.Write(IsPrivate);
             return pkg;
         }
 
@@ -97,7 +143,12 @@ namespace XPortal
 
         public override string ToString()
         {
-            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+            return $"{{ Id: `{Id}`, Name; `{GetFriendlyName()}`, Location: `{Location}`, NetworkOwner: `{NetworkOwnerPlayerId}` (`{NetworkOwnerDisplayName}`), Private: `{IsPrivate}`, Target: `{Target}` (`{GetFriendlyTargetName()}`), Colour: `{Colour}` }}";
+        }
+
+        public bool IsGlobalNetwork()
+        {
+            return NetworkOwnerPlayerId == 0L;
         }
     }
 }

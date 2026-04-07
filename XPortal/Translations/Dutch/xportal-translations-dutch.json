@@ -6,5 +6,15 @@
   "piece_portal_target_none": "(Geen)",
   "piece_portal_tag_none": "(Geen naam)",
   "piece_portal_defaultportal": "Standaardportaal",
-  "hud_xportal_title": "Gegroet, reiziger!"
+  "hud_xportal_title": "Gegroet, reiziger!",
+  "hud_xportal_portal_network": "Portaalnetwerk",
+  "hud_xportal_destination_network": "Bestemmingsnetwerk",
+  "hud_xportal_destination_portal": "Portaal",
+  "hud_xportal_network_global": "Globale portalen",
+  "hud_xportal_network_suffix": "Portalen",
+  "hud_xportal_no_destinations": "Geen andere portalen",
+  "piece_portal_private": "Privéportaal",
+  "hud_xportal_network_my_private": "Mijn privéportalen",
+  "settings_dropdown_scrollup": "Dropdown omhoog scrollen",
+  "settings_dropdown_scrolldown": "Dropdown omlaag scrollen"
 }

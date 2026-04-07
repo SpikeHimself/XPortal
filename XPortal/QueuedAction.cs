@@ -52,7 +52,7 @@ namespace XPortal
             var processedActions = queuedActions.Where(kvp => kvp.Value.Delay < 0).ToList();
             foreach (var processedAction in processedActions)
             {
-                Log.Warning($"Cleaned up stale action {processedAction.Value.Action.Method.Name}");
+                Log.Debug($"Cleaned up stale action {processedAction.Value.Action.Method.Name}");
                 queuedActions.Remove(processedAction.Key);
             }
         }

@@ -6,5 +6,15 @@
   "piece_portal_target_none": "(Ninguno)",
   "piece_portal_tag_none": "(Sin nombre)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "¡ Saludos, viajero !"
+  "hud_xportal_title": "¡ Saludos, viajero !",
+  "hud_xportal_portal_network": "Red del portal",
+  "hud_xportal_destination_network": "Red de destino",
+  "hud_xportal_destination_portal": "Portal",
+  "hud_xportal_network_global": "Portales globales",
+  "hud_xportal_network_suffix": "Portales",
+  "hud_xportal_no_destinations": "No hay otros portales",
+  "piece_portal_private": "Portal privado",
+  "hud_xportal_network_my_private": "Mis portales privados",
+  "settings_dropdown_scrollup": "Desplazar menú desplegable arriba",
+  "settings_dropdown_scrolldown": "Desplazar menú desplegable abajo"
 }

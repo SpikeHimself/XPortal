@@ -6,5 +6,15 @@
   "piece_portal_target_none": "(없음)",
   "piece_portal_tag_none": "(이름 없음)",
   "piece_portal_defaultportal": "Default portal",
-  "hud_xportal_title": "여행자여, 만세!"
+  "hud_xportal_title": "여행자여, 만세!",
+  "hud_xportal_portal_network": "포털 네트워크",
+  "hud_xportal_destination_network": "목적지 네트워크",
+  "hud_xportal_destination_portal": "포털",
+  "hud_xportal_network_global": "전역 포털",
+  "hud_xportal_network_suffix": "포털",
+  "hud_xportal_no_destinations": "다른 포털 없음",
+  "piece_portal_private": "비공개 포털",
+  "hud_xportal_network_my_private": "내 비공개 포털",
+  "settings_dropdown_scrollup": "드롭다운 위로 스크롤",
+  "settings_dropdown_scrolldown": "드롭다운 아래로 스크롤"
 }
