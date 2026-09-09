@@ -325,7 +325,7 @@ namespace XPortal
         /// <returns>A list of portal ZDOs</returns>
         private static List<ZDO> GetAllPortalZDOs()
         {
-            return ZDOMan.instance.GetPortals();
+            return ZDOMan.instance.GetPortalList();
         }
 
         /// <summary>
