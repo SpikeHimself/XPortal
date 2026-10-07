@@ -371,7 +371,11 @@ namespace XPortal.UI
                         draggable: false);
                 mainPanel.name = GO_MAINPANEL;
                 mainPanel.AddComponent<CanvasGroup>();
-                mainPanel.AddComponent<UIGroupHandler>();
+                var groupHandler = mainPanel.AddComponent<UIGroupHandler>();
+
+                // Outrank the game's own UI groups (e.g. the end credits near the start temple, priority 1),
+                // otherwise UIGroupHandler makes this panel non-interactable every frame
+                groupHandler.m_groupPriority = 10000;
 
                 if (!mainPanel.GetComponentInParent<Localize>())
                 {
