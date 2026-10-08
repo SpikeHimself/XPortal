@@ -1,5 +1,14 @@
-#### v1.2.25 (2026-09-12)
+#### v1.2.26 (2026-10-08)
 
+	* Fix unresponsive Portal Configuration Panel near Standing Stones (thanks Kengru)
+
+	* Update Jotunn 2.30.2
+
+<details>
+<summary>Click to view previous versions</summary>
+	
+* **v1.2.25** (2026-09-12)
+	
 	* Add translation to Japanese
 
 	* Update Jotunn 2.30.0
@@ -8,8 +17,6 @@
 
 	* Various reports have shown that XPortal is no longer fully compatible with Valheim VR, so this has been removed from the documentation
 
-<details>
-<summary>Click to view previous versions</summary>
 	
 * **v1.2.24** (2026-02-07)
 	
